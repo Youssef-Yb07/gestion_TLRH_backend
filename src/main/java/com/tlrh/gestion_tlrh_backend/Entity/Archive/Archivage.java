@@ -10,7 +10,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import lombok.Data;
 
-@Entity
+@MappedSuperClass
 @Data
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Archivage {
