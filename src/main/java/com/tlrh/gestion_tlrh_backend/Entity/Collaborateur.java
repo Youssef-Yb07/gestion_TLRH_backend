@@ -1,12 +1,10 @@
 package com.tlrh.gestion_tlrh_backend.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Data;
 
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -14,7 +12,7 @@ public class Collaborateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idCollaborateur;
+    private int id;
 
     private String email;
 
@@ -53,6 +51,9 @@ public class Collaborateur {
     private String PosteActuel;
 
     private int SalaireActuel;
-
+    @ManyToMany(mappedBy = "collaborateurs")
+    private List<Technologie> technologies;
+    @ManyToMany(mappedBy = "collaborateurs")
+    private List<Role> roles;
 
 }
