@@ -54,4 +54,5 @@ public class Collaborateur {
 
     private int SalaireActuel;
 
+
 }
