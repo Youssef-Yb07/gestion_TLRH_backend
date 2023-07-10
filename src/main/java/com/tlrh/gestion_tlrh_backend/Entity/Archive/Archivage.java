@@ -2,15 +2,16 @@ package com.tlrh.gestion_tlrh_backend.Entity.Archive;
 
 import java.sql.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.GeneratedValue;
+import javax.persistence.InheritanceType;
+
 import lombok.Data;
 
-@MappedSuperClass
+@MappedSuperclass
 @Data
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Archivage {
