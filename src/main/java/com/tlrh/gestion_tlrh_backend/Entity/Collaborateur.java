@@ -52,9 +52,21 @@ public class Collaborateur {
 
     private int SalaireActuel;
 
-    @ManyToMany(mappedBy = "collaborateurs")
+    @ManyToMany
+    @JoinTable(
+            name = "TechnologieCollaborateur",
+            joinColumns = @JoinColumn(name = "id_collaborateur"),
+            inverseJoinColumns = @JoinColumn(name = "id_technologie")
+    )
     private List<Technologie> technologies;
-    @ManyToMany(mappedBy = "collaborateurs")
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "RoleCollaborateur",
+            joinColumns = @JoinColumn(name = "id_collaborateur"),
+            inverseJoinColumns = @JoinColumn(name = "id_role")
+    )
     private List<Role> roles;
 
     @OneToMany
@@ -62,4 +74,6 @@ public class Collaborateur {
             joinColumns = @JoinColumn(name = "collaborateur_id"),
             inverseJoinColumns = @JoinColumn(name = "archivage_id"))
     private List<Archivage> archivageList;
+
+
 }
