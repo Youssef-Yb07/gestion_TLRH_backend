@@ -19,7 +19,7 @@ public class Technologie {
     private int niveau;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "TechnologieCollaborateur",
+            name = "Technologie_Collaborateur",
             joinColumns = @JoinColumn(name = "id_technologie"),
             inverseJoinColumns = @JoinColumn(name = "id_collaborateur")
     )

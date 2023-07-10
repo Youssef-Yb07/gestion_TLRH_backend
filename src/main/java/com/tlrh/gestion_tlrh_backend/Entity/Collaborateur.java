@@ -54,7 +54,7 @@ public class Collaborateur {
 
     @ManyToMany
     @JoinTable(
-            name = "TechnologieCollaborateur",
+            name = "Technologie_Collaborateur",
             joinColumns = @JoinColumn(name = "id_collaborateur"),
             inverseJoinColumns = @JoinColumn(name = "id_technologie")
     )
@@ -63,7 +63,7 @@ public class Collaborateur {
 
     @ManyToMany
     @JoinTable(
-            name = "RoleCollaborateur",
+            name = "Role_Collaborateur",
             joinColumns = @JoinColumn(name = "id_collaborateur"),
             inverseJoinColumns = @JoinColumn(name = "id_role")
     )
@@ -71,9 +71,9 @@ public class Collaborateur {
 
     @OneToMany
     @JoinTable(name = "collaborateur_archivage",
-            joinColumns = @JoinColumn(name = "collaborateur_id"),
-            inverseJoinColumns = @JoinColumn(name = "archivage_id"))
-    private List<Archivage> archivageList;
+            joinColumns = @JoinColumn(name = "id_collaborateur"),
+            inverseJoinColumns = @JoinColumn(name = "id_archivage"))
+    private List<Archivage> archivages;
 
 
 }
