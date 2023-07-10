@@ -8,9 +8,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@MappedSuperclass
+@Entity
 @Data
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Archivage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
