@@ -2,14 +2,11 @@ package com.tlrh.gestion_tlrh_backend.Entity.Archive;
 
 import java.sql.Date;
 
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.GeneratedValue;
-import javax.persistence.InheritanceType;
+
 
 import lombok.Data;
+
+import javax.persistence.*;
 
 @MappedSuperclass
 @Data
