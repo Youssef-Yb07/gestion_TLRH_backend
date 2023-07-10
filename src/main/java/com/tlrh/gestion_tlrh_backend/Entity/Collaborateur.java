@@ -74,6 +74,7 @@ public class Collaborateur {
             joinColumns = @JoinColumn(name = "id_collaborateur"),
             inverseJoinColumns = @JoinColumn(name = "id_archivage"))
     private List<Archivage> archivages;
-
+    @OneToMany(mappedBy = "collaborateur")
+    private List<Diplome> diplomes;
 
 }
