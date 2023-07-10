@@ -8,6 +8,6 @@ public class InitController {
 
     @RequestMapping("/hello")
     public String init() {
-        return "<h1> Hello World!</h1>";
+        return "<h1> Hello World Hiii!</h1>";
     }
 }
