@@ -12,13 +12,11 @@ public class Collaborateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer matricule;
 
     private String email;
 
     private String password;
-
-    private int matricule;
 
     private String NomCollaborateur;
 
@@ -27,6 +25,9 @@ public class Collaborateur {
     private String AbreviationCollaborateur;
 
     private String AncienManagerRH;
+
+    @OneToOne
+    private Collaborateur managerRH;
 
     private String sexe;
 
@@ -77,4 +78,5 @@ public class Collaborateur {
     @OneToMany(mappedBy = "collaborateur")
     private List<Diplome> diplomes;
 
+    private boolean status=true;
 }
