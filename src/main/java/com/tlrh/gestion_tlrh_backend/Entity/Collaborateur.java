@@ -1,12 +1,10 @@
 package com.tlrh.gestion_tlrh_backend.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.tlrh.gestion_tlrh_backend.Entity.Archive.Archivage;
 import lombok.Data;
-
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -14,7 +12,7 @@ public class Collaborateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idCollaborateur;
+    private int id;
 
     private String email;
 
@@ -53,6 +51,29 @@ public class Collaborateur {
     private String PosteActuel;
 
     private int SalaireActuel;
+
+    @ManyToMany
+    @JoinTable(
+            name = "TechnologieCollaborateur",
+            joinColumns = @JoinColumn(name = "id_collaborateur"),
+            inverseJoinColumns = @JoinColumn(name = "id_technologie")
+    )
+    private List<Technologie> technologies;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "RoleCollaborateur",
+            joinColumns = @JoinColumn(name = "id_collaborateur"),
+            inverseJoinColumns = @JoinColumn(name = "id_role")
+    )
+    private List<Role> roles;
+
+    @OneToMany
+    @JoinTable(name = "collaborateur_archivage",
+            joinColumns = @JoinColumn(name = "collaborateur_id"),
+            inverseJoinColumns = @JoinColumn(name = "archivage_id"))
+    private List<Archivage> archivageList;
 
 
 }
