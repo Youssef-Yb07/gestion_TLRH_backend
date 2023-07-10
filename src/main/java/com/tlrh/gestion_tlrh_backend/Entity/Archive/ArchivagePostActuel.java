@@ -2,9 +2,11 @@ package com.tlrh.gestion_tlrh_backend.Entity.Archive;
 
 import jakarta.persistence.Entity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-public class ArchivagePostActuel {
+@EqualsAndHashCode(callSuper = true)
+public class ArchivagePostActuel extends Archivage{
     private String posteActuel;
 }
