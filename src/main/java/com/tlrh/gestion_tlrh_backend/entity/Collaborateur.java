@@ -1,6 +1,8 @@
-package com.tlrh.gestion_tlrh_backend.Entity;
+package com.tlrh.gestion_tlrh_backend.entity;
 
-import com.tlrh.gestion_tlrh_backend.Entity.Archive.Archivage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tlrh.gestion_tlrh_backend.entity.Archive.Archivage;
+import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import lombok.Data;
 import javax.persistence.*;
 import java.sql.Date;
@@ -78,6 +80,5 @@ public class Collaborateur {
     @OneToMany(mappedBy = "collaborateur")
     private List<Diplome> diplomes;
 
-    private boolean status=true;
-
+    private StatutManagerRH statut;
 }

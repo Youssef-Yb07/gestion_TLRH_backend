@@ -1,4 +1,4 @@
-package com.tlrh.gestion_tlrh_backend.Entity;
+package com.tlrh.gestion_tlrh_backend.entity;
 
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,18 +8,19 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role {
+@Entity
+public class Technologie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String role;
+    private String nom;
+    private int niveau;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "Role_Collaborateur",
-            joinColumns = @JoinColumn(name = "id_role"),
+            name = "Technologie_Collaborateur",
+            joinColumns = @JoinColumn(name = "id_technologie"),
             inverseJoinColumns = @JoinColumn(name = "id_collaborateur")
     )
     private List<Collaborateur> collaborateurs;

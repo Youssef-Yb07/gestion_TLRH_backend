@@ -1,4 +1,4 @@
-package com.tlrh.gestion_tlrh_backend.Entity.Archive;
+package com.tlrh.gestion_tlrh_backend.entity.Archive;
 
 import java.sql.Date;
 

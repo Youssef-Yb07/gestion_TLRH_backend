@@ -1,4 +1,4 @@
-package com.tlrh.gestion_tlrh_backend.Entity;
+package com.tlrh.gestion_tlrh_backend.entity;
 
 
 import javax.persistence.*;
