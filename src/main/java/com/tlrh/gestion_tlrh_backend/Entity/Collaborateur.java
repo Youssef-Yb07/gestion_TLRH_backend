@@ -1,6 +1,6 @@
 package com.tlrh.gestion_tlrh_backend.Entity;
 
-import com.tlrh.gestion_tlrh_backend.Entity.Archive.Archivage;
+import com.tlrh.gestion_tlrh_backend.Entity.Archivage;
 import lombok.Data;
 import javax.persistence.*;
 import java.sql.Date;
