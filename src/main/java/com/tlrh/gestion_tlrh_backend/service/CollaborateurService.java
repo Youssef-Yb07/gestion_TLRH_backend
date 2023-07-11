@@ -1,15 +1,18 @@
 package com.tlrh.gestion_tlrh_backend.service;
 
 import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
+import com.tlrh.gestion_tlrh_backend.entity.Archivage;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
+import com.tlrh.gestion_tlrh_backend.repositories.ArchivageRepository;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -18,6 +21,8 @@ public class CollaborateurService {
     @Autowired private CollaborateurRepository collaborateurRepository;
 
     @Autowired private ModelMapper modelMapper;
+
+    @Autowired private ArchivageRepository archivageRepository;
 
     @Transactional
     public CollaborateurDto updateCollaborateurBy3Actors(Integer matricule, CollaborateurDto collaborateurDto) throws EntityNotFoundException {
@@ -28,6 +33,18 @@ public class CollaborateurService {
         //Check if Collaborateur exists
         if (optionalCollaborateur.isPresent()) {
             Collaborateur collaborateur = optionalCollaborateur.get();
+            //set the old values to the Archivage table and save it
+            Archivage archivage=new Archivage();
+            archivage.setCollaborateur(collaborateur);
+            archivage.setDateArchivage(Date.valueOf(LocalDateTime.now().toLocalDate()));
+            archivage.setPosteActuel(collaborateur.getPosteActuel());
+            archivage.setPosteApp(collaborateur.getPosteAPP());
+            archivage.setSalaire(collaborateur.getSalaireActuel());
+            archivageRepository.save(archivage);
+
+            //Assign it into association table "Collaborateur_Archivage"
+            collaborateur.getArchivages().add(archivage);
+
             //Update Collaborateur with new values
             collaborateur.setSalaireActuel(collaborateurDto.getSalaireActuel());
             collaborateur.setPosteAPP(collaborateurDto.getPosteAPP());

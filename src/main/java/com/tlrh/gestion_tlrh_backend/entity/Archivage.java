@@ -1,12 +1,17 @@
 package com.tlrh.gestion_tlrh_backend.entity;
 
 import java.sql.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Archivage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +28,6 @@ public class Archivage {
     private String posteApp;
 
     private int salaire;
+
+
 }

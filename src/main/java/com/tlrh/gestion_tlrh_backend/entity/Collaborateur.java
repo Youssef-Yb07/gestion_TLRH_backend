@@ -1,7 +1,6 @@
 package com.tlrh.gestion_tlrh_backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tlrh.gestion_tlrh_backend.entity.Archive.Archivage;
+
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import lombok.Data;
 import javax.persistence.*;
