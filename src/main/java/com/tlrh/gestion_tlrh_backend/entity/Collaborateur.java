@@ -79,5 +79,7 @@ public class Collaborateur {
     @OneToMany(mappedBy = "collaborateur")
     private List<Diplome> diplomes;
 
-    private StatutManagerRH statut;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatutManagerRH statut = StatutManagerRH.Desactive;
 }
