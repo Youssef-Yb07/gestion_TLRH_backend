@@ -3,6 +3,7 @@ package com.tlrh.gestion_tlrh_backend.service;
 import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.entity.Archivage;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
+import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import com.tlrh.gestion_tlrh_backend.repositories.ArchivageRepository;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
 import org.modelmapper.ModelMapper;
@@ -86,6 +87,70 @@ public class CollaborateurService {
     }
 
 
+    @Transactional
+public CollaborateurDto assignCollaborateurToManager(Integer collaborateurMatricule, Integer managerMatricule) throws EntityNotFoundException {
+    // Get Collaborateur by matricule
+    Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
 
+    // Check if Collaborateur exists
+    if (optionalCollaborateur.isPresent()) {
+        Collaborateur collaborateur = optionalCollaborateur.get();
+
+        // Get Manager RH by matricule
+        Optional<Collaborateur> optionalManagerRH = collaborateurRepository.findById(managerMatricule);
+        if (optionalManagerRH.isPresent()) {
+            Collaborateur managerRH = optionalManagerRH.get();
+            // Verify if the collaborator has the role "Manager RH"
+            if (managerRH.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
+                // Assign the HR Manager to the collaborator
+                collaborateur.setManagerRH(managerRH);
+            } else {
+                throw new IllegalStateException("Le Collaborateur sélectionné n'a pas le rôle de Manager RH.");
+            }
+        } else {
+            throw new EntityNotFoundException("Manager RH not found");
+        }
+
+        // Save the updated collaborator
+        Collaborateur collaborateurUpdated = collaborateurRepository.save(collaborateur);
+
+        //Convert Collaborateur to CollaborateurDto
+        CollaborateurDto updatedDto = new CollaborateurDto();
+        updatedDto.setMatricule(collaborateurUpdated.getMatricule());
+        updatedDto.setSalaireActuel(collaborateurUpdated.getSalaireActuel());
+        updatedDto.setManagerRH(collaborateurUpdated.getManagerRH().getMatricule());
+        updatedDto.setPosteAPP(collaborateurUpdated.getPosteAPP());
+
+        return updatedDto;
+    } else {
+        throw new EntityNotFoundException("Collaborateur not found");
+    }
+}
+
+@Transactional
+public void addRandomCollaborateurs(int number) {
+    for (int i = 0; i < number; i++) {
+        Collaborateur collaborateur = new Collaborateur();
+        collaborateur.setMatricule(i);
+        collaborateur.setSalaireActuel((int) (Math.random() * 1000));
+        collaborateur.setPosteAPP("Poste APP " + i);
+        collaborateur.setPosteActuel("Poste actuel " + i);
+        collaborateur.setSexe("M");
+        collaborateur.setNomCollaborateur("Nom " + i);
+        collaborateur.setPrenomCollaborateur("Prenom " + i);
+        collaborateur.setAbreviationCollaborateur("Abreviation " + i);
+        collaborateur.setAncienManagerRH("Ancien Manager RH " + i);
+        collaborateur.setAncien_Collaborateur(false);
+        collaborateur.setSeminaireIntegration(false);
+        collaborateur.setDate_Embauche(Date.valueOf(LocalDateTime.now().toLocalDate()));
+        collaborateur.setDateParticipation(Date.valueOf(LocalDateTime.now().toLocalDate()));
+        collaborateur.setDate_Depart(Date.valueOf(LocalDateTime.now().toLocalDate()));
+        collaborateur.setMois_BAP("Mois BAP " + i);
+        collaborateur.setSite("Site " + i);
+        collaborateur.setBU("BU " + i);
+        collaborateur.setStatut(StatutManagerRH.Active);
+        collaborateurRepository.save(collaborateur);
+    }
+}
 
 }

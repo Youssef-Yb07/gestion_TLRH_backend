@@ -24,4 +24,28 @@ public class CollaborateurController {
         }
     }
 
+    @PutMapping("/assignCollaborateurToManager")
+    public ResponseEntity<CollaborateurDto> assignCollaborateurToManager(@RequestParam Integer collaborateurMatricule, @RequestParam Integer managerMatricule) {
+        try {
+            return new ResponseEntity(collaborateurService.assignCollaborateurToManager(collaborateurMatricule, managerMatricule), HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error while assigning Collaborateur to Manager");
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //Add random Collaborators for testing purposes
+    @PostMapping("/addRandomCollaborateurs")
+    public ResponseEntity addRandomCollaborateurs(@RequestParam Integer number) {
+        try {
+            collaborateurService.addRandomCollaborateurs(number);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error while adding Collaborateurs");
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
