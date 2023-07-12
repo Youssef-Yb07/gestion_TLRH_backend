@@ -1,5 +1,6 @@
 package com.tlrh.gestion_tlrh_backend.service;
 import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
+import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
 import com.tlrh.gestion_tlrh_backend.entity.Archivage;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
@@ -36,7 +37,7 @@ public class     CollaborateurService {
     @Autowired private ArchivageRepository archivageRepository;
 
     @Transactional
-    public CollaborateurDto updateCollaborateurBy3Actors(Integer matricule, CollaborateurDto collaborateurDto) throws EntityNotFoundException {
+    public Collaborateur updateCollaborateurBy3Actors(Integer matricule, UpdateBy3ActorsDto collaborateurDto) throws EntityNotFoundException {
 
         //Get Collaborateur by matricule
         Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(matricule);
@@ -81,13 +82,8 @@ public class     CollaborateurService {
             }
             //Save Collaborateur updated
             Collaborateur collaborateurUpdated = collaborateurRepository.save(collaborateur);
-            //Convert Collaborateur to CollaborateurDto
-            CollaborateurDto updatedDto = new CollaborateurDto();
-            updatedDto.setMatricule(collaborateurUpdated.getMatricule());
-            updatedDto.setSalaireActuel(collaborateurUpdated.getSalaireActuel());
-            updatedDto.setManagerRH(collaborateurUpdated.getManagerRH().getMatricule());
-            updatedDto.setPosteAPP(collaborateurUpdated.getPosteAPP());
-            return updatedDto;
+
+            return collaborateurUpdated;
         } else {
             throw new EntityNotFoundException("Collaborateur not found");
         }
@@ -169,7 +165,7 @@ public class     CollaborateurService {
     }
 
     @Transactional
-    public CollaborateurDto assignCollaborateurToManager(Integer collaborateurMatricule, Integer managerMatricule) throws EntityNotFoundException {
+    public Collaborateur assignCollaborateurToManager(Integer collaborateurMatricule, Integer managerMatricule) throws EntityNotFoundException {
         // Get Collaborateur by matricule
         Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
 
@@ -195,14 +191,7 @@ public class     CollaborateurService {
             // Save the updated collaborator
             Collaborateur collaborateurUpdated = collaborateurRepository.save(collaborateur);
 
-            //Convert Collaborateur to CollaborateurDto
-            CollaborateurDto updatedDto = new CollaborateurDto();
-            updatedDto.setMatricule(collaborateurUpdated.getMatricule());
-            updatedDto.setSalaireActuel(collaborateurUpdated.getSalaireActuel());
-            updatedDto.setManagerRH(collaborateurUpdated.getManagerRH().getMatricule());
-            updatedDto.setPosteAPP(collaborateurUpdated.getPosteAPP());
-
-            return updatedDto;
+            return collaborateurUpdated;
         } else {
             throw new EntityNotFoundException("Collaborateur not found");
         }

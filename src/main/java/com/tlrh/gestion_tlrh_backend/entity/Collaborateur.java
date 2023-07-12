@@ -1,6 +1,7 @@
 package com.tlrh.gestion_tlrh_backend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import lombok.Data;
 import javax.persistence.*;
@@ -62,7 +63,8 @@ public class Collaborateur {
     )
     private List<Technologie> technologies;
 
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "Role_Collaborateur",
             joinColumns = @JoinColumn(name = "id_collaborateur"),
@@ -76,7 +78,10 @@ public class Collaborateur {
             inverseJoinColumns = @JoinColumn(name = "id_archivage"))
     private List<Archivage> archivages;
 
-    @OneToMany(mappedBy = "collaborateur")
+    @OneToMany
+    @JoinTable(name = "collaborateur_diplome",
+            joinColumns = @JoinColumn(name = "id_collaborateur"),
+            inverseJoinColumns = @JoinColumn(name = "id_diplome"))
     private List<Diplome> diplomes;
 
     @Enumerated(EnumType.STRING)
