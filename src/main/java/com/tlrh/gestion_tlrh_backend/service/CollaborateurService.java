@@ -327,42 +327,43 @@ public class     CollaborateurService {
 
 // create a managerRH
 @Transactional
-public CollaborateurDto CreateManagerRh(CollaborateurDto managerRhDto){
-        Collaborateur managerRH= new Collaborateur();
-        managerRH.setMatricule(managerRhDto.getMatricule());
-        managerRH.setNomCollaborateur(managerRhDto.getNom());
-        managerRH.setPrenomCollaborateur(managerRhDto.getPrenom());
-        managerRH.setBU(managerRhDto.getBu());
-        managerRH.setEmail(managerRhDto.getEmail());
-        managerRH.setPassword(managerRhDto.getPassword());
-        managerRH.setSite(managerRhDto.getSite());
-        managerRH.setSexe(managerRhDto.getSexe());
-        managerRH.setPosteAPP(managerRH.getPosteAPP());
-        managerRH.setSalaireActuel(managerRhDto.getSalaireActuel());
+public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws IllegalStateException {
+    // Check if the coll already exists in bd
+    Optional<Collaborateur> existingCollaborateur = collaborateurRepository.findById(managerDto.getMatricule());
+    if (existingCollaborateur.isPresent()) {
+        Collaborateur collaborateur = existingCollaborateur.get();
+        // Check if the collaborator already has the "Manager RH" role
+        boolean hasManagerRHRole = collaborateur.getRoles().stream()
+                .anyMatch(role -> role.getRole().equals("Manager RH"));
+        if (hasManagerRHRole) {
+            throw new IllegalStateException("Collaborator already has the Manager RH role.");
+        }
 
+        // Assign the "Manager RH" role to the coll
+        Role managerRole = new Role();
+        managerRole.setRole("Manager RH");
+        collaborateur.getRoles().add(managerRole);
+        collaborateurRepository.save(collaborateur);
 
-        //assignation du role ManagerRH au coll
-        Role managerRole= new Role();
-        managerRole.setRole("ManagerRH");
-        managerRH.getRoles().add(managerRole);
-        Collaborateur NewmanagerRh=collaborateurRepository.save(managerRH);
+        // Convert the coll to CollDto
+        CollaborateurDto collaborateurDto = new CollaborateurDto();
+        collaborateurDto.setMatricule(collaborateur.getMatricule());
+        collaborateurDto.setNom(collaborateur.getNomCollaborateur());
+        collaborateurDto.setPrenom(collaborateur.getPrenomCollaborateur());
+        collaborateurDto.setSexe(collaborateur.getSexe());
+        collaborateurDto.setSite(collaborateur.getSite());
+        collaborateurDto.setBu(collaborateur.getBU());
+        collaborateurDto.setEmail(collaborateur.getEmail());
+        collaborateurDto.setPassword(collaborateur.getPassword());
+        collaborateurDto.setSalaireActuel(collaborateur.getSalaireActuel());
+        collaborateurDto.setPosteAPP(collaborateur.getPosteAPP());
 
-        CollaborateurDto NewmanagerRhDto=new CollaborateurDto();
-        NewmanagerRhDto.setMatricule(NewmanagerRh.getMatricule());
-        NewmanagerRhDto.setNom(NewmanagerRh.getNomCollaborateur());
-        NewmanagerRhDto.setPrenom(NewmanagerRh.getPrenomCollaborateur());
-        NewmanagerRhDto.setBu(NewmanagerRh.getBU());
-        NewmanagerRhDto.setEmail(NewmanagerRh.getEmail());
-        NewmanagerRhDto.setPassword(NewmanagerRh.getPassword());
-        NewmanagerRhDto.setSexe(NewmanagerRh.getSexe());
-        NewmanagerRhDto.setSite(NewmanagerRh.getSite());
-        NewmanagerRhDto.setPosteAPP(NewmanagerRh.getPosteAPP());
-        NewmanagerRhDto.setSalaireActuel(NewmanagerRh.getSalaireActuel());
-
-        return NewmanagerRhDto;
-
-
+        return collaborateurDto;
+    } else {
+        throw new IllegalStateException("Collaborator does not exist.");
+    }
 }
+
 
 
 }

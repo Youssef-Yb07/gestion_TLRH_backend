@@ -90,7 +90,7 @@ public class CollaborateurController {
 @PostMapping("/createManagerRH")
     public ResponseEntity<CollaborateurDto> createManagerRH(@RequestBody CollaborateurDto managerDto) {
     try {
-        CollaborateurDto NewmanagerDto = collaborateurService.CreateManagerRh(managerDto);
+        CollaborateurDto NewmanagerDto = collaborateurService.createManagerRh(managerDto);
         return new ResponseEntity<>(NewmanagerDto, HttpStatus.OK);
     } catch (Exception e) {
         System.out.println("Error while creating Manager RH");
