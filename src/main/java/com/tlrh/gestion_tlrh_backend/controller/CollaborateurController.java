@@ -56,7 +56,21 @@ public class CollaborateurController {
         }
     }
 
-
+    @PutMapping("/{matricule}/updateByManager")
+    public ResponseEntity<CollaborateurDto> updateCollaborateurByManager(
+            @PathVariable("matricule") Integer matricule,
+            @RequestBody CollaborateurDto collaborateurDto) {
+        try {
+            CollaborateurDto updatedCollaborateur = collaborateurService.updateCollaborateurByManager(matricule, collaborateurDto);
+            return new ResponseEntity<>(updatedCollaborateur, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     //Add random Collaborators for testing purposes
     @PostMapping("/addRandomCollaborateurs")

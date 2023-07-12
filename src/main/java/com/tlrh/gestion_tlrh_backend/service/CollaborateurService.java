@@ -164,6 +164,63 @@ public List<CollaborateurDto> assignCollaborateursToManager(List<Integer> collab
 }
 
 
+//TODO: Not Tested yet
+@Transactional
+public CollaborateurDto updateCollaborateurByManager(Integer collaborateurMatricule, CollaborateurDto collaborateurDto) throws EntityNotFoundException {
+    // Get Collaborateur by matricule
+    Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
+
+    // Check if Collaborateur exists
+    if (optionalCollaborateur.isPresent()) {
+        Collaborateur collaborateur = optionalCollaborateur.get();
+
+        //set the old values to the Archivage table and save it
+        Archivage archivage=new Archivage();
+        archivage.setCollaborateur(collaborateur);
+        archivage.setDateArchivage(Date.valueOf(LocalDateTime.now().toLocalDate()));
+        archivage.setPosteActuel(collaborateur.getPosteActuel());
+        archivage.setPosteApp(collaborateur.getPosteAPP());
+        archivage.setSalaire(collaborateur.getSalaireActuel());
+        archivageRepository.save(archivage);
+
+        //Assign it into association table "Collaborateur_Archivage"
+        collaborateur.getArchivages().add(archivage);
+
+        // Update Collaborateur with new values
+        collaborateur.setSalaireActuel(collaborateurDto.getSalaireActuel());
+        collaborateur.setPosteAPP(collaborateurDto.getPosteAPP());
+
+        // Update Manager RH
+        if (collaborateurDto.getManagerRH() != null) {
+            // Get Manager RH by matricule
+            Optional<Collaborateur> optionalManagerRH = collaborateurRepository.findById(collaborateurDto.getManagerRH());
+            if (optionalManagerRH.isPresent()) {
+                Collaborateur managerRH = optionalManagerRH.get();
+                // Verify if the collaborator has the role "Manager RH"
+                if (managerRH.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
+                    // Assign the HR Manager to the collaborator
+                    collaborateur.setManagerRH(managerRH);
+                } else {
+                    throw new IllegalStateException("Le Collaborateur sélectionné n'a pas le rôle de Manager RH.");
+                }
+            } else {
+                throw new EntityNotFoundException("Manager RH not found");
+            }
+        }
+
+        // Save the updated collaborator
+        Collaborateur collaborateurUpdated = collaborateurRepository.save(collaborateur);
+
+        // Convert Collaborateur to CollaborateurDto
+        CollaborateurDto updatedDto = modelMapper.map(collaborateurUpdated, CollaborateurDto.class);
+
+        return updatedDto;
+    } else {
+        throw new EntityNotFoundException("Collaborateur not found");
+    }
+}
+
+
 @Transactional
 public void addRandomCollaborateurs(int number) {
     for (int i = 0; i < number; i++) {
