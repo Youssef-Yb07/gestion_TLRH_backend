@@ -14,7 +14,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CollaborateurService {
@@ -126,6 +128,41 @@ public CollaborateurDto assignCollaborateurToManager(Integer collaborateurMatric
         throw new EntityNotFoundException("Collaborateur not found");
     }
 }
+
+@Transactional
+public List<CollaborateurDto> assignCollaborateursToManager(List<Integer> collaborateurMatricules, Integer managerMatricule) throws EntityNotFoundException {
+    // Get Manager RH by matricule
+    Optional<Collaborateur> optionalManagerRH = collaborateurRepository.findById(managerMatricule);
+    if (optionalManagerRH.isPresent()) {
+        Collaborateur managerRH = optionalManagerRH.get();
+        // Verify if the manager has the role "Manager RH"
+        if (managerRH.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
+            // Assign the HR Manager to the collaborators
+            List<Collaborateur> collaborateurs = collaborateurRepository.findAllById(collaborateurMatricules);
+            collaborateurs.forEach(collaborateur -> collaborateur.setManagerRH(managerRH));
+            List<Collaborateur> updatedCollaborateurs = collaborateurRepository.saveAll(collaborateurs);
+
+            // Convert updated collaborators to CollaborateurDto list
+            List<CollaborateurDto> updatedDtos = updatedCollaborateurs.stream()
+                    .map(collaborateur -> {
+                        CollaborateurDto dto = new CollaborateurDto();
+                        dto.setMatricule(collaborateur.getMatricule());
+                        dto.setSalaireActuel(collaborateur.getSalaireActuel());
+                        dto.setManagerRH(collaborateur.getManagerRH().getMatricule());
+                        dto.setPosteAPP(collaborateur.getPosteAPP());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+
+            return updatedDtos;
+        } else {
+            throw new IllegalStateException("Le Manager sélectionné n'a pas le rôle de Manager RH.");
+        }
+    } else {
+        throw new EntityNotFoundException("Manager RH not found");
+    }
+}
+
 
 @Transactional
 public void addRandomCollaborateurs(int number) {
