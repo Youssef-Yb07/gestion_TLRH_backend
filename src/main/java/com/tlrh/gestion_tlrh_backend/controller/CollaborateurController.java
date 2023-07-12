@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/collaborateur")
 public class CollaborateurController {
 
-    @Autowired private CollaborateurService collaborateurService;
+    @Autowired
+    private CollaborateurService collaborateurService;
 
     @PutMapping("/updateBy3Actors")
     public ResponseEntity<CollaborateurDto> UpdateCollaborateurBy3Actors(@RequestParam Integer matricule,@RequestBody CollaborateurDto collaborateurDto) {
@@ -56,21 +57,21 @@ public class CollaborateurController {
         }
     }
 
-    @PutMapping("/{matricule}/updateByManager")
-    public ResponseEntity<CollaborateurDto> updateCollaborateurByManager(
-            @PathVariable("matricule") Integer matricule,
-            @RequestBody CollaborateurDto collaborateurDto) {
-        try {
-            CollaborateurDto updatedCollaborateur = collaborateurService.updateCollaborateurByManager(matricule, collaborateurDto);
-            return new ResponseEntity<>(updatedCollaborateur, HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (IllegalStateException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @PutMapping("/{matricule}/updateByManager")
+//    public ResponseEntity<CollaborateurDto> updateCollaborateurByManager(
+//            @PathVariable("matricule") Integer matricule,
+//            @RequestBody CollaborateurDto collaborateurDto) {
+//        try {
+//            CollaborateurDto updatedCollaborateur = collaborateurService.updateCollaborateurByManager(matricule, collaborateurDto);
+//            return new ResponseEntity<>(updatedCollaborateur, HttpStatus.OK);
+//        } catch (EntityNotFoundException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        } catch (IllegalStateException e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     //Add random Collaborators for testing purposes
     @PostMapping("/addRandomCollaborateurs")

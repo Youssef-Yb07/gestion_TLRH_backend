@@ -1,14 +1,19 @@
 package com.tlrh.gestion_tlrh_backend.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Collaborateur {
 
     @Id
@@ -82,4 +87,28 @@ public class Collaborateur {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatutManagerRH statut = StatutManagerRH.Desactive;
+
+    public Collaborateur(Integer matricule, String email, String password, String nomCollaborateur, String prenomCollaborateur, String abreviationCollaborateur, String ancienManagerRH, Collaborateur managerRH, String sexe, String site, String BU, Date date_Embauche, String mois_BAP, Date date_Depart, boolean ancien_Collaborateur, boolean seminaireIntegration, Date dateParticipation, String posteAPP, String posteActuel, int salaireActuel, StatutManagerRH statut) {
+        this.matricule = matricule;
+        this.email = email;
+        this.password = password;
+        NomCollaborateur = nomCollaborateur;
+        PrenomCollaborateur = prenomCollaborateur;
+        AbreviationCollaborateur = abreviationCollaborateur;
+        AncienManagerRH = ancienManagerRH;
+        this.managerRH = managerRH;
+        this.sexe = sexe;
+        this.site = site;
+        this.BU = BU;
+        Date_Embauche = date_Embauche;
+        Mois_BAP = mois_BAP;
+        Date_Depart = date_Depart;
+        Ancien_Collaborateur = ancien_Collaborateur;
+        SeminaireIntegration = seminaireIntegration;
+        DateParticipation = dateParticipation;
+        PosteAPP = posteAPP;
+        PosteActuel = posteActuel;
+        SalaireActuel = salaireActuel;
+        this.statut = statut;
+    }
 }
