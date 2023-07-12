@@ -6,6 +6,14 @@ import lombok.Data;
 public class CollaborateurDto {
 
     private Integer matricule;
+    private String Nom;
+    private String Prenom;
+    private String sexe;
+    private String site;
+    private String Bu;
+    private String email;
+    private String password;
+
 
     private int SalaireActuel;
 

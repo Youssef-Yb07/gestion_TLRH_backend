@@ -4,6 +4,7 @@ import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.entity.Archivage;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
+import com.tlrh.gestion_tlrh_backend.entity.Role;
 import com.tlrh.gestion_tlrh_backend.repositories.ArchivageRepository;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
 import org.modelmapper.ModelMapper;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class CollaborateurService {
+public class     CollaborateurService {
 
     @Autowired private CollaborateurRepository collaborateurRepository;
 
@@ -153,4 +154,45 @@ public void addRandomCollaborateurs(int number) {
     }
 }
 
+// create a managerRH
+@Transactional
+public CollaborateurDto CreateManagerRh(CollaborateurDto managerRhDto){
+        Collaborateur managerRH= new Collaborateur();
+        managerRH.setMatricule(managerRhDto.getMatricule());
+        managerRH.setNomCollaborateur(managerRhDto.getNom());
+        managerRH.setPrenomCollaborateur(managerRhDto.getPrenom());
+        managerRH.setBU(managerRhDto.getBu());
+        managerRH.setEmail(managerRhDto.getEmail());
+        managerRH.setPassword(managerRhDto.getPassword());
+        managerRH.setSite(managerRhDto.getSite());
+        managerRH.setSexe(managerRhDto.getSexe());
+        managerRH.setPosteAPP(managerRH.getPosteAPP());
+        managerRH.setSalaireActuel(managerRhDto.getSalaireActuel());
+
+
+        //assignation du role ManagerRH au coll
+        Role managerRole= new Role();
+        managerRole.setRole("ManagerRH");
+        managerRH.getRoles().add(managerRole);
+        Collaborateur NewmanagerRh=collaborateurRepository.save(managerRH);
+
+        CollaborateurDto NewmanagerRhDto=new CollaborateurDto();
+        NewmanagerRhDto.setMatricule(NewmanagerRh.getMatricule());
+        NewmanagerRhDto.setNom(NewmanagerRh.getNomCollaborateur());
+        NewmanagerRhDto.setPrenom(NewmanagerRh.getPrenomCollaborateur());
+        NewmanagerRhDto.setBu(NewmanagerRh.getBU());
+        NewmanagerRhDto.setEmail(NewmanagerRh.getEmail());
+        NewmanagerRhDto.setPassword(NewmanagerRh.getPassword());
+        NewmanagerRhDto.setSexe(NewmanagerRh.getSexe());
+        NewmanagerRhDto.setSite(NewmanagerRh.getSite());
+        NewmanagerRhDto.setPosteAPP(NewmanagerRh.getPosteAPP());
+        NewmanagerRhDto.setSalaireActuel(NewmanagerRh.getSalaireActuel());
+
+        return NewmanagerRhDto;
+
+
 }
+
+
+}
+

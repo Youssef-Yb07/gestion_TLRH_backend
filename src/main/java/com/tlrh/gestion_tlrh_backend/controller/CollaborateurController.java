@@ -13,7 +13,7 @@ public class CollaborateurController {
 
     @Autowired private CollaborateurService collaborateurService;
 
-    @PutMapping("/updateBy3Actors")
+    @PutMapping("/updateBy3A ctors")
     public ResponseEntity<CollaborateurDto> UpdateCollaborateurBy3Actors(@RequestParam Integer matricule,@RequestBody CollaborateurDto collaborateurDto) {
         try {
             return new ResponseEntity(collaborateurService.updateCollaborateurBy3Actors(matricule, collaborateurDto), HttpStatus.OK);
@@ -47,5 +47,20 @@ public class CollaborateurController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //create managerRH
+@PostMapping("/createManagerRH")
+    public ResponseEntity<CollaborateurDto> createManagerRH(@RequestBody CollaborateurDto managerDto) {
+    try {
+        CollaborateurDto NewmanagerDto = collaborateurService.CreateManagerRh(managerDto);
+        return new ResponseEntity<>(NewmanagerDto, HttpStatus.OK);
+    } catch (Exception e) {
+        System.out.println("Error while creating Manager RH");
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+}
+
 
 }
