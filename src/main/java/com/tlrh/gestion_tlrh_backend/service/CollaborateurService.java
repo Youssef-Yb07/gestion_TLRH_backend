@@ -29,8 +29,8 @@ public class CollaborateurService {
 
     @Autowired private CollaborateurRepository collaborateurRepository;
 
-//    @Autowired
-//    private ModelMapper modelMapper;
+    //@Autowired
+    //private ModelMapper modelMapper;
     @Autowired
     private EmailsService emailsService;
 
@@ -393,6 +393,7 @@ public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws Ille
         }
     }
 
+    @Transactional
     public Collaborateur ActivateStatusManagerRH(Integer idManagerRH){
         Optional<Collaborateur> optionalManagerRH = collaborateurRepository.findById(idManagerRH);
         if(optionalManagerRH.isPresent()) {
@@ -411,6 +412,7 @@ public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws Ille
         }
     }
 
+    @Transactional
     public Collaborateur DesactivateStatusManagerRH(Integer idManagerRH){
         Optional<Collaborateur> optionalManagerRH = collaborateurRepository.findById(idManagerRH);
         if(optionalManagerRH.isPresent()) {
@@ -427,6 +429,12 @@ public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws Ille
         else {
             throw new IllegalStateException("Collaborator does not exist.");
         }
+    }
+
+    @Transactional
+    public List<Collaborateur> getAllCollaborateurs() {
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        return collaborateurs;
     }
 
 
