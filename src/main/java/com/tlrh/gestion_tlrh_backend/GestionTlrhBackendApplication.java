@@ -35,13 +35,13 @@ public class GestionTlrhBackendApplication {
 
     }
 //    Oumnia's test
-   /* @Bean
+    @Bean
     CommandLineRunner start(CollaborateurService collaborateurService){
         return args -> {
             Collaborateur c=new Collaborateur(12345,"kahlaouioumnia@gmail.com","hidxdd","Kahlaoui","Oumnia","Be",
                     "Amani",null,"Femme","Rabat","", Date.valueOf("2023-4-12"),"6",null,false,true,null,"d","xc",123456789, StatutManagerRH.Active);
             collaborateurService.createCollaborateur(c);
         };
-    }*/
+    }
 
 }

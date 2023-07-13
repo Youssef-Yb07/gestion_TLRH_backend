@@ -323,7 +323,7 @@ public class CollaborateurService {
 
 // create a managerRH
 @Transactional
-public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws IllegalStateException, MessagingException {
+public Collaborateur createManagerRh(CollaborateurDto managerDto) throws IllegalStateException, MessagingException {
     // Check if the coll already exists in bd
     Optional<Collaborateur> existingCollaborateur = collaborateurRepository.findById(managerDto.getMatricule());
     if (existingCollaborateur.isPresent()) {
@@ -338,22 +338,12 @@ public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws Ille
         Role managerRole = new Role();
         managerRole.setRole("Manager RH");
         collaborateur.getRoles().add(managerRole);
+        StatutManagerRH status=StatutManagerRH.Active;
+        collaborateur.setStatut(status);
         collaborateurRepository.save(collaborateur);
         AffectationEmails(collaborateur);
 
-        // Convert the coll to CollDto
-        CollaborateurDto collaborateurDto = new CollaborateurDto();
-        collaborateurDto.setMatricule(collaborateur.getMatricule());
-        collaborateurDto.setNom(collaborateur.getNom());
-        collaborateurDto.setPrenom(collaborateur.getPrenom());
-        collaborateurDto.setSexe(collaborateur.getSexe());
-        collaborateurDto.setSite(collaborateur.getSite());
-        collaborateurDto.setBu(collaborateur.getBU());
-        collaborateurDto.setEmail(collaborateur.getEmail());
-        collaborateurDto.setPassword(collaborateur.getPassword());
-        collaborateurDto.setSalaireActuel(collaborateur.getSalaireActuel());
-        collaborateurDto.setPosteAPP(collaborateur.getPosteAPP());
-        return collaborateurDto;
+        return collaborateur;
     } else {
         throw new IllegalStateException("Collaborator does not exist.");
     }

@@ -89,10 +89,10 @@ public class CollaborateurController {
     }
 
     //create managerRH
-    @PostMapping("/createManagerRH")
-    public ResponseEntity<CollaborateurDto> createManagerRH(@RequestBody CollaborateurDto managerDto) {
+@PostMapping("/createManagerRH")
+    public ResponseEntity<Collaborateur> createManagerRH(@RequestBody CollaborateurDto managerDto) {
     try {
-        CollaborateurDto NewmanagerDto = collaborateurService.createManagerRh(managerDto);
+        Collaborateur NewmanagerDto = collaborateurService.createManagerRh(managerDto);
         return new ResponseEntity<>(NewmanagerDto, HttpStatus.OK);
     } catch (Exception e) {
         System.out.println("Error while creating Manager RH");
@@ -101,7 +101,7 @@ public class CollaborateurController {
     }
 }
 
-    @PutMapping("/ActivateStatusManagerRH")
+@PutMapping("/ActivateStatusManagerRH")
     public ResponseEntity<Collaborateur> ActivateStatusManagerRH(@RequestParam Integer matricule) {
     try {
         return new ResponseEntity(collaborateurService.ActivateStatusManagerRH(matricule), HttpStatus.OK);
@@ -111,7 +111,7 @@ public class CollaborateurController {
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     }
-    @PutMapping("/DesactivateStatusManagerRH")
+@PutMapping("/DesactivateStatusManagerRH")
     public ResponseEntity<Collaborateur> DesactivateStatusManagerRH(@RequestParam Integer matricule) {
     try {
         return new ResponseEntity(collaborateurService.DesactivateStatusManagerRH(matricule), HttpStatus.OK);
@@ -121,19 +121,6 @@ public class CollaborateurController {
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
-    @GetMapping("/get/AllCollaborateurs")
-    public ResponseEntity<List<Collaborateur>> getAllCollaborateurs() {
-        try {
-            List<Collaborateur> collaborateurs = collaborateurService.getAllCollaborateurs();
-            return new ResponseEntity<>(collaborateurs, HttpStatus.OK);
-        } catch (Exception e) {
-            System.out.println("Error while getting Collaborateurs");
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
 
 
 
