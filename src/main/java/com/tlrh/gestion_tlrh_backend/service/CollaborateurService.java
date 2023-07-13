@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class     CollaborateurService {
+public class CollaborateurService {
 
     @Autowired private CollaborateurRepository collaborateurRepository;
 
@@ -37,7 +37,7 @@ public class     CollaborateurService {
     @Autowired private ArchivageRepository archivageRepository;
 
     @Transactional
-    public Collaborateur updateCollaborateurBy3Actors(Integer matricule, UpdateBy3ActorsDto collaborateurDto) throws EntityNotFoundException {
+    public Collaborateur updateCollaborateurBy3Actors(Integer matricule, UpdateBy3ActorsDto collaborateurDto) throws EntityNotFoundException, MessagingException {
 
         //Get Collaborateur by matricule
         Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(matricule);
@@ -70,6 +70,7 @@ public class     CollaborateurService {
                         collaborateur.setAncienManagerRH(collaborateur.getManagerRH().getPrenom());
                         //Affect the new Manager RH to the attribute "ManagerRH"
                         collaborateur.setManagerRH(managerRH);
+
                     } else {
                         throw new IllegalStateException("Le Collaborateur sélectionné n'a pas le rôle de Manager RH.");
                     }
@@ -78,9 +79,10 @@ public class     CollaborateurService {
                 }
             }
             //Save Collaborateur updated
-            Collaborateur collaborateurUpdated = collaborateurRepository.save(collaborateur);
+            collaborateurRepository.save(collaborateur);
+            AffectationEmails(collaborateur);
 
-            return collaborateurUpdated;
+            return collaborateur;
         } else {
             throw new EntityNotFoundException("Collaborateur not found");
         }
@@ -105,7 +107,6 @@ public class     CollaborateurService {
     }
     private void WelcomeEmail(Collaborateur collaborateur) throws MessagingException {
         String collaborateurMail=collaborateur.getEmail();
-        System.out.println("hi there");
         emailsService.SendEmail(collaborateurMail,
                 "Hi Dear welcome to SQLI . " ,
                 " SQLI ");
@@ -169,7 +170,7 @@ public class     CollaborateurService {
         return false;
     }
     @Transactional
-    public Collaborateur assignCollaborateurToManager(Integer collaborateurMatricule, Integer managerMatricule) throws EntityNotFoundException {
+    public Collaborateur assignCollaborateurToManager(Integer collaborateurMatricule, Integer managerMatricule) throws EntityNotFoundException, MessagingException {
         // Get Collaborateur by matricule
         Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
 
@@ -194,6 +195,7 @@ public class     CollaborateurService {
 
             // Save the updated collaborator
             Collaborateur collaborateurUpdated = collaborateurRepository.save(collaborateur);
+            AffectationEmails(collaborateurUpdated);
 
             return collaborateurUpdated;
 
@@ -321,7 +323,7 @@ public class     CollaborateurService {
 
 // create a managerRH
 @Transactional
-public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws IllegalStateException {
+public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws IllegalStateException, MessagingException {
     // Check if the coll already exists in bd
     Optional<Collaborateur> existingCollaborateur = collaborateurRepository.findById(managerDto.getMatricule());
     if (existingCollaborateur.isPresent()) {
@@ -337,6 +339,8 @@ public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws Ille
         managerRole.setRole("Manager RH");
         collaborateur.getRoles().add(managerRole);
         collaborateurRepository.save(collaborateur);
+        AffectationEmails(collaborateur);
+
         // Convert the coll to CollDto
         CollaborateurDto collaborateurDto = new CollaborateurDto();
         collaborateurDto.setMatricule(collaborateur.getMatricule());
@@ -358,7 +362,6 @@ public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws Ille
         // Vérifie si le collaborateur existe déjà dans la base de données
         Optional<Collaborateur> existingCollaborateur = collaborateurRepository.findById(collab.getMatricule());
         if (existingCollaborateur.isPresent()) {
-            System.out.println(existingCollaborateur.get().getMatricule());
             throw new IllegalStateException("Le collaborateur existe déjà.");
         }
         else {
