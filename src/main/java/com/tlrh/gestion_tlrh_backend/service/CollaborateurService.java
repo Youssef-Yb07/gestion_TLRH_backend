@@ -393,6 +393,41 @@ public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws Ille
         }
     }
 
+    public Collaborateur ActivateStatusManagerRH(Integer idManagerRH){
+        Optional<Collaborateur> optionalManagerRH = collaborateurRepository.findById(idManagerRH);
+        if(optionalManagerRH.isPresent()) {
+            Collaborateur ManagerRH = optionalManagerRH.get();
+            if (ManagerRH.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
+                ManagerRH.setStatut(StatutManagerRH.Active);
+                collaborateurRepository.save(ManagerRH);
+                return ManagerRH;
+            }
+            else{
+                throw new IllegalStateException("Collaborator does not have the Manager RH role.");
+            }
+        }
+        else {
+            throw new IllegalStateException("Collaborator does not exist.");
+        }
+    }
+
+    public Collaborateur DesactivateStatusManagerRH(Integer idManagerRH){
+        Optional<Collaborateur> optionalManagerRH = collaborateurRepository.findById(idManagerRH);
+        if(optionalManagerRH.isPresent()) {
+            Collaborateur ManagerRH = optionalManagerRH.get();
+            if (ManagerRH.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
+                ManagerRH.setStatut(StatutManagerRH.Desactive);
+                collaborateurRepository.save(ManagerRH);
+                return ManagerRH;
+            }
+            else{
+                throw new IllegalStateException("Collaborator does not have the Manager RH role.");
+            }
+        }
+        else {
+            throw new IllegalStateException("Collaborator does not exist.");
+        }
+    }
 
 
 }

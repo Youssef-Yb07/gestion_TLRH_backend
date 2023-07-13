@@ -101,5 +101,28 @@ public class CollaborateurController {
     }
 }
 
+@PutMapping("/ActivateStatusManagerRH")
+    public ResponseEntity<Collaborateur> ActivateStatusManagerRH(@RequestParam Integer matricule) {
+    try {
+        return new ResponseEntity(collaborateurService.ActivateStatusManagerRH(matricule), HttpStatus.OK);
+    } catch (Exception e) {
+        System.out.println("Error while updating Collaborateur");
+        e.printStackTrace();
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+@PutMapping("/DesactivateStatusManagerRH")
+    public ResponseEntity<Collaborateur> DesactivateStatusManagerRH(@RequestParam Integer matricule) {
+    try {
+        return new ResponseEntity(collaborateurService.DesactivateStatusManagerRH(matricule), HttpStatus.OK);
+    } catch (Exception e) {
+        System.out.println("Error while updating Collaborateur");
+        e.printStackTrace();
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+
 
 }
