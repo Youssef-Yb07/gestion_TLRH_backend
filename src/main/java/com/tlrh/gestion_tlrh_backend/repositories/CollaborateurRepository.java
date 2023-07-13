@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface CollaborateurRepository extends JpaRepository<Collaborateur,Integer> {
-
 }

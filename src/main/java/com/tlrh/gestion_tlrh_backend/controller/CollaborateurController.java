@@ -98,7 +98,6 @@ public class CollaborateurController {
         System.out.println("Error while creating Manager RH");
         e.printStackTrace();
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
     }
 }
 

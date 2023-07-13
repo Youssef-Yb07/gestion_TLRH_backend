@@ -37,7 +37,7 @@ public class     CollaborateurService {
     @Autowired private ArchivageRepository archivageRepository;
 
     @Transactional
-    public Collaborateur updateCollaborateurBy3Actors(Integer matricule, UpdateBy3ActorsDto collaborateurDto) throws EntityNotFoundException {
+    public CollaborateurDto updateCollaborateurBy3Actors(Integer matricule, UpdateBy3ActorsDto collaborateurDto) throws EntityNotFoundException {
 
         //Get Collaborateur by matricule
         Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(matricule);
@@ -53,14 +53,11 @@ public class     CollaborateurService {
             archivage.setPosteApp(collaborateur.getPosteAPP());
             archivage.setSalaire(collaborateur.getSalaireActuel());
             archivageRepository.save(archivage);
-
             //Assign it into association table "Collaborateur_Archivage"
             collaborateur.getArchivages().add(archivage);
-
             //Update Collaborateur with new values
             collaborateur.setSalaireActuel(collaborateurDto.getSalaireActuel());
             collaborateur.setPosteAPP(collaborateurDto.getPosteAPP());
-
             //Update Manager RH
             if (collaborateurDto.getManagerRH() != null) {
                 //Get Manager RH by matricule
@@ -70,7 +67,7 @@ public class     CollaborateurService {
                     // Verify if the ID in the DTO corresponds to a collaborateur with the role "Manager RH"
                     if (managerRH.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
                         //Affect the old Manager RH to the attribute "AncienManagerRH"
-                        collaborateur.setAncienManagerRH(collaborateur.getManagerRH().getPrenomCollaborateur());
+                        collaborateur.setAncienManagerRH(collaborateur.getManagerRH().getPrenom());
                         //Affect the new Manager RH to the attribute "ManagerRH"
                         collaborateur.setManagerRH(managerRH);
                     } else {
@@ -82,24 +79,38 @@ public class     CollaborateurService {
             }
             //Save Collaborateur updated
             Collaborateur collaborateurUpdated = collaborateurRepository.save(collaborateur);
-
-            return collaborateurUpdated;
+            //Convert Collaborateur to CollaborateurDto
+            CollaborateurDto updatedDto = new CollaborateurDto();
+            updatedDto.setMatricule(collaborateurUpdated.getMatricule());
+            updatedDto.setSalaireActuel(collaborateurUpdated.getSalaireActuel());
+            updatedDto.setManagerRH(collaborateurUpdated.getManagerRH().getMatricule());
+            updatedDto.setPosteAPP(collaborateurUpdated.getPosteAPP());
+            return updatedDto;
         } else {
             throw new EntityNotFoundException("Collaborateur not found");
         }
     }
 
-    public void SendMails(Collaborateur collaborateur) throws MessagingException {
+    public void AffectationEmails(Collaborateur collaborateur) throws MessagingException {
         String collaborateurMail=collaborateur.getEmail();
         Collaborateur manager=collaborateur.getManagerRH();
         if(manager!=null) {
             String managerMail = manager.getEmail();
             String sexe = manager.getSexe().equals("Female") ? "Mrs" : "Mr";
             emailsService.SendEmail(managerMail,
-                    "Hi Dear Your new Employee is : " + collaborateur.getPrenomCollaborateur() +
-                            " " + collaborateur.getNomCollaborateur() + " the email is : " + collaborateurMail,
+                    "Hi Dear Your new Employee is : " + collaborateur.getPrenom() +
+                            " " + collaborateur.getNom() + " the email is : " + collaborateurMail,
                     "New Employee ");
+
+            emailsService.SendEmail(collaborateurMail,
+                    "Hi Dear Your new Manager Rh is : " + manager.getPrenom() +
+                            " " + manager.getNom() + " the email is : " + managerMail,
+                    "New Manager RH  ");
         }
+    }
+    private void WelcomeEmail(Collaborateur collaborateur) throws MessagingException {
+        String collaborateurMail=collaborateur.getEmail();
+        System.out.println("hi there");
         emailsService.SendEmail(collaborateurMail,
                 "Hi Dear welcome to SQLI . " ,
                 " SQLI ");
@@ -110,7 +121,7 @@ public class     CollaborateurService {
             Collaborateur manager=collaborateur.getManagerRH();
             if(manager!=null) {
                 emailsService.SendEmail(manager.getEmail(),
-                        "Bilan de periode d'essai pour : " + collaborateur.getPrenomCollaborateur() + " " + collaborateur.getNomCollaborateur()
+                        "Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " " + collaborateur.getNom()
                         , "Bilan de periode d'essai");
             }
         }
@@ -118,8 +129,8 @@ public class     CollaborateurService {
             Collaborateur manager=collaborateur.getManagerRH();
             if(manager!=null) {
                 emailsService.SendEmail(manager.getEmail(),
-                        "BIP Bilan intermediaire de performance : " + collaborateur.getPrenomCollaborateur()
-                                + " " + collaborateur.getNomCollaborateur()
+                        "BIP Bilan intermediaire de performance : " + collaborateur.getPrenom()
+                                + " " + collaborateur.getNom()
                         , "Bilan de periode d'essai");
             }
         }
@@ -127,13 +138,12 @@ public class     CollaborateurService {
             Collaborateur manager = collaborateur.getManagerRH();
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
-                        "Bilan Annuel de performance Pour : " + collaborateur.getPrenomCollaborateur()
-                                + " " + collaborateur.getNomCollaborateur()
+                        "Bilan Annuel de performance Pour : " + collaborateur.getPrenom()
+                                + " " + collaborateur.getNom()
                         , "BAP");
             }
         }
     }
-
     private List<Collaborateur> CollaborateurAfterX(int amount){
         List<Collaborateur> collaborateurs=new ArrayList<>();
         Calendar calendar=Calendar.getInstance();
@@ -163,9 +173,8 @@ public class     CollaborateurService {
             return true;
         return false;
     }
-
     @Transactional
-    public Collaborateur assignCollaborateurToManager(Integer collaborateurMatricule, Integer managerMatricule) throws EntityNotFoundException {
+    public CollaborateurDto assignCollaborateurToManager(Integer collaborateurMatricule, Integer managerMatricule) throws EntityNotFoundException {
         // Get Collaborateur by matricule
         Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
 
@@ -191,7 +200,14 @@ public class     CollaborateurService {
             // Save the updated collaborator
             Collaborateur collaborateurUpdated = collaborateurRepository.save(collaborateur);
 
-            return collaborateurUpdated;
+            //Convert Collaborateur to CollaborateurDto
+            CollaborateurDto updatedDto = new CollaborateurDto();
+            updatedDto.setMatricule(collaborateurUpdated.getMatricule());
+            updatedDto.setSalaireActuel(collaborateurUpdated.getSalaireActuel());
+            updatedDto.setManagerRH(collaborateurUpdated.getManagerRH().getMatricule());
+            updatedDto.setPosteAPP(collaborateurUpdated.getPosteAPP());
+
+            return updatedDto;
         } else {
             throw new EntityNotFoundException("Collaborateur not found");
         }
@@ -294,8 +310,8 @@ public class     CollaborateurService {
             collaborateur.setPosteAPP("Poste APP " + i);
             collaborateur.setPosteActuel("Poste actuel " + i);
             collaborateur.setSexe("M");
-            collaborateur.setNomCollaborateur("Nom " + i);
-            collaborateur.setPrenomCollaborateur("Prenom " + i);
+            collaborateur.setNom("Nom " + i);
+            collaborateur.setPrenom("Prenom " + i);
             collaborateur.setAbreviationCollaborateur("Abreviation " + i);
             collaborateur.setAncienManagerRH("Ancien Manager RH " + i);
             collaborateur.setAncien_Collaborateur(false);
@@ -327,18 +343,16 @@ public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws Ille
         if (hasManagerRHRole) {
             throw new IllegalStateException("Collaborator already has the Manager RH role.");
         }
-
         // Assign the "Manager RH" role to the coll
         Role managerRole = new Role();
         managerRole.setRole("Manager RH");
         collaborateur.getRoles().add(managerRole);
         collaborateurRepository.save(collaborateur);
-
         // Convert the coll to CollDto
         CollaborateurDto collaborateurDto = new CollaborateurDto();
         collaborateurDto.setMatricule(collaborateur.getMatricule());
-        collaborateurDto.setNom(collaborateur.getNomCollaborateur());
-        collaborateurDto.setPrenom(collaborateur.getPrenomCollaborateur());
+        collaborateurDto.setNom(collaborateur.getNom());
+        collaborateurDto.setPrenom(collaborateur.getPrenom());
         collaborateurDto.setSexe(collaborateur.getSexe());
         collaborateurDto.setSite(collaborateur.getSite());
         collaborateurDto.setBu(collaborateur.getBU());
@@ -346,12 +360,46 @@ public CollaborateurDto createManagerRh(CollaborateurDto managerDto) throws Ille
         collaborateurDto.setPassword(collaborateur.getPassword());
         collaborateurDto.setSalaireActuel(collaborateur.getSalaireActuel());
         collaborateurDto.setPosteAPP(collaborateur.getPosteAPP());
-
         return collaborateurDto;
     } else {
         throw new IllegalStateException("Collaborator does not exist.");
     }
 }
+    public Collaborateur createCollaborateur(Collaborateur collab) throws IllegalStateException, MessagingException {
+        // Vérifie si le collaborateur existe déjà dans la base de données
+        Optional<Collaborateur> existingCollaborateur = collaborateurRepository.findById(collab.getMatricule());
+        if (existingCollaborateur.isPresent()) {
+            System.out.println(existingCollaborateur.get().getMatricule());
+            throw new IllegalStateException("Le collaborateur existe déjà.");
+        }
+        else {
+            // Crée une nouvelle instance de collaborateur
+            Collaborateur collaborateur = new Collaborateur();
+            collaborateur.setMatricule(collab.getMatricule());
+            collaborateur.setNom(collab.getNom());
+            collaborateur.setEmail(collab.getEmail());
+            collaborateur.setPrenom(collab.getPrenom());
+            collaborateur.setSexe(collab.getSexe());
+            collaborateur.setSite(collab.getSite());
+            collaborateur.setAbreviationCollaborateur(collab.getAbreviationCollaborateur());
+            collaborateur.setBU(collab.getBU());
+            collaborateur.setDate_Embauche(collab.getDate_Embauche());
+            collaborateur.setMois_BAP(collab.getMois_BAP());
+            collaborateur.setEmail(collab.getEmail());
+            collaborateur.setPassword(collab.getPassword());
+            collaborateur.setSalaireActuel(collab.getSalaireActuel());
+            collaborateur.setPosteActuel(collab.getPosteActuel());
+            collaborateur.setPosteAPP(collab.getPosteAPP());
+            collaborateur.setAncienManagerRH(collab.getAncienManagerRH());
+            collaborateur.setDateParticipation(collab.getDateParticipation());
+            // Enregistre le collaborateur dans la base de données
+            collaborateurRepository.save(collaborateur);
+            WelcomeEmail(collaborateur);
+            AffectationEmails(collaborateur);
+            System.out.println(collaborateur.getEmail());
+            return collaborateur;
+        }
+    }
 
 
 
