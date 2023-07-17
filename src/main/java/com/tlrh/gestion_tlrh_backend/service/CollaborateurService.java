@@ -444,11 +444,49 @@ public class CollaborateurService {
             throw new IllegalStateException("Collaborator does not exist.");
         }
     }
-
-    @Transactional
     public List<Collaborateur> getAllCollaborateurs() {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
         return collaborateurs;
     }
+    public List<Collaborateur> getManagerRHByStatutActivated(){
+        //check if the collaborators has a role "Manager RH"
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        List<Collaborateur>ActivatedManagers=new ArrayList<>();
+        for (Collaborateur collaborateur : collaborateurs) {
+            if (collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
+                if (collaborateur.getStatut().equals(StatutManagerRH.Active)) {
+                    ActivatedManagers.add(collaborateur);
+                }
+            }
+        }
+        if(ActivatedManagers.isEmpty()){
+        throw new IllegalStateException("No Manager RH Active found.");
+        }
+        return ActivatedManagers;
+    }
+
+    public List<Collaborateur> getManagerRHByStatutDisactivated() {
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        List<Collaborateur>DesactivatedManagers=new ArrayList<>();
+        for (Collaborateur collaborateur:collaborateurs){
+            if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
+                if(collaborateur.getStatut().equals(StatutManagerRH.Desactive)){
+                    DesactivatedManagers.add(collaborateur);
+                }
+            }
+        }
+        if(DesactivatedManagers.isEmpty()){
+            throw new IllegalStateException("No Manager RH Desactive found.");
+        }
+        return DesactivatedManagers;
+    }
+
+
+
+
+
+
+
+
 
 }

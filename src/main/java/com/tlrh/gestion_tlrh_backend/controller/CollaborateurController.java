@@ -24,22 +24,22 @@ public class CollaborateurController {
     @PutMapping("/updateBy3Actors")
     public ResponseEntity<Collaborateur> UpdateCollaborateurBy3Actors(@RequestParam Integer matricule,@RequestBody UpdateBy3ActorsDto collaborateurDto) {
         try {
-            return new ResponseEntity(collaborateurService.updateCollaborateurBy3Actors(matricule, collaborateurDto), HttpStatus.OK);
+            return new ResponseEntity<>(collaborateurService.updateCollaborateurBy3Actors(matricule, collaborateurDto), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error while updating Collaborateur");
             e.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/assignCollaborateurToManager")
     public ResponseEntity<Collaborateur> assignCollaborateurToManager(@RequestParam Integer collaborateurMatricule, @RequestParam Integer managerMatricule) {
         try {
-            return new ResponseEntity(collaborateurService.assignCollaborateurToManager(collaborateurMatricule, managerMatricule), HttpStatus.OK);
+            return new ResponseEntity<>(collaborateurService.assignCollaborateurToManager(collaborateurMatricule, managerMatricule), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error while assigning Collaborateur to Manager");
             e.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -80,16 +80,16 @@ public class CollaborateurController {
     public ResponseEntity addRandomCollaborateurs(@RequestParam Integer number) {
         try {
             collaborateurService.addRandomCollaborateurs(number);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error while adding Collaborateurs");
             e.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     //create managerRH
-@PostMapping("/createManagerRH")
+    @PostMapping("/createManagerRH")
     public ResponseEntity<Collaborateur> createManagerRH(@RequestBody CollaborateurDto managerDto) {
     try {
         Collaborateur NewmanagerDto = collaborateurService.createManagerRh(managerDto);
@@ -101,27 +101,56 @@ public class CollaborateurController {
     }
 }
 
-@PutMapping("/ActivateStatusManagerRH")
+    @PutMapping("/ActivateStatusManagerRH")
     public ResponseEntity<Collaborateur> ActivateStatusManagerRH(@RequestParam Integer matricule) {
     try {
-        return new ResponseEntity(collaborateurService.ActivateStatusManagerRH(matricule), HttpStatus.OK);
+        return new ResponseEntity<>(collaborateurService.ActivateStatusManagerRH(matricule), HttpStatus.OK);
     } catch (Exception e) {
         System.out.println("Error while updating Collaborateur");
         e.printStackTrace();
-        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     }
-@PutMapping("/DesactivateStatusManagerRH")
+    @PutMapping("/DesactivateStatusManagerRH")
     public ResponseEntity<Collaborateur> DesactivateStatusManagerRH(@RequestParam Integer matricule) {
     try {
-        return new ResponseEntity(collaborateurService.DesactivateStatusManagerRH(matricule), HttpStatus.OK);
+        return new ResponseEntity<>(collaborateurService.DesactivateStatusManagerRH(matricule), HttpStatus.OK);
     } catch (Exception e) {
         System.out.println("Error while updating Collaborateur");
         e.printStackTrace();
-        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 
+    @GetMapping("/get/all")
+    public ResponseEntity<List<Collaborateur>> GetAllCollaborateurs(){
+        try {
+            return new ResponseEntity<>(collaborateurService.getAllCollaborateurs(),HttpStatus.OK);
+        }catch (Exception e){
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("get/ManagerRH/activated")
+    public ResponseEntity<List<Collaborateur>> getManagerRHByStatutActivated(){
+        try {
+            return new ResponseEntity<>(collaborateurService.getManagerRHByStatutActivated(),HttpStatus.OK);
+        }catch (Exception e){
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("get/ManagerRH/Desactivated")
+    public ResponseEntity<List<Collaborateur>> getManagerRHByStatutDesactivated(){
+        try {
+            return new ResponseEntity<>(collaborateurService.getManagerRHByStatutDisactivated(),HttpStatus.OK);
+        }catch (Exception e){
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 

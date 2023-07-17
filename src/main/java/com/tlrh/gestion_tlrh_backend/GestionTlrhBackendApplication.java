@@ -34,7 +34,7 @@ public class GestionTlrhBackendApplication {
         SpringApplication.run(GestionTlrhBackendApplication.class, args);
 
     }
-//    Oumnia's test
+/*//    Oumnia's test
     @Bean
     CommandLineRunner start(CollaborateurService collaborateurService){
         return args -> {
@@ -42,6 +42,6 @@ public class GestionTlrhBackendApplication {
                     "Amani",null,"Femme","Rabat","", Date.valueOf("2023-4-12"),"6",null,false,true,null,"d","xc",123456789, StatutManagerRH.Active);
             collaborateurService.createCollaborateur(c);
         };
-    }
+    }*/
 
 }

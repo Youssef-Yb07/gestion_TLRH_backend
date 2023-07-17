@@ -18,6 +18,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String role;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
