@@ -460,7 +460,7 @@ public class CollaborateurService {
             }
         }
         if(ActivatedManagers.isEmpty()){
-        throw new IllegalStateException("No Manager RH Active found.");
+            System.err.println("No Manager RH Active found.");
         }
         return ActivatedManagers;
     }
@@ -476,7 +476,7 @@ public class CollaborateurService {
             }
         }
         if(DesactivatedManagers.isEmpty()){
-            throw new IllegalStateException("No Manager RH Desactive found.");
+            System.err.println("No Manager RH Desactive found.");
         }
         return DesactivatedManagers;
     }
