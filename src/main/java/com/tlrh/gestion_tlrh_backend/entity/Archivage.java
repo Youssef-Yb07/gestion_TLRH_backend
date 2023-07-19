@@ -31,5 +31,4 @@ public class Archivage {
 
     private int salaire;
 
-
 }
