@@ -56,6 +56,10 @@ public class CollaborateurService {
             archivage.setPosteApp(collaborateur.getPosteAPP());
             archivage.setSalaire(collaborateur.getSalaireActuel());
             archivageRepository.save(archivage);
+            // Initialize the archivages list if it is null
+            if (collaborateur.getArchivages() == null) {
+                collaborateur.setArchivages(new ArrayList<>());
+            }
             // Assign it into association table "Collaborateur_Archivage"
             collaborateur.getArchivages().add(archivage);
             // Update Collaborateur with new values
@@ -260,68 +264,42 @@ public class CollaborateurService {
             throw new EntityNotFoundException("Manager RH not found");
         }
     }
-    // @Transactional
-    // public CollaborateurDto updateCollaborateurByManager(Integer
-    // collaborateurMatricule, CollaborateurDto collaborateurDto) throws
-    // EntityNotFoundException {
-    // // Get Collaborateur by matricule
-    // Optional<Collaborateur> optionalCollaborateur =
-    // collaborateurRepository.findById(collaborateurMatricule);
-    //
-    // // Check if Collaborateur exists
-    // if (optionalCollaborateur.isPresent()) {
-    // Collaborateur collaborateur = optionalCollaborateur.get();
-    //
-    // //set the old values to the Archivage table and save it
-    // Archivage archivage=new Archivage();
-    // archivage.setCollaborateur(collaborateur);
-    // archivage.setDateArchivage(Date.valueOf(LocalDateTime.now().toLocalDate()));
-    // archivage.setPosteActuel(collaborateur.getPosteActuel());
-    // archivage.setPosteApp(collaborateur.getPosteAPP());
-    // archivage.setSalaire(collaborateur.getSalaireActuel());
-    // archivageRepository.save(archivage);
-    //
-    // //Assign it into association table "Collaborateur_Archivage"
-    // collaborateur.getArchivages().add(archivage);
-    //
-    // // Update Collaborateur with new values
-    // collaborateur.setSalaireActuel(collaborateurDto.getSalaireActuel());
-    // collaborateur.setPosteAPP(collaborateurDto.getPosteAPP());
-    //
-    // // Update Manager RH
-    // if (collaborateurDto.getManagerRH() != null) {
-    // // Get Manager RH by matricule
-    // Optional<Collaborateur> optionalManagerRH =
-    // collaborateurRepository.findById(collaborateurDto.getManagerRH());
-    // if (optionalManagerRH.isPresent()) {
-    // Collaborateur managerRH = optionalManagerRH.get();
-    // // Verify if the collaborator has the role "Manager RH"
-    // if (managerRH.getRoles().stream().anyMatch(role ->
-    // role.getRole().equals("Manager RH"))) {
-    // // Assign the HR Manager to the collaborator
-    // collaborateur.setManagerRH(managerRH);
-    // } else {
-    // throw new IllegalStateException("Le Collaborateur sélectionné n'a pas le rôle
-    // de Manager RH.");
-    // }
-    // } else {
-    // throw new EntityNotFoundException("Manager RH not found");
-    // }
-    // }
-    //
-    // // Save the updated collaborator
-    // Collaborateur collaborateurUpdated =
-    // collaborateurRepository.save(collaborateur);
-    //
-    // // Convert Collaborateur to CollaborateurDto
-    // CollaborateurDto updatedDto = modelMapper.map(collaborateurUpdated,
-    // CollaborateurDto.class);
-    //
-    // return updatedDto;
-    // } else {
-    // throw new EntityNotFoundException("Collaborateur not found");
-    // }
-    // }
+     @Transactional
+     public Collaborateur updateCollaborateurByManager(Integer collaborateurMatricule, Collaborateur collaborateur) throws EntityNotFoundException {
+     // Get Collaborateur by matricule
+     Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
+
+     // Check if Collaborateur exists
+     if (optionalCollaborateur.isPresent()) {
+     Collaborateur collab = optionalCollaborateur.get();
+     collaborateur.setMatricule(collab.getMatricule());
+
+     //set the old values to the Archivage table and save it
+     Archivage archivage=new Archivage();
+     archivage.setCollaborateur(collab);
+     archivage.setDateArchivage(Date.valueOf(LocalDateTime.now().toLocalDate()));
+     archivage.setPosteActuel(collab.getPosteActuel());
+     archivage.setPosteApp(collab.getPosteAPP());
+     archivage.setSalaire(collab.getSalaireActuel());
+     archivageRepository.save(archivage);
+
+     // Initialize the archivages list if it is null
+     if (collaborateur.getArchivages() == null) {
+         collaborateur.setArchivages(new ArrayList<>());
+     }
+     // Assign it to the association table "Collaborateur_Archivage"
+     collaborateur.getArchivages().add(archivage);
+
+     // Save the updated collaborator
+     collaborateurRepository.save(collaborateur);
+
+     return collaborateur;
+
+     }
+     else {
+         throw new EntityNotFoundException("Collaborateur not found");
+     }
+    }
 
     @Transactional
     public void addRandomCollaborateurs(int number) {
@@ -444,11 +422,53 @@ public class CollaborateurService {
             throw new IllegalStateException("Collaborator does not exist.");
         }
     }
-
-    @Transactional
     public List<Collaborateur> getAllCollaborateurs() {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
         return collaborateurs;
     }
+    public List<Collaborateur> getManagerRHByStatutActivated(){
+        //check if the collaborators has a role "Manager RH"
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        List<Collaborateur>ActivatedManagers=new ArrayList<>();
+        for (Collaborateur collaborateur : collaborateurs) {
+            if (collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
+                if (collaborateur.getStatut().equals(StatutManagerRH.Active)) {
+                    ActivatedManagers.add(collaborateur);
+                }
+            }
+        }
+        if(ActivatedManagers.isEmpty()){
+            System.err.println("No Manager RH Active found.");
+        }
+        return ActivatedManagers;
+    }
+
+    public List<Collaborateur> getManagerRHByStatutDisactivated() {
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        List<Collaborateur>DesactivatedManagers=new ArrayList<>();
+        for (Collaborateur collaborateur:collaborateurs){
+            if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
+                if(collaborateur.getStatut().equals(StatutManagerRH.Desactive)){
+                    DesactivatedManagers.add(collaborateur);
+                }
+            }
+        }
+        if(DesactivatedManagers.isEmpty()){
+            System.err.println("No Manager RH Desactive found.");
+        }
+        return DesactivatedManagers;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
