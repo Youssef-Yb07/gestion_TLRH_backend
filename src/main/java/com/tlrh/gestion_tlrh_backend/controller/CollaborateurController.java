@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +20,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/collaborateur")
 public class CollaborateurController {
 
+    private final Logger LOG = LoggerFactory.getLogger(CollaborateurController.class);
     @Autowired
     private CollaborateurService collaborateurService;
 
     @PutMapping("/updateBy3Actors")
-    public ResponseEntity<Collaborateur> UpdateCollaborateurBy3Actors(@RequestParam Integer matricule,@RequestBody UpdateBy3ActorsDto collaborateurDto) {
+    public ResponseEntity<Collaborateur> UpdateCollaborateurBy3Actors(@RequestParam Integer matricule, @RequestBody UpdateBy3ActorsDto collaborateurDto) {
         try {
             return new ResponseEntity(collaborateurService.updateCollaborateurBy3Actors(matricule, collaborateurDto), HttpStatus.OK);
-        } catch (Exception e) {
-            System.out.println("Error while updating Collaborateur");
-            e.printStackTrace();
+        } catch (Exception exception) {
+            LOG.error("Error while updating Collaborateur", exception);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -36,9 +38,8 @@ public class CollaborateurController {
     public ResponseEntity<Collaborateur> assignCollaborateurToManager(@RequestParam Integer collaborateurMatricule, @RequestParam Integer managerMatricule) {
         try {
             return new ResponseEntity(collaborateurService.assignCollaborateurToManager(collaborateurMatricule, managerMatricule), HttpStatus.OK);
-        } catch (Exception e) {
-            System.out.println("Error while assigning Collaborateur to Manager");
-            e.printStackTrace();
+        } catch (Exception exception) {
+            LOG.error("Error while assigning Collaborateur to Manager", exception);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -81,46 +82,43 @@ public class CollaborateurController {
         try {
             collaborateurService.addRandomCollaborateurs(number);
             return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) {
-            System.out.println("Error while adding Collaborateurs");
-            e.printStackTrace();
+        } catch (Exception exception) {
+            LOG.error("Error while adding Collaborateurs", exception);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     //create managerRH
-@PostMapping("/createManagerRH")
+    @PostMapping("/createManagerRH")
     public ResponseEntity<Collaborateur> createManagerRH(@RequestBody CollaborateurDto managerDto) {
-    try {
-        Collaborateur NewmanagerDto = collaborateurService.createManagerRh(managerDto);
-        return new ResponseEntity<>(NewmanagerDto, HttpStatus.OK);
-    } catch (Exception e) {
-        System.out.println("Error while creating Manager RH");
-        e.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            Collaborateur NewmanagerDto = collaborateurService.createManagerRh(managerDto);
+            return new ResponseEntity<>(NewmanagerDto, HttpStatus.OK);
+        } catch (Exception exception) {
+            LOG.error("Error while creating Manager RH", exception);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-}
 
-@PutMapping("/ActivateStatusManagerRH")
+    @PutMapping("/ActivateStatusManagerRH")
     public ResponseEntity<Collaborateur> ActivateStatusManagerRH(@RequestParam Integer matricule) {
-    try {
-        return new ResponseEntity(collaborateurService.ActivateStatusManagerRH(matricule), HttpStatus.OK);
-    } catch (Exception e) {
-        System.out.println("Error while updating Collaborateur");
-        e.printStackTrace();
-        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            return new ResponseEntity(collaborateurService.ActivateStatusManagerRH(matricule), HttpStatus.OK);
+        } catch (Exception exception) {
+            LOG.error("Error while updating Collaborateur", exception);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    }
-@PutMapping("/DesactivateStatusManagerRH")
+
+    @PutMapping("/DesactivateStatusManagerRH")
     public ResponseEntity<Collaborateur> DesactivateStatusManagerRH(@RequestParam Integer matricule) {
-    try {
-        return new ResponseEntity(collaborateurService.DesactivateStatusManagerRH(matricule), HttpStatus.OK);
-    } catch (Exception e) {
-        System.out.println("Error while updating Collaborateur");
-        e.printStackTrace();
-        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            return new ResponseEntity(collaborateurService.DesactivateStatusManagerRH(matricule), HttpStatus.OK);
+        } catch (Exception exception) {
+            LOG.error("Error while updating Collaborateur", exception);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-}
 
 
 
