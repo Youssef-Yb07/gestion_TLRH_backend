@@ -5,6 +5,7 @@ import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
 import com.tlrh.gestion_tlrh_backend.service.CollaborateurService;
 import com.tlrh.gestion_tlrh_backend.service.EmailsService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,20 +24,34 @@ public class GestionTlrhBackendApplication {
     private CollaborateurRepository collaborateurRepository;
     @Autowired
     private CollaborateurService collaborateurService;
+
+//    @Bean
+//    public ModelMapper modelMapper(){
+//        return new ModelMapper();
+//    }
     public static void main(String[] args) {
 
         SpringApplication.run(GestionTlrhBackendApplication.class, args);
+
+
     }
-
-
 //    Oumnia's test
-//    @Bean
-//    CommandLineRunner start(CollaborateurService collaborateurService){
-//        return args -> {
-//            Collaborateur c=new Collaborateur(12345,"kahlaouioumnia@gmail.com","Kahlaoui","Oumnia","Be",
-//                    "Amani",null,"Femme","Rabat","", Date.valueOf("2023-4-12"),"6",null,false,true,null,"d","xc",123456789, StatutManagerRH.Active);
-//            collaborateurService.createCollaborateur(c);
-//        };
-//    }
+    //@Bean
+    //CommandLineRunner start(CollaborateurService collaborateurService){
+    //    return args -> {
+           // Collaborateur c=new Collaborateur(12345,"kahlaouioumnia@gmail.com","hidxdd","Kahlaoui","Oumnia","Be",
+           //         "Amani",null,"Femme","Rabat","", Date.valueOf("2023-4-12"),"6",null,false,true,null,"d","xc",123456789, StatutManagerRH.Active);
+          //  collaborateurService.createCollaborateur(c);
+      //  };
+    //}
+/*//    Oumnia's test
+    @Bean
+    CommandLineRunner start(CollaborateurService collaborateurService){
+        return args -> {
+            Collaborateur c=new Collaborateur(12345,"kahlaouioumnia@gmail.com","hidxdd","Kahlaoui","Oumnia","Be",
+                    "Amani",null,"Femme","Rabat","", Date.valueOf("2023-4-12"),"6",null,false,true,null,"d","xc",123456789, StatutManagerRH.Active);
+            collaborateurService.createCollaborateur(c);
+        };
+    }*/
 
 }

@@ -66,12 +66,12 @@ public class CompteService {
         int samePassword=newPassword.compareTo(confirmedPassword);
         Collaborateur collaborateur=compte.getCollaborateur();
         if (valideAuthentication==0 && samePassword==0){
-                compte.setPassword(confirmedPassword);
+            compte.setPassword(confirmedPassword);
             emailsService.SendEmail(collaborateur.getEmail()
                     ,"Hi Dear "+collaborateur.getPrenom() +" " +collaborateur.getNom()
                             +" , To acces to your personnal space in our Application SQLI , Your new password is : "+compte.getPassword()
                     ,"Password has changed");
-                return compteRepository.save(compte);
+            return compteRepository.save(compte);
         }
         else {
             throw new RuntimeException("Password should be valid ");
