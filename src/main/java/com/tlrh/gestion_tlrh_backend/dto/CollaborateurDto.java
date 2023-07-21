@@ -12,8 +12,6 @@ public class CollaborateurDto {
     private String site;
     private String Bu;
     private String email;
-    private String password;
-
 
     private int SalaireActuel;
 

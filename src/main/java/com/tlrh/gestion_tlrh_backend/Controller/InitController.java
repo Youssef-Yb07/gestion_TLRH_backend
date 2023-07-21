@@ -1,4 +1,4 @@
-package com.tlrh.gestion_tlrh_backend.Controller;
+package com.tlrh.gestion_tlrh_backend.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
