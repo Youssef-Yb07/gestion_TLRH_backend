@@ -1,5 +1,6 @@
 package com.tlrh.gestion_tlrh_backend.service;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
+import com.tlrh.gestion_tlrh_backend.entity.Compte;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
 import com.tlrh.gestion_tlrh_backend.repositories.CompteRepository;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class CompteService {
         Compte compte=new Compte(null,compteEmail,generatePassword());
         return compteRepository.save(compte);
     }
-    public Compte AccountToCollab(Integer compteId,Integer collaborateurId){
+    public Compte AccountToCollab(Integer compteId, Integer collaborateurId){
         Optional<Compte> optionalCompte=compteRepository.findById(compteId);
         Optional<Collaborateur> optionalCollab=collaborateurRepository.findById(collaborateurId);
         if (!(optionalCompte.isPresent() && optionalCollab.isPresent())) {
