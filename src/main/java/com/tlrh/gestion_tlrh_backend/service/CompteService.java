@@ -32,6 +32,7 @@ public class CompteService {
         Compte compte = optionalCompte.get();
         Collaborateur collaborateur = optionalCollab.get();
         compte.setCollaborateur(collaborateur);
+//        An email will be send
         return compteRepository.save(compte);
     }
     private String GeneratePassword(){
@@ -46,6 +47,14 @@ public class CompteService {
     public List<Compte> GetComptes(){
         return compteRepository.findAll();
     }
+    public void ChangePassword(){
+
+
+    }
+    public void accountWithoutCollab(){
+
+    }
+
 }
 
 
