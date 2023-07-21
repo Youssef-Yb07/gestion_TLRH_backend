@@ -1,8 +1,11 @@
 package com.tlrh.gestion_tlrh_backend.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Collaborateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +58,7 @@ public class Collaborateur {
     private String PosteActuel;
 
     private int SalaireActuel;
+
 
     @ManyToMany
     @JoinTable(
