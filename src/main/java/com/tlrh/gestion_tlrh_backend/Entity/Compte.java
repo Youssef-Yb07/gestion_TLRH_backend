@@ -9,17 +9,23 @@ import javax.persistence.*;
 @Data
 @Entity
 @AllArgsConstructor
+
 @NoArgsConstructor
 public class Compte {
+
+
+
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
+
     @OneToOne
     private Collaborateur collaborateur;
-
     public Compte(Integer id, String email, String password) {
         this.id = id;
         this.email = email;
