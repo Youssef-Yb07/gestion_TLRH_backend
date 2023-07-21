@@ -13,9 +13,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Diplome {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer  id;

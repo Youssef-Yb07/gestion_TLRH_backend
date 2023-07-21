@@ -1,14 +1,10 @@
 package com.tlrh.gestion_tlrh_backend.controller;
-
 import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.service.CollaborateurService;
-
 import java.util.List;
-
 import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -145,5 +141,21 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/createCollaborateur")
+    public ResponseEntity<Collaborateur> createCollaborateur(@RequestBody Collaborateur collab){
+        try {
+            Collaborateur collaborateur= collaborateurService.createCollaborateur(collab);
+            return new ResponseEntity<>(collaborateur, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error while creating collaborateur");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+
 
 }
