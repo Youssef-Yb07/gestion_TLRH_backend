@@ -1,18 +1,20 @@
-package com.tlrh.gestion_tlrh_backend.controller;
-
+package com.tlrh.gestion_tlrh_backend.controllers;
 import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.service.CollaborateurService;
-
 import java.util.List;
-
 import javax.persistence.EntityNotFoundException;
 
+import com.tlrh.gestion_tlrh_backend.service.ExcelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/collaborateur")
@@ -145,5 +147,53 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/createCollaborateur")
+    public ResponseEntity<Collaborateur> createCollaborateur(@RequestBody Collaborateur collab){
+        try {
+            Collaborateur collaborateur= collaborateurService.createCollaborateur(collab);
+            return new ResponseEntity<>(collaborateur, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error while creating collaborateur");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/upload/collaborateursData",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<Collaborateur>> uploadCollaborateursData(@RequestPart("file") MultipartFile file){
+        try{
+            return new ResponseEntity<>(collaborateurService.saveCollaborateursToDatabase(file),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Error while uploading file");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired private ExcelService excelService;
+    @GetMapping("/export/collaborateursData")
+    public ResponseEntity<InputStreamResource> exportCollaborateursData() {
+        List<Collaborateur> collaborateurs = collaborateurService.getAllCollaborateurs();
+
+        InputStreamResource resource = excelService.exportCollaborateursToExcel(collaborateurs);
+
+        if (resource == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "collaborateurs.xlsx"); // Specify the file name
+
+        // Create the ResponseEntity with the InputStreamResource, headers, and HTTP status
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(resource);
+    }
+
+
+
 
 }

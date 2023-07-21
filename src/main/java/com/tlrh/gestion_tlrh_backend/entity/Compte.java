@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Compte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,6 @@ public class Compte {
     private String password;
     @OneToOne
     private Collaborateur collaborateur;
-
     public Compte(Integer id, String email, String password) {
         this.id = id;
         this.email = email;

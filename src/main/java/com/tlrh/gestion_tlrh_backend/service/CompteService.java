@@ -1,12 +1,15 @@
 package com.tlrh.gestion_tlrh_backend.service;
-
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.entity.Compte;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
 import com.tlrh.gestion_tlrh_backend.repositories.CompteRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+<<<<<<<<< Temporary merge branch 1
 
+import java.util.List;
+=========
+>>>>>>>>> Temporary merge branch 2
 import java.util.Optional;
 
 @Service
@@ -19,10 +22,10 @@ public class CompteService {
         if(optionalCompte.isPresent()){
             throw new IllegalStateException("Already Exist");
         }
-        Compte compte=new Compte(null,compteEmail,generatePassword());
+        Compte compte=new Compte(null,compteEmail,GeneratePassword());
         return compteRepository.save(compte);
     }
-    public Compte AccountToCollab(Integer compteId,Integer collaborateurId){
+    public Compte AccountToCollab(Integer compteId, Integer collaborateurId){
         Optional<Compte> optionalCompte=compteRepository.findById(compteId);
         Optional<Collaborateur> optionalCollab=collaborateurRepository.findById(collaborateurId);
         if (!(optionalCompte.isPresent() && optionalCollab.isPresent())) {
@@ -31,9 +34,10 @@ public class CompteService {
         Compte compte = optionalCompte.get();
         Collaborateur collaborateur = optionalCollab.get();
         compte.setCollaborateur(collaborateur);
+//        An email will be send
         return compteRepository.save(compte);
     }
-    private String generatePassword(){
+    private String GeneratePassword(){
             String Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             String passwordBuilder ="";
             for (int i = 0; i < 13; i++) {
@@ -42,7 +46,19 @@ public class CompteService {
             }
             return passwordBuilder;
     }
+    public List<Compte> GetComptes(){
+        return compteRepository.findAll();
     }
+    public void ChangePassword(){
+
+
+    }
+    public void accountWithoutCollab(){
+// to test
+//        Second one
+    }
+
+}
 
 
 
