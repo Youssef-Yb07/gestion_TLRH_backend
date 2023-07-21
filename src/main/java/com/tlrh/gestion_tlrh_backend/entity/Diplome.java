@@ -28,7 +28,9 @@ public class Diplome {
     @ManyToOne
     @JoinColumn(name="ecole_id")
     private Ecole ecole;
+
     @ManyToOne
     @JoinColumn(name="collaborateur_id")
     private Collaborateur collaborateur;
+
 }

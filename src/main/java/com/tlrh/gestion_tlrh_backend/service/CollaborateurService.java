@@ -11,10 +11,12 @@ import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -104,10 +106,7 @@ public class CollaborateurService {
             String sexe = manager.getSexe().equals("Female") ? "Mrs" : "Mr";
             emailsService.SendEmail(managerMail,
                     "Hi Dear Your new Employee is : " + collaborateur.getPrenom() +
-                            " " + collaborateur.getNom() + " the email is : " + collaborateurMail
-                            +"with the Id : "+collaborateur.getMatricule()+" . The Programme will be : " +
-                            "-After 3 months : BPE . -After 6 months : BIP. -After 12 months : BAP "
-                    ,
+                            " " + collaborateur.getNom() + " the email is : " + collaborateurMail,
                     "New Employee ");
 
             emailsService.SendEmail(collaborateurMail,
@@ -120,42 +119,18 @@ public class CollaborateurService {
     private void WelcomeEmail(Collaborateur collaborateur) throws MessagingException {
         String collaborateurMail = collaborateur.getEmail();
         emailsService.SendEmail(collaborateurMail,
-                "Hi Dear "+collaborateur.getPrenom() +" "+ collaborateur.getNom()
-                        +"welcome to SQLI .  "+" Your ID is : " + collaborateur.getMatricule() +" The date of integration is : " +collaborateur.getDate_Embauche()
-                        +"The period will be 3 to 5 months , if it's 5 months you will be declared in the second months " +
-                        "Thank you and welcome another time to SQLI . ",
+                "Hi Dear welcome to SQLI . ",
                 " SQLI ");
-        for (Collaborateur collabs:collaborateurRepository.findAll()){
-            if(collabs.getRoles().stream().anyMatch(col -> col.getRole().equals("Ambassadeur RH"))){
-                emailsService.SendEmail(collaborateurMail,
-                        "Hi Dear "+collabs.getPrenom() +" "+collabs.getNom()
-                                +" . a new employee has integrated SQLI the name is :"+collaborateur.getNom()+" "+collaborateur.getPrenom()
-                                +"with the Id : "+collaborateur.getMatricule()+" ." ,
-                        " New Employee ");
-            }
-        }
-
     }
+
     @Scheduled(cron = "0 25 20 * * *")
     public void SendInvitations() throws MessagingException {
         for (Collaborateur collaborateur : CollaborateurAfterX(3)) {
             Collaborateur manager = collaborateur.getManagerRH();
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
-                        "Rappel Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " " + collaborateur.getNom()
-                                +" Avec numero de Matricule "+collaborateur.getMatricule()
-                        , "Bilan de periode d'essai");
-            }
-        }
-
-        for (Collaborateur collaborateur:CollaborateurAfterX(2)) {
-            Collaborateur manager=collaborateur.getManagerRH();
-            if(manager!=null) {
-                emailsService.SendEmail(manager.getEmail(),
-                        "Rappel Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " " + collaborateur.getNom()
-                                +" Avec numero de Matricule "+collaborateur.getMatricule() +" If you want to make it 5 months ," +
-                                " it's the time to let the employee know it ."
-                        , "Bilan de periode d'essai");
+                        "Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " " + collaborateur.getNom(),
+                        "Bilan de periode d'essai");
             }
         }
         for (Collaborateur collaborateur : CollaborateurAfterX(6)) {
@@ -163,8 +138,8 @@ public class CollaborateurService {
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
                         "BIP Bilan intermediaire de performance : " + collaborateur.getPrenom()
-                                + " " + collaborateur.getNom() +" With the Id : "+collaborateur.getMatricule()
-                        , "Bilan de periode d'essai");
+                                + " " + collaborateur.getNom(),
+                        "Bilan de periode d'essai");
             }
         }
         for (Collaborateur collaborateur : CollaborateurAfterX(12)) {
@@ -172,8 +147,8 @@ public class CollaborateurService {
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
                         "Bilan Annuel de performance Pour : " + collaborateur.getPrenom()
-                                + " " + collaborateur.getNom() +" With the Id : "+collaborateur.getMatricule()
-                        , "BAP");
+                                + " " + collaborateur.getNom(),
+                        "BAP");
             }
         }
     }
@@ -252,7 +227,7 @@ public class CollaborateurService {
 
     @Transactional
     public List<CollaborateurDto> assignCollaborateursToManager(List<Integer> collaborateurMatricules,
-                                                                Integer managerMatricule) throws EntityNotFoundException {
+            Integer managerMatricule) throws EntityNotFoundException {
         // Get Manager RH by matricule
         Optional<Collaborateur> optionalManagerRH = collaborateurRepository.findById(managerMatricule);
         if (optionalManagerRH.isPresent()) {
@@ -290,41 +265,41 @@ public class CollaborateurService {
             throw new EntityNotFoundException("Manager RH not found");
         }
     }
-    @Transactional
-    public Collaborateur updateCollaborateurByManager(Integer collaborateurMatricule, Collaborateur collaborateur) throws EntityNotFoundException {
-        // Get Collaborateur by matricule
-        Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
+     @Transactional
+     public Collaborateur updateCollaborateurByManager(Integer collaborateurMatricule, Collaborateur collaborateur) throws EntityNotFoundException {
+     // Get Collaborateur by matricule
+     Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
 
-        // Check if Collaborateur exists
-        if (optionalCollaborateur.isPresent()) {
-            Collaborateur collab = optionalCollaborateur.get();
-            collaborateur.setMatricule(collab.getMatricule());
+     // Check if Collaborateur exists
+     if (optionalCollaborateur.isPresent()) {
+     Collaborateur collab = optionalCollaborateur.get();
+     collaborateur.setMatricule(collab.getMatricule());
 
-            //set the old values to the Archivage table and save it
-            Archivage archivage=new Archivage();
-            archivage.setCollaborateur(collab);
-            archivage.setDateArchivage(Date.valueOf(LocalDateTime.now().toLocalDate()));
-            archivage.setPosteActuel(collab.getPosteActuel());
-            archivage.setPosteApp(collab.getPosteAPP());
-            archivage.setSalaire(collab.getSalaireActuel());
-            archivageRepository.save(archivage);
+     //set the old values to the Archivage table and save it
+     Archivage archivage=new Archivage();
+     archivage.setCollaborateur(collab);
+     archivage.setDateArchivage(Date.valueOf(LocalDateTime.now().toLocalDate()));
+     archivage.setPosteActuel(collab.getPosteActuel());
+     archivage.setPosteApp(collab.getPosteAPP());
+     archivage.setSalaire(collab.getSalaireActuel());
+     archivageRepository.save(archivage);
 
-            // Initialize the archivages list if it is null
-            if (collaborateur.getArchivages() == null) {
-                collaborateur.setArchivages(new ArrayList<>());
-            }
-            // Assign it to the association table "Collaborateur_Archivage"
-            collaborateur.getArchivages().add(archivage);
+     // Initialize the archivages list if it is null
+     if (collaborateur.getArchivages() == null) {
+         collaborateur.setArchivages(new ArrayList<>());
+     }
+     // Assign it to the association table "Collaborateur_Archivage"
+     collaborateur.getArchivages().add(archivage);
 
-            // Save the updated collaborator
-            collaborateurRepository.save(collaborateur);
+     // Save the updated collaborator
+     collaborateurRepository.save(collaborateur);
 
-            return collaborateur;
+     return collaborateur;
 
-        }
-        else {
-            throw new EntityNotFoundException("Collaborateur not found");
-        }
+     }
+     else {
+         throw new EntityNotFoundException("Collaborateur not found");
+     }
     }
 
     @Transactional
@@ -400,6 +375,7 @@ public class CollaborateurService {
             collaborateur.setDate_Embauche(collab.getDate_Embauche());
             collaborateur.setMois_BAP(collab.getMois_BAP());
             collaborateur.setEmail(collab.getEmail());
+            collaborateur.setPassword(collab.getPassword());
             collaborateur.setSalaireActuel(collab.getSalaireActuel());
             collaborateur.setPosteActuel(collab.getPosteActuel());
             collaborateur.setPosteAPP(collab.getPosteAPP());
@@ -409,6 +385,7 @@ public class CollaborateurService {
             collaborateurRepository.save(collaborateur);
             WelcomeEmail(collaborateur);
             AffectationEmails(collaborateur);
+            System.out.println(collaborateur.getEmail());
             return collaborateur;
         }
     }
@@ -446,7 +423,6 @@ public class CollaborateurService {
             throw new IllegalStateException("Collaborator does not exist.");
         }
     }
-
     public List<Collaborateur> getAllCollaborateurs() {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
         return collaborateurs;
@@ -484,7 +460,20 @@ public class CollaborateurService {
         return DesactivatedManagers;
     }
 
+    public List<Collaborateur> saveCollaborateursToDatabase(MultipartFile file) {
+        List<Collaborateur> collaborateurs = new ArrayList<>();
 
+        if (ExcelService.isValidExcelFile(file)) {
+            try {
+                collaborateurs = ExcelService.getCollaborateursDataFromExcel(file.getInputStream());
+                this.collaborateurRepository.saveAll(collaborateurs);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("The file is not a valid excel file");
+            }
+        }
+
+        return collaborateurs;
+    }
 
 
 
