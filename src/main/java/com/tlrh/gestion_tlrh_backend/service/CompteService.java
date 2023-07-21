@@ -35,7 +35,7 @@ public class CompteService {
         Compte compte = optionalCompte.get();
         Collaborateur collaborateur = optionalCollab.get();
         compte.setCollaborateur(collaborateur);
-        emailsService.SendEmail(compte.getEmail()
+        emailsService.SendEmail(collaborateur.getEmail()
                 ,"Hi Dear "+collaborateur.getPrenom() +" " +collaborateur.getNom()
                         +" , To acces to your personnal space in our Application SQLI Here's the authentication information . The Email :"
                         +compte.getEmail()+" And the password : "+compte.getPassword()
@@ -67,7 +67,7 @@ public class CompteService {
         Collaborateur collaborateur=compte.getCollaborateur();
         if (valideAuthentication==0 && samePassword==0){
                 compte.setPassword(confirmedPassword);
-            emailsService.SendEmail(compte.getEmail()
+            emailsService.SendEmail(collaborateur.getEmail()
                     ,"Hi Dear "+collaborateur.getPrenom() +" " +collaborateur.getNom()
                             +" , To acces to your personnal space in our Application SQLI , Your new password is : "+compte.getPassword()
                     ,"Password has changed");
