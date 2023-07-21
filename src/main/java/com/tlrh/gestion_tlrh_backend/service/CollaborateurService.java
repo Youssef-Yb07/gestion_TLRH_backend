@@ -42,10 +42,8 @@ public class CollaborateurService {
     @Transactional
     public Collaborateur updateCollaborateurBy3Actors(Integer matricule, UpdateBy3ActorsDto collaborateurDto)
             throws EntityNotFoundException, MessagingException {
-
         // Get Collaborateur by matricule
         Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(matricule);
-
         // Check if Collaborateur exists
         if (optionalCollaborateur.isPresent()) {
             Collaborateur collaborateur = optionalCollaborateur.get();
@@ -80,6 +78,7 @@ public class CollaborateurService {
                         collaborateur.setAncienManagerRH(collaborateur.getManagerRH().getPrenom());
                         // Affect the new Manager RH to the attribute "ManagerRH"
                         collaborateur.setManagerRH(managerRH);
+                        AffectationEmails(collaborateur);
 
                     } else {
                         throw new IllegalStateException("Le Collaborateur sélectionné n'a pas le rôle de Manager RH.");
@@ -90,7 +89,6 @@ public class CollaborateurService {
             }
             // Save Collaborateur updated
             collaborateurRepository.save(collaborateur);
-            AffectationEmails(collaborateur);
 
             return collaborateur;
         } else {
@@ -106,7 +104,11 @@ public class CollaborateurService {
             String sexe = manager.getSexe().equals("Female") ? "Mrs" : "Mr";
             emailsService.SendEmail(managerMail,
                     "Hi Dear Your new Employee is : " + collaborateur.getPrenom() +
-                            " " + collaborateur.getNom() + " the email is : " + collaborateurMail,
+                            " " + collaborateur.getNom() + " the email is : " + collaborateurMail+
+                    " " + collaborateur.getNom() + " the email is : " + collaborateurMail
+                            +"with the Id : "+collaborateur.getMatricule()+" . The Programme will be : " +
+                            "-After 3 months : BPE . -After 6 months : BIP. -After 12 months : BAP "
+                    ,
                     "New Employee ");
 
             emailsService.SendEmail(collaborateurMail,
@@ -119,18 +121,41 @@ public class CollaborateurService {
     private void WelcomeEmail(Collaborateur collaborateur) throws MessagingException {
         String collaborateurMail = collaborateur.getEmail();
         emailsService.SendEmail(collaborateurMail,
-                "Hi Dear welcome to SQLI . ",
+                "Hi Dear "+collaborateur.getPrenom() +" "+ collaborateur.getNom()
+                        +"welcome to SQLI .  "+" Your ID is : " + collaborateur.getMatricule() +" The date of integration is : " +collaborateur.getDate_Embauche()
+                        +"The period will be 3 to 5 months , if it's 5 months you will be declared in the second months " +
+                        "Thank you and welcome another time to SQLI . ",
                 " SQLI ");
+        for (Collaborateur collabs:collaborateurRepository.findAll()){
+            if(collabs.getRoles().stream().anyMatch(col -> col.getRole().equals("Ambassadeur RH"))){
+                emailsService.SendEmail(collaborateurMail,
+                        "Hi Dear "+collabs.getPrenom() +" "+collabs.getNom()
+                                +" . a new employee has integrated SQLI the name is :"+collaborateur.getNom()+" "+collaborateur.getPrenom()
+                                +"with the Id : "+collaborateur.getMatricule()+" ." ,
+                        " New Employee ");
+            }
+        }
     }
 
-    @Scheduled(cron = "0 25 20 * * *")
+    @Scheduled(cron = "0 24 20 * * *")
     public void SendInvitations() throws MessagingException {
+        for (Collaborateur collaborateur:CollaborateurAfterX(2)) {
+            Collaborateur manager=collaborateur.getManagerRH();
+            if(manager!=null) {
+                emailsService.SendEmail(manager.getEmail(),
+                        "Rappel Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " " + collaborateur.getNom()
+                                +" Avec numero de Matricule "+collaborateur.getMatricule() +" If you want to make it 5 months ," +
+                                " it's the time to let the employee know it ."
+                        , "Bilan de periode d'essai");
+            }
+        }
         for (Collaborateur collaborateur : CollaborateurAfterX(3)) {
             Collaborateur manager = collaborateur.getManagerRH();
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
-                        "Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " " + collaborateur.getNom(),
-                        "Bilan de periode d'essai");
+                        "Rappel Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " " + collaborateur.getNom()
+                                +" Avec numero de Matricule "+collaborateur.getMatricule()
+                        , "Bilan de periode d'essai");
             }
         }
         for (Collaborateur collaborateur : CollaborateurAfterX(6)) {
@@ -138,8 +163,8 @@ public class CollaborateurService {
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
                         "BIP Bilan intermediaire de performance : " + collaborateur.getPrenom()
-                                + " " + collaborateur.getNom(),
-                        "Bilan de periode d'essai");
+                                + " " + collaborateur.getNom() +" With the Id : "+collaborateur.getMatricule()
+                        , "Bilan de periode d'essai");
             }
         }
         for (Collaborateur collaborateur : CollaborateurAfterX(12)) {
@@ -147,8 +172,8 @@ public class CollaborateurService {
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
                         "Bilan Annuel de performance Pour : " + collaborateur.getPrenom()
-                                + " " + collaborateur.getNom(),
-                        "BAP");
+                                + " " + collaborateur.getNom() +" With the Id : "+collaborateur.getMatricule()
+                        , "BAP");
             }
         }
     }
@@ -204,6 +229,8 @@ public class CollaborateurService {
                     if (managerRH.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
                         // Assign the HR Manager to the collaborator
                         collaborateur.setManagerRH(managerRH);
+                        AffectationEmails(collaborateur);
+
                     } else {
                         throw new IllegalStateException("Le Collaborateur sélectionné n'a pas le rôle de Manager RH.");
                     }
@@ -216,7 +243,6 @@ public class CollaborateurService {
 
             // Save the updated collaborator
             Collaborateur collaborateurUpdated = collaborateurRepository.save(collaborateur);
-            AffectationEmails(collaborateurUpdated);
 
             return collaborateurUpdated;
 
@@ -239,7 +265,15 @@ public class CollaborateurService {
                 if (managerRH.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
                     // Assign the HR Manager to the collaborators
                     List<Collaborateur> collaborateurs = collaborateurRepository.findAllById(collaborateurMatricules);
-                    collaborateurs.forEach(collaborateur -> collaborateur.setManagerRH(managerRH));
+                    collaborateurs.forEach(collaborateur -> {
+                        collaborateur.setManagerRH(managerRH);
+                        try {
+                            AffectationEmails(collaborateur);
+                        } catch (MessagingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+
                     List<Collaborateur> updatedCollaborateurs = collaborateurRepository.saveAll(collaborateurs);
 
                     // Convert updated collaborators to CollaborateurDto list
@@ -348,7 +382,7 @@ public class CollaborateurService {
             StatutManagerRH status = StatutManagerRH.Active;
             collaborateur.setStatut(status);
             collaborateurRepository.save(collaborateur);
-            AffectationEmails(collaborateur);
+            WelcomeEmail(collaborateur);
 
             return collaborateur;
         } else {
@@ -384,7 +418,6 @@ public class CollaborateurService {
             collaborateurRepository.save(collaborateur);
             WelcomeEmail(collaborateur);
             AffectationEmails(collaborateur);
-            System.out.println(collaborateur.getEmail());
             return collaborateur;
         }
     }
