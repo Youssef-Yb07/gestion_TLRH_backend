@@ -1,14 +1,10 @@
-package com.tlrh.gestion_tlrh_backend.controller;
-
+package com.tlrh.gestion_tlrh_backend.controllers;
 import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.service.CollaborateurService;
-
 import java.util.List;
-
 import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +17,7 @@ public class CollaborateurController {
     @Autowired
     private CollaborateurService collaborateurService;
 
-    @PutMapping("/updateBy3Actors")
+    @PutMapping("/update/By3Actors")
     public ResponseEntity<Collaborateur> UpdateCollaborateurBy3Actors(@RequestParam Integer matricule,@RequestBody UpdateBy3ActorsDto collaborateurDto) {
         try {
             return new ResponseEntity<>(collaborateurService.updateCollaborateurBy3Actors(matricule, collaborateurDto), HttpStatus.OK);
@@ -58,22 +54,6 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-//    @PutMapping("/{matricule}/updateByManager")
-//    public ResponseEntity<CollaborateurDto> updateCollaborateurByManager(
-//            @PathVariable("matricule") Integer matricule,
-//            @RequestBody CollaborateurDto collaborateurDto) {
-//        try {
-//            CollaborateurDto updatedCollaborateur = collaborateurService.updateCollaborateurByManager(matricule, collaborateurDto);
-//            return new ResponseEntity<>(updatedCollaborateur, HttpStatus.OK);
-//        } catch (EntityNotFoundException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        } catch (IllegalStateException e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 
     //Add random Collaborators for testing purposes
     @PostMapping("/addRandomCollaborateurs")
@@ -132,7 +112,7 @@ public class CollaborateurController {
         }
     }
 
-    @GetMapping("get/ManagerRH/activated")
+    @GetMapping("get/ManagerRH/Activated")
     public ResponseEntity<List<Collaborateur>> getManagerRHByStatutActivated(){
         try {
             return new ResponseEntity<>(collaborateurService.getManagerRHByStatutActivated(),HttpStatus.OK);
@@ -151,6 +131,30 @@ public class CollaborateurController {
          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PutMapping("/update/ByManager")
+    public ResponseEntity<Collaborateur> UpdateCollaborateurByManager(@RequestParam Integer matricule,@RequestBody Collaborateur collaborateur) {
+        try {
+            return new ResponseEntity<>(collaborateurService.updateCollaborateurByManager(matricule, collaborateur), HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error while updating Collaborateur");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/createCollaborateur")
+    public ResponseEntity<Collaborateur> createCollaborateur(@RequestBody Collaborateur collab){
+        try {
+            Collaborateur collaborateur= collaborateurService.createCollaborateur(collab);
+            return new ResponseEntity<>(collaborateur, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error while creating collaborateur");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
 
 

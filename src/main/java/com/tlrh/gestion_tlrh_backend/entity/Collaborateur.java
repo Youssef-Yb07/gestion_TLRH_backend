@@ -29,7 +29,8 @@ public class Collaborateur {
 
     @OneToOne
     private Collaborateur managerRH;
-//F or M : Femme ou Homme
+
+    //F or M : Femme ou Homme
     private String sexe;
 
     private String site;
