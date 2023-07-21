@@ -1,5 +1,4 @@
 package com.tlrh.gestion_tlrh_backend.service;
-
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.entity.Compte;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
