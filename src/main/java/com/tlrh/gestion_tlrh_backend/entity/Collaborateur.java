@@ -1,4 +1,5 @@
 package com.tlrh.gestion_tlrh_backend.entity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import lombok.AllArgsConstructor;
@@ -20,8 +21,6 @@ public class Collaborateur {
     private Integer matricule;
 
     private String email;
-
-    private String password;
 
     private String Nom;
 
@@ -88,10 +87,13 @@ public class Collaborateur {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatutManagerRH statut = StatutManagerRH.Desactive;
-    public Collaborateur(Integer matricule,String email, String password, String nom, String prenom, String abreviationCollaborateur, String ancienManagerRH, Collaborateur managerRH, String sexe, String site, String BU, Date date_Embauche, String mois_BAP, Date date_Depart, boolean ancien_Collaborateur, boolean seminaireIntegration, Date dateParticipation, String posteAPP, String posteActuel, int salaireActuel, StatutManagerRH statut) {
+
+    @OneToOne(mappedBy = "collaborateur",fetch = FetchType.LAZY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Compte compte;
+    public Collaborateur(Integer matricule,String email, String nom, String prenom, String abreviationCollaborateur, String ancienManagerRH, Collaborateur managerRH, String sexe, String site, String BU, Date date_Embauche, String mois_BAP, Date date_Depart, boolean ancien_Collaborateur, boolean seminaireIntegration, Date dateParticipation, String posteAPP, String posteActuel, int salaireActuel, StatutManagerRH statut) {
         this.matricule=matricule;
         this.email = email;
-        this.password = password;
         this.Nom = nom;
         this.Prenom = prenom;
         this.AbreviationCollaborateur = abreviationCollaborateur;

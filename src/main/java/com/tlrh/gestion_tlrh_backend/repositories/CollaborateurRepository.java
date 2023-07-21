@@ -11,4 +11,5 @@ import java.util.List;
 public interface CollaborateurRepository extends JpaRepository<Collaborateur,Integer> {
     @EntityGraph(attributePaths = "roles")
     List<Collaborateur> findAll();
+    List<Collaborateur> findCollaborateursByCompteIsNull();
 }

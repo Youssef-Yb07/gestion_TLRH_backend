@@ -42,24 +42,23 @@ public class ExcelService {
                        case 0 -> collaborateur.setNom(cell.getStringCellValue());
                        case 1 -> collaborateur.setPrenom(cell.getStringCellValue());
                        case 2 -> collaborateur.setEmail(cell.getStringCellValue());
-                       case 3 -> collaborateur.setPassword(cell.getStringCellValue());
-                       case 4 -> collaborateur.setAbreviationCollaborateur(cell.getStringCellValue());
-                       case 5 -> collaborateur.setAncienManagerRH(cell.getStringCellValue());
-                       case 6 -> collaborateur.setSexe(cell.getStringCellValue());
-                       case 7 -> collaborateur.setSite(cell.getStringCellValue());
-                       case 8 -> collaborateur.setBU(cell.getStringCellValue());
-                       case 9 -> {
+                       case 3 -> collaborateur.setAbreviationCollaborateur(cell.getStringCellValue());
+                       case 4 -> collaborateur.setAncienManagerRH(cell.getStringCellValue());
+                       case 5 -> collaborateur.setSexe(cell.getStringCellValue());
+                       case 6 -> collaborateur.setSite(cell.getStringCellValue());
+                       case 7 -> collaborateur.setBU(cell.getStringCellValue());
+                       case 8 -> {
                            java.util.Date utilDate = cell.getDateCellValue();
                            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
                            collaborateur.setDate_Embauche(sqlDate);
                        }
-                       case 10 -> collaborateur.setMois_BAP(cell.getStringCellValue());
-                       case 11 -> {
+                       case 9 -> collaborateur.setMois_BAP(cell.getStringCellValue());
+                       case 10 -> {
                             java.util.Date utilDate = cell.getDateCellValue();
                             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
                             collaborateur.setDate_Depart(sqlDate);
                        }
-                       case 12 -> {
+                       case 11 -> {
                            if (cell.getCellType() == CellType.BOOLEAN) {
                                collaborateur.setAncien_Collaborateur(cell.getBooleanCellValue());
                            } else if(cell.getCellType() == CellType.STRING) {
@@ -68,7 +67,7 @@ public class ExcelService {
                                collaborateur.setAncien_Collaborateur(Boolean.parseBoolean(value));
                            }
                        }
-                       case 13 -> {
+                       case 12 -> {
                            if (cell.getCellType() == CellType.BOOLEAN) {
                                collaborateur.setSeminaireIntegration(cell.getBooleanCellValue());
                            } else if (cell.getCellType() == CellType.STRING) {
@@ -78,14 +77,14 @@ public class ExcelService {
                            }
                        }
 
-                       case 14 ->{
+                       case 13 ->{
                             java.util.Date utilDate = cell.getDateCellValue();
                             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
                             collaborateur.setDateParticipation(sqlDate);
                        }
-                       case 15 -> collaborateur.setPosteAPP(cell.getStringCellValue());
-                       case 16 -> collaborateur.setPosteActuel(cell.getStringCellValue());
-                       case 17 -> collaborateur.setSalaireActuel((int) cell.getNumericCellValue());
+                       case 14 -> collaborateur.setPosteAPP(cell.getStringCellValue());
+                       case 15 -> collaborateur.setPosteActuel(cell.getStringCellValue());
+                       case 16 -> collaborateur.setSalaireActuel((int) cell.getNumericCellValue());
                        default -> {
                        }
                    }
@@ -120,7 +119,7 @@ public class ExcelService {
             Sheet sheet = workbook.createSheet("collaborateurs");
 
             // Create header row with bold, italic, and centered text
-            addBoldItalicAndCenteredHeader((XSSFSheet) sheet, 0, "Nom", "Prénom", "Email", "Password", "AbreviationCollaborateur",
+            addBoldItalicAndCenteredHeader((XSSFSheet) sheet, 0, "Nom", "Prénom", "Email", "AbreviationCollaborateur",
                     "AncienManagerRH", "Sexe", "Site", "BU", "Date_Embauche", "Mois_BAP", "Date_Depart",
                     "Ancien_Collaborateur", "SeminaireIntegration", "DateParticipation", "PosteAPP",
                     "PosteActuel", "SalaireActuel");
@@ -134,24 +133,23 @@ public class ExcelService {
                 dataRow.createCell(0).setCellValue(collaborateur.getNom());
                 dataRow.createCell(1).setCellValue(collaborateur.getPrenom());
                 dataRow.createCell(2).setCellValue(collaborateur.getEmail());
-                dataRow.createCell(3).setCellValue(collaborateur.getPassword());
-                dataRow.createCell(4).setCellValue(collaborateur.getAbreviationCollaborateur());
-                dataRow.createCell(5).setCellValue(collaborateur.getAncienManagerRH());
-                dataRow.createCell(6).setCellValue(collaborateur.getSexe());
-                dataRow.createCell(7).setCellValue(collaborateur.getSite());
-                dataRow.createCell(8).setCellValue(collaborateur.getBU());
-                dataRow.createCell(9).setCellValue(new java.util.Date(collaborateur.getDate_Embauche().getTime()));
-                dataRow.createCell(10).setCellValue(collaborateur.getMois_BAP());
-                dataRow.createCell(11).setCellValue(new java.util.Date(collaborateur.getDate_Depart().getTime()));
+                dataRow.createCell(3).setCellValue(collaborateur.getAbreviationCollaborateur());
+                dataRow.createCell(4).setCellValue(collaborateur.getAncienManagerRH());
+                dataRow.createCell(5).setCellValue(collaborateur.getSexe());
+                dataRow.createCell(6).setCellValue(collaborateur.getSite());
+                dataRow.createCell(7).setCellValue(collaborateur.getBU());
+                dataRow.createCell(8).setCellValue(new java.util.Date(collaborateur.getDate_Embauche().getTime()));
+                dataRow.createCell(9).setCellValue(collaborateur.getMois_BAP());
+                dataRow.createCell(10).setCellValue(new java.util.Date(collaborateur.getDate_Depart().getTime()));
 
                 // Convert boolean attributes to "true" or "false"
-                dataRow.createCell(12).setCellValue(collaborateur.isAncien_Collaborateur() ? "true" : "false");
-                dataRow.createCell(13).setCellValue(collaborateur.isSeminaireIntegration() ? "true" : "false");
+                dataRow.createCell(11).setCellValue(collaborateur.isAncien_Collaborateur() ? "true" : "false");
+                dataRow.createCell(12).setCellValue(collaborateur.isSeminaireIntegration() ? "true" : "false");
 
-                dataRow.createCell(14).setCellValue(new java.util.Date(collaborateur.getDateParticipation().getTime()));
-                dataRow.createCell(15).setCellValue(collaborateur.getPosteAPP());
-                dataRow.createCell(16).setCellValue(collaborateur.getPosteActuel());
-                dataRow.createCell(17).setCellValue(collaborateur.getSalaireActuel());
+                dataRow.createCell(13).setCellValue(new java.util.Date(collaborateur.getDateParticipation().getTime()));
+                dataRow.createCell(14).setCellValue(collaborateur.getPosteAPP());
+                dataRow.createCell(15).setCellValue(collaborateur.getPosteActuel());
+                dataRow.createCell(16).setCellValue(collaborateur.getSalaireActuel());
 
             }
 
