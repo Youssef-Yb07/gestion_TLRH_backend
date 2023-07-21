@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import com.tlrh.gestion_tlrh_backend.service.ExcelService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/collaborateur")
+@AllArgsConstructor
 public class CollaborateurController {
 
-    @Autowired
     private CollaborateurService collaborateurService;
+    private ExcelService excelService;
+
 
     @PutMapping("/update/By3Actors")
     public ResponseEntity<Collaborateur> UpdateCollaborateurBy3Actors(@RequestParam Integer matricule,@RequestBody UpdateBy3ActorsDto collaborateurDto) {
@@ -171,7 +174,6 @@ public class CollaborateurController {
         }
     }
 
-    @Autowired private ExcelService excelService;
     @GetMapping("/export/collaborateursData")
     public ResponseEntity<InputStreamResource> exportCollaborateursData() {
         List<Collaborateur> collaborateurs = collaborateurService.getAllCollaborateurs();

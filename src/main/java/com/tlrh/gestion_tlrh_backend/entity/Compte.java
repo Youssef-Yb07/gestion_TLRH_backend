@@ -17,6 +17,7 @@ public class Compte {
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
+
     @OneToOne
     private Collaborateur collaborateur;
     public Compte(Integer id, String email, String password) {

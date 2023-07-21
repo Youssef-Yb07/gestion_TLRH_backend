@@ -375,7 +375,6 @@ public class CollaborateurService {
             collaborateur.setDate_Embauche(collab.getDate_Embauche());
             collaborateur.setMois_BAP(collab.getMois_BAP());
             collaborateur.setEmail(collab.getEmail());
-            collaborateur.setPassword(collab.getPassword());
             collaborateur.setSalaireActuel(collab.getSalaireActuel());
             collaborateur.setPosteActuel(collab.getPosteActuel());
             collaborateur.setPosteAPP(collab.getPosteAPP());
@@ -474,15 +473,8 @@ public class CollaborateurService {
 
         return collaborateurs;
     }
-
-
-
-
-
-
-
-
-
-
+    public List<Collaborateur> collWithoutAccount(){
+        return collaborateurRepository.findCollaborateursByCompteIsNull() ;
+    }
 
 }
