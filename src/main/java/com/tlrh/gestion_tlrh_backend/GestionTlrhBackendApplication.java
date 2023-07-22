@@ -1,9 +1,12 @@
 package com.tlrh.gestion_tlrh_backend;
 
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
+import com.tlrh.gestion_tlrh_backend.entity.Diplome;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
+import com.tlrh.gestion_tlrh_backend.repositories.DiplomeRepository;
 import com.tlrh.gestion_tlrh_backend.service.CollaborateurService;
+import com.tlrh.gestion_tlrh_backend.service.DiplomeService;
 import com.tlrh.gestion_tlrh_backend.service.EmailsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,10 @@ public class GestionTlrhBackendApplication {
     @Autowired
     private CollaborateurService collaborateurService;
 
+    @Autowired
+    private DiplomeService diplomeService;
+    @Autowired
+    private DiplomeRepository diplomeRepository;
 //    @Bean
 //    public ModelMapper modelMapper(){
 //        return new ModelMapper();
@@ -54,4 +61,38 @@ public class GestionTlrhBackendApplication {
         };
     }*/
 
+    //test1
+    @Bean
+    CommandLineRunner loadData() {
+        return args -> {
+            // Adding test data to the database when the application starts
+            Diplome diplome1 = new Diplome();
+            diplome1.setType("Bachelor");
+            diplome1.setNiveau(3);
+            diplome1.setPromotion(2022);
+
+            Diplome diplome2 = new Diplome();
+            diplome2.setType("Master");
+            diplome2.setNiveau(2);
+            diplome2.setPromotion(2021);
+
+            Diplome diplome3= new Diplome();
+            diplome3.setId(1);
+            diplome3.setType("doctora");
+            diplome3.setNiveau(3);
+            diplome3.setPromotion(2023);
+//            diplomeRepository.save(diplome3);
+            diplomeRepository.save(diplome1);
+            diplomeRepository.save(diplome2);
+            diplomeService.createDiplome(diplome3);
+            diplomeService.AffectDiplomeToACollaborateur(12,1);
+
+
+
+        };
+    }
 }
+
+
+
+
