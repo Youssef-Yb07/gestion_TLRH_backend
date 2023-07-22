@@ -47,9 +47,12 @@ public class DiplomeService {
             throw new RuntimeException("this diploma is already affected to collaborateur");
         }
 
-
         diplome.setCollaborateur(collaborateur);
+
+        System.out.println("diplome to collaboatteur done");
+
         return diplomeRepository.save(diplome);
+
     }
 
 
