@@ -62,35 +62,35 @@ public class GestionTlrhBackendApplication {
     }*/
 
     //test1
-    @Bean
-    CommandLineRunner loadData() {
-        return args -> {
-            // Adding test data to the database when the application starts
-            Diplome diplome1 = new Diplome();
-            diplome1.setType("Bachelor");
-            diplome1.setNiveau(3);
-            diplome1.setPromotion(2022);
-
-            Diplome diplome2 = new Diplome();
-            diplome2.setType("Master");
-            diplome2.setNiveau(2);
-            diplome2.setPromotion(2021);
-
-            Diplome diplome3= new Diplome();
-            diplome3.setId(1);
-            diplome3.setType("doctora");
-            diplome3.setNiveau(3);
-            diplome3.setPromotion(2023);
-//            diplomeRepository.save(diplome3);
-            diplomeRepository.save(diplome1);
-            diplomeRepository.save(diplome2);
-            diplomeService.createDiplome(diplome3);
-            diplomeService.AffectDiplomeToACollaborateur(12,1);
-
-
-
-        };
-    }
+//    @Bean
+//    CommandLineRunner loadData() {
+//        return args -> {
+//            // Adding test data to the database when the application starts
+//            Diplome diplome1 = new Diplome();
+//            diplome1.setType("Bachelor");
+//            diplome1.setNiveau(3);
+//            diplome1.setPromotion(2022);
+//
+//            Diplome diplome2 = new Diplome();
+//            diplome2.setType("Master");
+//            diplome2.setNiveau(2);
+//            diplome2.setPromotion(2021);
+//
+//            Diplome diplome3= new Diplome();
+//            diplome3.setId(1);
+//            diplome3.setType("doctora");
+//            diplome3.setNiveau(3);
+//            diplome3.setPromotion(2023);
+////            diplomeRepository.save(diplome3);
+//            diplomeRepository.save(diplome1);
+//            diplomeRepository.save(diplome2);
+//            diplomeService.createDiplome(diplome3);
+//            diplomeService.AffectDiplomeToACollaborateur(12,1);
+//
+//
+//
+//        };
+//    }
 }
 
 
