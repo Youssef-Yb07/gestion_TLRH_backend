@@ -2,6 +2,7 @@ package com.tlrh.gestion_tlrh_backend.controllers;
 
 import com.tlrh.gestion_tlrh_backend.entity.Certificat;
 
+import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.service.CertificatService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/certificat")
+@CrossOrigin(origins = "*")
 public class CertificatController {
 
     @Autowired
@@ -27,9 +29,9 @@ public class CertificatController {
     }
 
     @PutMapping("/affectCertificatsToCollaborateur")
-    public ResponseEntity affectCertificatsToCollaborateur(@RequestParam int idCertificat, @RequestParam int idCollaborateur){
+    public ResponseEntity<Collaborateur > affectCertificatsToCollaborateur(@RequestParam int idCertificat, @RequestParam int idCollaborateur){
         try{
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(certificatService.affectCertificatsToCollaborateur(idCertificat,idCollaborateur),HttpStatus.OK);
         }catch (Exception e){
             System.out.println("Erreur lors de l'affectation du certificat au collaborateur");
             e.printStackTrace();

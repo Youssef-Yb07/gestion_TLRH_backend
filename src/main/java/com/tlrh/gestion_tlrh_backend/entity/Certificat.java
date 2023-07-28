@@ -1,6 +1,7 @@
 package com.tlrh.gestion_tlrh_backend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Certificat {
 
     private Date date;
 
-
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "Certificat_Collaborateur",

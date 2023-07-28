@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import com.tlrh.gestion_tlrh_backend.service.ExcelService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -19,12 +20,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/collaborateur")
+@Tag(name = "Collaborateur", description = "Gestion des collaborateurs")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class CollaborateurController {
 
+    @Autowired
     private CollaborateurService collaborateurService;
-    private ExcelService excelService;
 
+    @Autowired
+    private ExcelService excelService;
 
     @PutMapping("/update/By3Actors")
     public ResponseEntity<Collaborateur> UpdateCollaborateurBy3Actors(@RequestParam Integer matricule,@RequestBody UpdateBy3ActorsDto collaborateurDto) {
@@ -193,6 +198,15 @@ public class CollaborateurController {
                 .ok()
                 .headers(headers)
                 .body(resource);
+    }
+    @GetMapping("/get/all/Managers")
+    public ResponseEntity<List<Collaborateur>> GetAllManagers(){
+        try {
+            return new ResponseEntity<>(collaborateurService.getAllManagerRH(),HttpStatus.OK);
+        }catch (Exception e){
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

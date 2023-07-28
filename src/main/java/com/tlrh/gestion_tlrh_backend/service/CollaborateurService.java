@@ -510,4 +510,15 @@ public class CollaborateurService {
         return collaborateurRepository.findCollaborateursByCompteIsNull() ;
     }
 
+    public List<Collaborateur> getAllManagerRH(){
+        List<Collaborateur> collaborateurs=collaborateurRepository.findAll();
+        List<Collaborateur> managers=new ArrayList<>();
+        for(Collaborateur collaborateur:collaborateurs){
+            if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
+                managers.add(collaborateur);
+            }
+        }
+        return managers;
+    }
+
 }

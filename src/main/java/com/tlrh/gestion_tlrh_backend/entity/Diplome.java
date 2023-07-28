@@ -1,6 +1,8 @@
 package com.tlrh.gestion_tlrh_backend.entity;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Generated;
@@ -29,6 +31,7 @@ public class Diplome {
     @JoinColumn(name="ecole_id")
     private Ecole ecole;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="collaborateur_id")
     private Collaborateur collaborateur;

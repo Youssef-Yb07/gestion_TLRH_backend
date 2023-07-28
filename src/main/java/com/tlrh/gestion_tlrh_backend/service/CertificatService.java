@@ -41,7 +41,7 @@ public class CertificatService {
             return certificat;
         }
     }
-    public void affectCertificatsToCollaborateur (int idCertificat, int idCollaborateur) {
+    public Collaborateur affectCertificatsToCollaborateur (int idCertificat, int idCollaborateur) {
         Optional<Certificat> optionalCertificat = certificatRepository.findById(idCertificat);
         Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(idCollaborateur);
 
@@ -52,6 +52,8 @@ public class CertificatService {
             if (!(certificat.getCollaborateurs().contains(collaborateur)&&collaborateur.getCertificats().contains(certificat))) {
                 certificat.getCollaborateurs().add(collaborateur);
                 certificat =certificatRepository.save(certificat);
+
+                return collaborateur;
             }
         }
         throw new IllegalStateException("Certificat or Collaborateur not found");

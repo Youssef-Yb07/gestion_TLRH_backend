@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/technologie")
+@CrossOrigin(origins = "*")
 public class TechnologieController {
 
     @Autowired private TechnologieService technologieService;
