@@ -520,8 +520,12 @@ public class CollaborateurService {
 
         return collaborateurs;
     }
-    public List<Collaborateur> collWithoutAccount(){
-        return collaborateurRepository.findCollaborateursByCompteIsNull() ;
+    public List<Collaborateur> getManagerWithoutAccount(){
+        Role role=roleRepositories.findByRole("Manager RH");
+        List<Collaborateur> managerRh=collaborateurRepository.findCollaborateursByRolesNotContaining(role) ;
+        return managerRh.stream()
+                .filter(manager -> manager.getCompte() == null)
+                .collect(Collectors.toList());
     }
 
     public List<Collaborateur> getAllManagerRH(){
@@ -538,5 +542,6 @@ public class CollaborateurService {
         Role role=roleRepositories.findByRole("Manager RH");
         return collaborateurRepository.findCollaborateursByRolesNotContaining(role);
     }
+
 
 }

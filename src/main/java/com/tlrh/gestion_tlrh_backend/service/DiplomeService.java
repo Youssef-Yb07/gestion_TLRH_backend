@@ -57,7 +57,7 @@ public class DiplomeService {
 
 
 
-    // Méthode pour affecter une liste de diplômes à un collaborateur
+    //
     //public void affecterListeDiplomesACollaborateur(Collaborateur collaborateur, List<Diplome> listeDiplomes) {
     //  for (Diplome diplome : listeDiplomes) {
     //    diplome.setCollaborateur(collaborateur);
