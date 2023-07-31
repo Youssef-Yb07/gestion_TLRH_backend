@@ -76,6 +76,9 @@ public class GestionTlrhBackendApplication {
 //            diplomeRepository.save(diplome2);
 //            diplomeService.createDiplome(diplome3);
 //            diplomeService.AffectDiplomeToACollaborateur(12,1);
+//
+//
+//
 //        };
 //    }
 }

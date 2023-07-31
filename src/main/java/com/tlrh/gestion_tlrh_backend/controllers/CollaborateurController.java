@@ -145,6 +145,17 @@ public class CollaborateurController {
          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/get/nonAffectedCollabs")
+    public ResponseEntity<List<Collaborateur>> getNonAffectedCollabs(){
+        try {
+            return new ResponseEntity<>(collaborateurService.getNonAffectedCollabs(),HttpStatus.OK);
+        }catch (Exception e){
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PutMapping("/update/ByManager")
     public ResponseEntity<Collaborateur> UpdateCollaborateurByManager(@RequestParam Integer matricule,@RequestBody Collaborateur collaborateur) {
         try {
