@@ -459,6 +459,17 @@ public class CollaborateurService {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
         return collaborateurs;
     }
+
+    public List<Collaborateur> getNonAffectedCollabs() {
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        List<Collaborateur> nonAffectedCollabs = new ArrayList<>();
+        for (Collaborateur collaborateur : collaborateurs) {
+            if (collaborateur.getManagerRH() == null) {
+                nonAffectedCollabs.add(collaborateur);
+            }
+        }
+        return nonAffectedCollabs;
+    }
     public List<Collaborateur> getManagerRHByStatutActivated(){
         //check if the collaborators has a role "Manager RH"
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
