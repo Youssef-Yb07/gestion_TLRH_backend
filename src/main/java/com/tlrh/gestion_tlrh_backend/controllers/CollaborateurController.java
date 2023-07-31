@@ -219,7 +219,7 @@ public class CollaborateurController {
          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/get/NonManager")
+    @GetMapping("/get/NonManagers")
     public ResponseEntity<List<Collaborateur>> GetNonManagers(){
         try {
             return new ResponseEntity<>(collaborateurService.getNonManagerRH(),HttpStatus.OK);
@@ -238,6 +238,7 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
 }
