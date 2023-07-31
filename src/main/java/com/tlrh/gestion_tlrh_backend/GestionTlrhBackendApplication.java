@@ -1,23 +1,13 @@
 package com.tlrh.gestion_tlrh_backend;
-
-import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
-import com.tlrh.gestion_tlrh_backend.entity.Diplome;
-import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
 import com.tlrh.gestion_tlrh_backend.repositories.DiplomeRepository;
 import com.tlrh.gestion_tlrh_backend.service.CollaborateurService;
 import com.tlrh.gestion_tlrh_backend.service.DiplomeService;
 import com.tlrh.gestion_tlrh_backend.service.EmailsService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import java.sql.Date;
-
 @SpringBootApplication
 @EnableScheduling
 public class GestionTlrhBackendApplication {

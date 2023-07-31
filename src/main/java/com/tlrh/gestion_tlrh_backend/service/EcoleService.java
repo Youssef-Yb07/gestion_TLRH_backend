@@ -37,7 +37,6 @@ public class EcoleService {
         }
         if(!existingEcole.isPresent()){
             throw new RuntimeException("Ecole entity doesn't exist !");
-
         }
         Ecole ecole=existingEcole.get();
 

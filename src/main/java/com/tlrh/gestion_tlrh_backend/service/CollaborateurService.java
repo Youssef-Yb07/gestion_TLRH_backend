@@ -8,6 +8,7 @@ import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import com.tlrh.gestion_tlrh_backend.entity.Role;
 import com.tlrh.gestion_tlrh_backend.repositories.ArchivageRepository;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
+import com.tlrh.gestion_tlrh_backend.repositories.RoleRepositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,8 @@ public class CollaborateurService {
 
     @Autowired
     private CollaborateurRepository collaborateurRepository;
+    @Autowired
+    private RoleRepositories roleRepositories;
 
     // @Autowired
     // private ModelMapper modelMapper;
@@ -519,6 +522,21 @@ public class CollaborateurService {
     }
     public List<Collaborateur> collWithoutAccount(){
         return collaborateurRepository.findCollaborateursByCompteIsNull() ;
+    }
+
+    public List<Collaborateur> getAllManagerRH(){
+        List<Collaborateur> collaborateurs=collaborateurRepository.findAll();
+        List<Collaborateur> managers=new ArrayList<>();
+        for(Collaborateur collaborateur:collaborateurs){
+            if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
+                managers.add(collaborateur);
+            }
+        }
+        return managers;
+    }
+    public List<Collaborateur> getNonManagerRH(){
+        Role role=roleRepositories.findByRole("Manager RH");
+        return collaborateurRepository.findCollaborateursByRolesNotContaining(role);
     }
 
 }

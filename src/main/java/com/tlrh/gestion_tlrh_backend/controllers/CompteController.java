@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/compte")
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class CompteController {
 
     @Autowired
