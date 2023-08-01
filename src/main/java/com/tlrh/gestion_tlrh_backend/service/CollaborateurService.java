@@ -473,6 +473,7 @@ public class CollaborateurService {
         }
         return nonAffectedCollabs;
     }
+
     public List<Collaborateur> getManagerRHByStatutActivated(){
         //check if the collaborators has a role "Manager RH"
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
@@ -484,6 +485,7 @@ public class CollaborateurService {
                 }
             }
         }
+
         if(ActivatedManagers.isEmpty()){
             System.err.println("No Manager RH Active found.");
         }
@@ -520,9 +522,17 @@ public class CollaborateurService {
 
         return collaborateurs;
     }
-    public List<Collaborateur> collWithoutAccount(){
-        return collaborateurRepository.findCollaborateursByCompteIsNull() ;
+    public List<Collaborateur> getManagerWithoutAccount(){
+        List<Collaborateur> managerRh=this.getAllManagerRH();
+        List<Collaborateur> managers=new ArrayList<>();
+        for(Collaborateur manager:managerRh){
+            if(manager.getCompte()==null){
+                managers.add(manager);
+            }
+        }
+        return managers;
     }
+
 
     public List<Collaborateur> getAllManagerRH(){
         List<Collaborateur> collaborateurs=collaborateurRepository.findAll();
@@ -538,5 +548,6 @@ public class CollaborateurService {
         Role role=roleRepositories.findByRole("Manager RH");
         return collaborateurRepository.findCollaborateursByRolesNotContaining(role);
     }
+
 
 }

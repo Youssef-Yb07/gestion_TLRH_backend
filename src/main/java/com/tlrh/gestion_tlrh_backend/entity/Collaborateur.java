@@ -66,7 +66,7 @@ public class Collaborateur {
             inverseJoinColumns = @JoinColumn(name = "id_technologie")
     )
     private List<Technologie> technologies;
-
+    
     @ManyToMany
     @JoinTable(
             name = "Role_Collaborateur",

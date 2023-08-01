@@ -229,7 +229,14 @@ public class CollaborateurController {
         }
     }
 
-
-
+    @GetMapping("/get/ManagerWithoutAcc")
+    public ResponseEntity<List<Collaborateur>> ManagerWithoutAcc(){
+        try {
+            return new ResponseEntity<>(collaborateurService.getManagerWithoutAccount(),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
