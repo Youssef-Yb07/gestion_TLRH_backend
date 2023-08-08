@@ -239,4 +239,25 @@ public class CollaborateurController {
         }
     }
 
+    @GetMapping("/get/FemaleRatio")
+    public ResponseEntity<Double> FemaleRatio(){
+        try {
+            return new ResponseEntity<>(collaborateurService.FemaleRatio(),HttpStatus.OK);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/get/MaleRatio")
+    public ResponseEntity<Double> MaleRatio() {
+        try {
+
+            return new ResponseEntity<>(collaborateurService.MaleRatio(),HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
