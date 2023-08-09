@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/ecole")
 @AllArgsConstructor
@@ -45,4 +48,12 @@ public class EcoleController {
         }
     }
 
+    @GetMapping("/pourcentage/ecole")
+    public ResponseEntity<List<Map.Entry<String, Double>>> getPourcentageEcoleByCollaborateur() {
+        try {
+            return new ResponseEntity<>(ecoleService.calculerPourcentageParEcole(), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
