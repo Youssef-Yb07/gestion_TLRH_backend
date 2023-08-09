@@ -550,4 +550,52 @@ public class CollaborateurService {
     }
 
 
-}
+
+
+        public double FemaleRatio() {
+            int totalFemales = 0;
+            int totalMales = 0;
+
+            List<Collaborateur> collaborateurs = this.getAllCollaborateurs();
+            for (Collaborateur collaborateur : collaborateurs) {
+                String sexe = collaborateur.getSexe().toLowerCase();
+
+                if ("f".equals(sexe) || "femme".equals(sexe)) {
+                    totalFemales++;
+                } else if ("m".equals(sexe) || "homme".equals(sexe)) {
+                    totalMales++;
+                }
+            }
+
+            if (totalFemales == 0 && totalMales == 0) {
+                return 0.0;
+            }
+
+            return (double) totalFemales / (totalFemales + totalMales);
+        }
+
+        public double MaleRatio() {
+            int totalFemales = 0;
+            int totalMales = 0;
+
+            List<Collaborateur> collaborateurs = this.getAllCollaborateurs();
+            for (Collaborateur collaborateur : collaborateurs) {
+                String sexe = collaborateur.getSexe().toLowerCase();
+
+                if ("f".equals(sexe) || "femme".equals(sexe)) {
+                    totalFemales++;
+                } else if ("m".equals(sexe) || "homme".equals(sexe)) {
+                    totalMales++;
+                }
+            }
+
+            if (totalFemales == 0 && totalMales == 0) {
+                return 0.0;
+            }
+
+            return (double) totalMales / (totalFemales + totalMales);
+        }
+    }
+
+
+

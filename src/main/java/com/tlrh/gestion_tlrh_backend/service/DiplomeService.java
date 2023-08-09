@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -54,16 +55,6 @@ public class DiplomeService {
         return diplomeRepository.save(diplome);
 
     }
-
-
-
-    //
-    //public void affecterListeDiplomesACollaborateur(Collaborateur collaborateur, List<Diplome> listeDiplomes) {
-    //  for (Diplome diplome : listeDiplomes) {
-    //    diplome.setCollaborateur(collaborateur);
-    //  diplomeRepository.save(diplome);
-    //}
-    //}
 
 
 }
