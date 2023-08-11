@@ -249,6 +249,7 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/get/MaleRatio")
     public ResponseEntity<Double> MaleRatio() {
         try {
