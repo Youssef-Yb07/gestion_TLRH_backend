@@ -19,11 +19,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -549,7 +547,7 @@ public class CollaborateurService {
         return collaborateurRepository.findCollaborateursByRolesNotContaining(role);
     }
 
-        public double FemaleRatio() {
+    public double FemaleRatio() {
             int totalFemales = 0;
             int totalMales = 0;
             double ratio;
@@ -572,9 +570,9 @@ public class CollaborateurService {
 
 
             return ratio;
-        }
+    }
 
-        public double MaleRatio() {
+    public double MaleRatio() {
             int totalFemales = 0;
             int totalMales = 0;
             double ratio;
@@ -597,7 +595,52 @@ public class CollaborateurService {
 
             return ratio;
         }
-    }
+    private int maxDate(){
+        int maxDate=Integer.MIN_VALUE;
+        for (Collaborateur collaborateur:collaborateurRepository.findAll()){
+            LocalDate localDate = collaborateur.getDate_Embauche().toLocalDate();
+            Integer year = localDate.getYear();
+            if(year>maxDate){
+                maxDate=year;
+            }
+        }
+        System.out.println("max"+maxDate);
+        return maxDate;
+        }
+    private Integer minDate(){
+            Integer minDate=Integer.MAX_VALUE;
+            for (Collaborateur collaborateur:collaborateurRepository.findAll()){
+                LocalDate localDate = collaborateur.getDate_Embauche().toLocalDate();
+                Integer year = localDate.getYear();
+                if(year<minDate){
+                    minDate=year;
+                }
+            }
+            return minDate;
+        }
+
+    public Map<Integer,Integer> getRecruitmentEvolution(){
+            List<Collaborateur> collaborateurs=collaborateurRepository.findAll();
+            Map<Integer,Integer> hash=new HashMap<>();
+            Integer min=minDate();
+            Integer max=maxDate();
+            for(Integer i=min-1;i<=max+1;i++){
+                Integer numberOfCollabs=0;
+                for(Collaborateur collaborateur:collaborateurs){
+                    LocalDate localDate = collaborateur.getDate_Embauche().toLocalDate();
+                    int year = localDate.getYear();
+                    System.out.println(year);
+                    if(year==i){
+                        numberOfCollabs++;
+                    }
+                }
+                hash.put(i,numberOfCollabs);
+            }
+            return hash;
+        }
+
+
+}
 
 
 
