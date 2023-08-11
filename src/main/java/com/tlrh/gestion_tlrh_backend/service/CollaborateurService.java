@@ -549,14 +549,12 @@ public class CollaborateurService {
         return collaborateurRepository.findCollaborateursByRolesNotContaining(role);
     }
 
-
-
-
         public double FemaleRatio() {
             int totalFemales = 0;
             int totalMales = 0;
+            double ratio;
 
-            List<Collaborateur> collaborateurs = this.getAllCollaborateurs();
+            List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
             for (Collaborateur collaborateur : collaborateurs) {
                 String sexe = collaborateur.getSexe().toLowerCase();
 
@@ -570,15 +568,18 @@ public class CollaborateurService {
             if (totalFemales == 0 && totalMales == 0) {
                 return 0.0;
             }
+            ratio=((double) totalFemales / (totalFemales + totalMales))*100;
 
-            return (double) totalFemales / (totalFemales + totalMales);
+
+            return ratio;
         }
 
         public double MaleRatio() {
             int totalFemales = 0;
             int totalMales = 0;
+            double ratio;
 
-            List<Collaborateur> collaborateurs = this.getAllCollaborateurs();
+            List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
             for (Collaborateur collaborateur : collaborateurs) {
                 String sexe = collaborateur.getSexe().toLowerCase();
 
@@ -592,8 +593,9 @@ public class CollaborateurService {
             if (totalFemales == 0 && totalMales == 0) {
                 return 0.0;
             }
+            ratio=((double) totalMales / (totalFemales + totalMales))*100;
 
-            return (double) totalMales / (totalFemales + totalMales);
+            return ratio;
         }
     }
 

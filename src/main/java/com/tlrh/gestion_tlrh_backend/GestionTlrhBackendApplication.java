@@ -22,7 +22,7 @@ public class GestionTlrhBackendApplication {
     private DiplomeService diplomeService;
     @Autowired
     private DiplomeRepository diplomeRepository;
-//    @Bean
+    //    @Bean
 //    public ModelMapper modelMapper(){
 //        return new ModelMapper();
 //    }
@@ -35,10 +35,10 @@ public class GestionTlrhBackendApplication {
     //@Bean
     //CommandLineRunner start(CollaborateurService collaborateurService){
     //    return args -> {
-           // Collaborateur c=new Collaborateur(12345,"kahlaouioumnia@gmail.com","hidxdd","Kahlaoui","Oumnia","Be",
-           //         "Amani",null,"Femme","Rabat","", Date.valueOf("2023-4-12"),"6",null,false,true,null,"d","xc",123456789, StatutManagerRH.Active);
-          //  collaborateurService.createCollaborateur(c);
-      //  };
+    // Collaborateur c=new Collaborateur(12345,"kahlaouioumnia@gmail.com","hidxdd","Kahlaoui","Oumnia","Be",
+    //         "Amani",null,"Femme","Rabat","", Date.valueOf("2023-4-12"),"6",null,false,true,null,"d","xc",123456789, StatutManagerRH.Active);
+    //  collaborateurService.createCollaborateur(c);
+    //  };
     //}
 /*//    Oumnia's test
     @Bean
@@ -81,7 +81,6 @@ public class GestionTlrhBackendApplication {
 //        };
 //    }
 }
-
 
 
 
