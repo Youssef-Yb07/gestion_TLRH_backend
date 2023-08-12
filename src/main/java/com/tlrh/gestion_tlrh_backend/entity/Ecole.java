@@ -2,6 +2,8 @@ package com.tlrh.gestion_tlrh_backend.entity;
 
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class Ecole {
     @Column(nullable = false)
     private String nom;
     @OneToMany(mappedBy ="ecole" )
+    @JsonIgnore
     private List<Diplome> diplomes;
 
 

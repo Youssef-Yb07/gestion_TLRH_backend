@@ -7,9 +7,7 @@ import com.tlrh.gestion_tlrh_backend.repositories.DiplomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DiplomeService {
@@ -54,6 +52,39 @@ public class DiplomeService {
 
         return diplomeRepository.save(diplome);
 
+    }
+    public List<Map.Entry<String, Double>> calculerPourcentageParTypeDeDiplome() {
+
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+
+
+        Map<String, Integer> countParTypeDeDiplome = new HashMap<>();
+
+        int totalDiplomes = 0;
+
+        // Parcourir tous les collaborateurs
+        for (Collaborateur collaborateur : collaborateurs) {
+            List<Diplome> diplomes = collaborateur.getDiplomes();
+            totalDiplomes += diplomes.size();
+            for (Diplome diplome : diplomes) {
+                String typeDiplome = diplome.getType();
+
+
+                countParTypeDeDiplome.put(typeDiplome, countParTypeDeDiplome.getOrDefault(typeDiplome, 0) + 1);
+            }
+        }
+
+
+        List<Map.Entry<String, Double>> pourcentagesParTypeDeDiplome = new ArrayList<>();
+
+
+        for (Map.Entry<String, Integer> entry : countParTypeDeDiplome.entrySet()) {
+
+            double pourcentage = (entry.getValue() / (double) totalDiplomes) * 100;
+            pourcentagesParTypeDeDiplome.add(new AbstractMap.SimpleEntry<>(entry.getKey(), pourcentage));
+        }
+
+        return pourcentagesParTypeDeDiplome;
     }
 
 

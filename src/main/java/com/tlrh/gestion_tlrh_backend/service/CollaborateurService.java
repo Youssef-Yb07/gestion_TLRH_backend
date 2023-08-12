@@ -4,6 +4,7 @@ import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
 import com.tlrh.gestion_tlrh_backend.entity.Archivage;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
+import com.tlrh.gestion_tlrh_backend.entity.Diplome;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import com.tlrh.gestion_tlrh_backend.entity.Role;
 import com.tlrh.gestion_tlrh_backend.repositories.ArchivageRepository;
@@ -638,6 +639,8 @@ public class CollaborateurService {
             }
             return hash;
         }
+
+
 
 
 }
