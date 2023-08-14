@@ -2,11 +2,10 @@ package com.tlrh.gestion_tlrh_backend.controllers;
 import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
-import com.tlrh.gestion_tlrh_backend.service.CollaborateurService;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityNotFoundException;
-
-import com.tlrh.gestion_tlrh_backend.service.ExcelService;
+import com.tlrh.gestion_tlrh_backend.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class CollaborateurController {
-
     @Autowired
     private CollaborateurService collaborateurService;
 
@@ -156,6 +154,7 @@ public class CollaborateurController {
         }
     }
 
+
     @PutMapping("/update/ByManager")
     public ResponseEntity<Collaborateur> UpdateCollaborateurByManager(@RequestParam Integer matricule,@RequestBody Collaborateur collaborateur) {
         try {
@@ -261,4 +260,14 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/getRecruitmentEvolution")
+    public ResponseEntity<Map<Integer,Integer>> getRecruitmentEvolution(){
+        try {
+            return new ResponseEntity<>(collaborateurService.getRecruitmentEvolution(),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

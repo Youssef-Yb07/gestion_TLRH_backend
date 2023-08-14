@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/diplome")
 @AllArgsConstructor
@@ -41,6 +44,14 @@ public class DiplomeController {
 
             Diplome affectedDiplome = diplomeService.AffectDiplomeToACollaborateur(diplomeId, collaborateurId);
             return new ResponseEntity<>(affectedDiplome, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/pourcentage/type")
+    public ResponseEntity<List<Map.Entry<String, Double>>> getPourcentageTypeDeDiplomeByCollaborateur() {
+        try {
+            return new ResponseEntity<>(diplomeService.calculerPourcentageParTypeDeDiplome(), HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
