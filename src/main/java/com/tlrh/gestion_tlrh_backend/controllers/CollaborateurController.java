@@ -282,17 +282,44 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/get/DiplomaRatios")
-    public ResponseEntity<Map<String, Double>> getDiplomaRatios() {
+    @GetMapping("/get/Departure/Annee")
+    public ResponseEntity<Map<Integer,Integer>> getDepartureEvolution(){
         try {
-            Map<String, Double> ratios = collaborateurService.getDiplomaRatios();
-            System.out.println(ratios);
-            return new ResponseEntity<>(ratios, HttpStatus.OK);
-        } catch (Exception e) {
+            return new ResponseEntity<>(collaborateurService.DepartParAnnee(),HttpStatus.OK);
+        }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/get/Arrival/Annee")
+    public ResponseEntity<Map<Integer,Integer>> getArrivalEvolution(){
+        try {
+            return new ResponseEntity<>(collaborateurService.ArriveeParAnnee(),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("get/Effectifs/Debut/Annee")
+    public ResponseEntity<Map<Integer,Integer>>calculateEffectifs(){
+        try {
+            return new ResponseEntity<>(collaborateurService.calculateEffectifs1stJanvier(),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("get/TurnOver/Annee")
+    public ResponseEntity<Map<Integer,Double>>TurnOverParAnnee(){
+        try {
+            return new ResponseEntity<>(collaborateurService.calculateTurnoverRates(),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
 }

@@ -53,39 +53,33 @@ public class DiplomeService {
         return diplomeRepository.save(diplome);
 
     }
-    public List<Map.Entry<String, Double>> calculerPourcentageParTypeDeDiplome() {
+
+    public Map<String, Double> getDiplomaRatios() {
+        Map<String, Integer> diplomaCounts = new HashMap<>();
+        int totalCollaborators = 0;
 
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
 
-
-        Map<String, Integer> countParTypeDeDiplome = new HashMap<>();
-
-        int totalDiplomes = 0;
-
-        // Parcourir tous les collaborateurs
         for (Collaborateur collaborateur : collaborateurs) {
             List<Diplome> diplomes = collaborateur.getDiplomes();
-            totalDiplomes += diplomes.size();
+
             for (Diplome diplome : diplomes) {
-                String typeDiplome = diplome.getType();
-
-
-                countParTypeDeDiplome.put(typeDiplome, countParTypeDeDiplome.getOrDefault(typeDiplome, 0) + 1);
+                String diplomaType = diplome.getType();
+                diplomaCounts.put(diplomaType, diplomaCounts.getOrDefault(diplomaType, 0) + 1);
+                totalCollaborators++;
             }
         }
 
-
-        List<Map.Entry<String, Double>> pourcentagesParTypeDeDiplome = new ArrayList<>();
-
-
-        for (Map.Entry<String, Integer> entry : countParTypeDeDiplome.entrySet()) {
-
-            double pourcentage = (entry.getValue() / (double) totalDiplomes) * 100;
-            pourcentagesParTypeDeDiplome.add(new AbstractMap.SimpleEntry<>(entry.getKey(), pourcentage));
+        Map<String, Double> diplomaRatios = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : diplomaCounts.entrySet()) {
+            double ratio = ((double) entry.getValue() / totalCollaborators) * 100;
+            diplomaRatios.put(entry.getKey(), ratio);
         }
 
-        return pourcentagesParTypeDeDiplome;
+        return diplomaRatios;
     }
+
+
 
 
 }
