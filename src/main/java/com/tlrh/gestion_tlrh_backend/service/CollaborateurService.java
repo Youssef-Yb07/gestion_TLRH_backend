@@ -106,11 +106,10 @@ public class CollaborateurService {
             String sexe = manager.getSexe().equals("Female") ? "Mrs" : "Mr";
             emailsService.SendEmail(managerMail,
                     "Hi Dear Your new Employee is : " + collaborateur.getPrenom() +
-                            " " + collaborateur.getNom() + " the email is : " + collaborateurMail+
-                    " " + collaborateur.getNom() + " the email is : " + collaborateurMail
-                            +"with the Id : "+collaborateur.getMatricule()+" . The Programme will be : " +
-                            "-After 3 months : BPE . -After 6 months : BIP. -After 12 months : BAP "
-                    ,
+                            " " + collaborateur.getNom() + " the email is : " + collaborateurMail +
+                            " " + collaborateur.getNom() + " the email is : " + collaborateurMail
+                            + "with the Id : " + collaborateur.getMatricule() + " . The Programme will be : " +
+                            "-After 3 months : BPE . -After 6 months : BIP. -After 12 months : BAP ",
                     "New Employee ");
 
             emailsService.SendEmail(collaborateurMail,
@@ -123,17 +122,20 @@ public class CollaborateurService {
     private void WelcomeEmail(Collaborateur collaborateur) throws MessagingException {
         String collaborateurMail = collaborateur.getEmail();
         emailsService.SendEmail(collaborateurMail,
-                "Hi Dear "+collaborateur.getPrenom() +" "+ collaborateur.getNom()
-                        +"welcome to SQLI .  "+" Your ID is : " + collaborateur.getMatricule() +" The date of integration is : " +collaborateur.getDate_Embauche()
-                        +"The period will be 3 to 5 months , if it's 5 months you will be declared in the second months " +
+                "Hi Dear " + collaborateur.getPrenom() + " " + collaborateur.getNom()
+                        + "welcome to SQLI .  " + " Your ID is : " + collaborateur.getMatricule()
+                        + " The date of integration is : " + collaborateur.getDate_Embauche()
+                        + "The period will be 3 to 5 months , if it's 5 months you will be declared in the second months "
+                        +
                         "Thank you and welcome another time to SQLI . ",
                 " SQLI ");
-        for (Collaborateur collabs:collaborateurRepository.findAll()){
-            if(collabs.getRoles().stream().anyMatch(col -> col.getRole().equals("Ambassadeur RH"))){
+        for (Collaborateur collabs : collaborateurRepository.findAll()) {
+            if (collabs.getRoles().stream().anyMatch(col -> col.getRole().equals("Ambassadeur RH"))) {
                 emailsService.SendEmail(collaborateurMail,
-                        "Hi Dear "+collabs.getPrenom() +" "+collabs.getNom()
-                                +" . a new employee has integrated SQLI the name is :"+collaborateur.getNom()+" "+collaborateur.getPrenom()
-                                +"with the Id : "+collaborateur.getMatricule()+" ." ,
+                        "Hi Dear " + collabs.getPrenom() + " " + collabs.getNom()
+                                + " . a new employee has integrated SQLI the name is :" + collaborateur.getNom() + " "
+                                + collaborateur.getPrenom()
+                                + "with the Id : " + collaborateur.getMatricule() + " .",
                         " New Employee ");
             }
         }
@@ -141,23 +143,26 @@ public class CollaborateurService {
 
     @Scheduled(cron = "0 24 20 * * *")
     public void SendInvitations() throws MessagingException {
-        for (Collaborateur collaborateur:CollaborateurAfterX(2)) {
-            Collaborateur manager=collaborateur.getManagerRH();
-            if(manager!=null) {
+        for (Collaborateur collaborateur : CollaborateurAfterX(2)) {
+            Collaborateur manager = collaborateur.getManagerRH();
+            if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
-                        "Rappel Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " " + collaborateur.getNom()
-                                +" Avec numero de Matricule "+collaborateur.getMatricule() +" If you want to make it 5 months ," +
-                                " it's the time to let the employee know it ."
-                        , "Bilan de periode d'essai");
+                        "Rappel Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " "
+                                + collaborateur.getNom()
+                                + " Avec numero de Matricule " + collaborateur.getMatricule()
+                                + " If you want to make it 5 months ," +
+                                " it's the time to let the employee know it .",
+                        "Bilan de periode d'essai");
             }
         }
         for (Collaborateur collaborateur : CollaborateurAfterX(3)) {
             Collaborateur manager = collaborateur.getManagerRH();
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
-                        "Rappel Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " " + collaborateur.getNom()
-                                +" Avec numero de Matricule "+collaborateur.getMatricule()
-                        , "Bilan de periode d'essai");
+                        "Rappel Bilan de periode d'essai pour : " + collaborateur.getPrenom() + " "
+                                + collaborateur.getNom()
+                                + " Avec numero de Matricule " + collaborateur.getMatricule(),
+                        "Bilan de periode d'essai");
             }
         }
         for (Collaborateur collaborateur : CollaborateurAfterX(6)) {
@@ -165,8 +170,8 @@ public class CollaborateurService {
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
                         "BIP Bilan intermediaire de performance : " + collaborateur.getPrenom()
-                                + " " + collaborateur.getNom() +" With the Id : "+collaborateur.getMatricule()
-                        , "Bilan de periode d'essai");
+                                + " " + collaborateur.getNom() + " With the Id : " + collaborateur.getMatricule(),
+                        "Bilan de periode d'essai");
             }
         }
         for (Collaborateur collaborateur : CollaborateurAfterX(12)) {
@@ -174,8 +179,8 @@ public class CollaborateurService {
             if (manager != null) {
                 emailsService.SendEmail(manager.getEmail(),
                         "Bilan Annuel de performance Pour : " + collaborateur.getPrenom()
-                                + " " + collaborateur.getNom() +" With the Id : "+collaborateur.getMatricule()
-                        , "BAP");
+                                + " " + collaborateur.getNom() + " With the Id : " + collaborateur.getMatricule(),
+                        "BAP");
             }
         }
     }
@@ -301,41 +306,42 @@ public class CollaborateurService {
             throw new EntityNotFoundException("Manager RH not found");
         }
     }
-     @Transactional
-     public Collaborateur updateCollaborateurByManager(Integer collaborateurMatricule, Collaborateur collaborateur) throws EntityNotFoundException {
-     // Get Collaborateur by matricule
-     Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
 
-     // Check if Collaborateur exists
-     if (optionalCollaborateur.isPresent()) {
-     Collaborateur collab = optionalCollaborateur.get();
-     collaborateur.setMatricule(collab.getMatricule());
+    @Transactional
+    public Collaborateur updateCollaborateurByManager(Integer collaborateurMatricule, Collaborateur collaborateur)
+            throws EntityNotFoundException {
+        // Get Collaborateur by matricule
+        Optional<Collaborateur> optionalCollaborateur = collaborateurRepository.findById(collaborateurMatricule);
 
-     //set the old values to the Archivage table and save it
-     Archivage archivage=new Archivage();
-     archivage.setCollaborateur(collab);
-     archivage.setDateArchivage(Date.valueOf(LocalDateTime.now().toLocalDate()));
-     archivage.setPosteActuel(collab.getPosteActuel());
-     archivage.setPosteApp(collab.getPosteAPP());
-     archivage.setSalaire(collab.getSalaireActuel());
-     archivageRepository.save(archivage);
+        // Check if Collaborateur exists
+        if (optionalCollaborateur.isPresent()) {
+            Collaborateur collab = optionalCollaborateur.get();
+            collaborateur.setMatricule(collab.getMatricule());
 
-     // Initialize the archivages list if it is null
-     if (collaborateur.getArchivages() == null) {
-         collaborateur.setArchivages(new ArrayList<>());
-     }
-     // Assign it to the association table "Collaborateur_Archivage"
-     collaborateur.getArchivages().add(archivage);
+            // set the old values to the Archivage table and save it
+            Archivage archivage = new Archivage();
+            archivage.setCollaborateur(collab);
+            archivage.setDateArchivage(Date.valueOf(LocalDateTime.now().toLocalDate()));
+            archivage.setPosteActuel(collab.getPosteActuel());
+            archivage.setPosteApp(collab.getPosteAPP());
+            archivage.setSalaire(collab.getSalaireActuel());
+            archivageRepository.save(archivage);
 
-     // Save the updated collaborator
-     collaborateurRepository.save(collaborateur);
+            // Initialize the archivages list if it is null
+            if (collaborateur.getArchivages() == null) {
+                collaborateur.setArchivages(new ArrayList<>());
+            }
+            // Assign it to the association table "Collaborateur_Archivage"
+            collaborateur.getArchivages().add(archivage);
 
-     return collaborateur;
+            // Save the updated collaborator
+            collaborateurRepository.save(collaborateur);
 
-     }
-     else {
-         throw new EntityNotFoundException("Collaborateur not found");
-     }
+            return collaborateur;
+
+        } else {
+            throw new EntityNotFoundException("Collaborateur not found");
+        }
     }
 
     @Transactional
@@ -457,6 +463,7 @@ public class CollaborateurService {
             throw new IllegalStateException("Collaborator does not exist.");
         }
     }
+
     public List<Collaborateur> getAllCollaborateurs() {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
         return collaborateurs;
@@ -473,10 +480,10 @@ public class CollaborateurService {
         return nonAffectedCollabs;
     }
 
-    public List<Collaborateur> getManagerRHByStatutActivated(){
-        //check if the collaborators has a role "Manager RH"
+    public List<Collaborateur> getManagerRHByStatutActivated() {
+        // check if the collaborators has a role "Manager RH"
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
-        List<Collaborateur>ActivatedManagers=new ArrayList<>();
+        List<Collaborateur> ActivatedManagers = new ArrayList<>();
         for (Collaborateur collaborateur : collaborateurs) {
             if (collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
                 if (collaborateur.getStatut().equals(StatutManagerRH.Active)) {
@@ -485,7 +492,7 @@ public class CollaborateurService {
             }
         }
 
-        if(ActivatedManagers.isEmpty()){
+        if (ActivatedManagers.isEmpty()) {
             System.err.println("No Manager RH Active found.");
         }
         return ActivatedManagers;
@@ -493,15 +500,15 @@ public class CollaborateurService {
 
     public List<Collaborateur> getManagerRHByStatutDisactivated() {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
-        List<Collaborateur>DesactivatedManagers=new ArrayList<>();
-        for (Collaborateur collaborateur:collaborateurs){
-            if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
-                if(collaborateur.getStatut().equals(StatutManagerRH.Desactive)){
+        List<Collaborateur> DesactivatedManagers = new ArrayList<>();
+        for (Collaborateur collaborateur : collaborateurs) {
+            if (collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
+                if (collaborateur.getStatut().equals(StatutManagerRH.Desactive)) {
                     DesactivatedManagers.add(collaborateur);
                 }
             }
         }
-        if(DesactivatedManagers.isEmpty()){
+        if (DesactivatedManagers.isEmpty()) {
             System.err.println("No Manager RH Desactive found.");
         }
         return DesactivatedManagers;
@@ -521,129 +528,150 @@ public class CollaborateurService {
 
         return collaborateurs;
     }
-    public List<Collaborateur> getManagerWithoutAccount(){
-        List<Collaborateur> managerRh=this.getAllManagerRH();
-        List<Collaborateur> managers=new ArrayList<>();
-        for(Collaborateur manager:managerRh){
-            if(manager.getCompte()==null){
+
+    public List<Collaborateur> getManagerWithoutAccount() {
+        List<Collaborateur> managerRh = this.getAllManagerRH();
+        List<Collaborateur> managers = new ArrayList<>();
+        for (Collaborateur manager : managerRh) {
+            if (manager.getCompte() == null) {
                 managers.add(manager);
             }
         }
         return managers;
     }
 
-
-    public List<Collaborateur> getAllManagerRH(){
-        List<Collaborateur> collaborateurs=collaborateurRepository.findAll();
-        List<Collaborateur> managers=new ArrayList<>();
-        for(Collaborateur collaborateur:collaborateurs){
-            if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
+    public List<Collaborateur> getAllManagerRH() {
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        List<Collaborateur> managers = new ArrayList<>();
+        for (Collaborateur collaborateur : collaborateurs) {
+            if (collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))) {
                 managers.add(collaborateur);
             }
         }
         return managers;
     }
-    public List<Collaborateur> getNonManagerRH(){
-        Role role=roleRepositories.findByRole("Manager RH");
+
+    public List<Collaborateur> getNonManagerRH() {
+        Role role = roleRepositories.findByRole("Manager RH");
         return collaborateurRepository.findCollaborateursByRolesNotContaining(role);
     }
 
     public double FemaleRatio() {
-            int totalFemales = 0;
-            int totalMales = 0;
-            double ratio;
+        int totalFemales = 0;
+        int totalMales = 0;
+        double ratio;
 
-            List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
-            for (Collaborateur collaborateur : collaborateurs) {
-                String sexe = collaborateur.getSexe().toLowerCase();
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        for (Collaborateur collaborateur : collaborateurs) {
+            String sexe = collaborateur.getSexe().toLowerCase();
 
-                if ("f".equals(sexe) || "femme".equals(sexe)) {
-                    totalFemales++;
-                } else if ("m".equals(sexe) || "homme".equals(sexe)) {
-                    totalMales++;
-                }
+            if ("f".equals(sexe) || "femme".equals(sexe)) {
+                totalFemales++;
+            } else if ("m".equals(sexe) || "homme".equals(sexe)) {
+                totalMales++;
             }
+        }
 
-            if (totalFemales == 0 && totalMales == 0) {
-                return 0.0;
-            }
-            ratio=((double) totalFemales / (totalFemales + totalMales))*100;
+        if (totalFemales == 0 && totalMales == 0) {
+            return 0.0;
+        }
+        ratio = ((double) totalFemales / (totalFemales + totalMales)) * 100;
 
-
-            return ratio;
+        return ratio;
     }
 
     public double MaleRatio() {
-            int totalFemales = 0;
-            int totalMales = 0;
-            double ratio;
+        int totalFemales = 0;
+        int totalMales = 0;
+        double ratio;
 
-            List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
-            for (Collaborateur collaborateur : collaborateurs) {
-                String sexe = collaborateur.getSexe().toLowerCase();
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        for (Collaborateur collaborateur : collaborateurs) {
+            String sexe = collaborateur.getSexe().toLowerCase();
 
-                if ("f".equals(sexe) || "femme".equals(sexe)) {
-                    totalFemales++;
-                } else if ("m".equals(sexe) || "homme".equals(sexe)) {
-                    totalMales++;
-                }
+            if ("f".equals(sexe) || "femme".equals(sexe)) {
+                totalFemales++;
+            } else if ("m".equals(sexe) || "homme".equals(sexe)) {
+                totalMales++;
             }
-
-            if (totalFemales == 0 && totalMales == 0) {
-                return 0.0;
-            }
-            ratio=((double) totalMales / (totalFemales + totalMales))*100;
-
-            return ratio;
         }
-    private int maxDate(){
-        int maxDate=Integer.MIN_VALUE;
-        for (Collaborateur collaborateur:collaborateurRepository.findAll()){
+
+        if (totalFemales == 0 && totalMales == 0) {
+            return 0.0;
+        }
+        ratio = ((double) totalMales / (totalFemales + totalMales)) * 100;
+
+        return ratio;
+    }
+
+    private int maxDate() {
+        int maxDate = Integer.MIN_VALUE;
+        for (Collaborateur collaborateur : collaborateurRepository.findAll()) {
             LocalDate localDate = collaborateur.getDate_Embauche().toLocalDate();
             Integer year = localDate.getYear();
-            if(year>maxDate){
-                maxDate=year;
+            if (year > maxDate) {
+                maxDate = year;
             }
         }
-        System.out.println("max"+maxDate);
+        System.out.println("max" + maxDate);
         return maxDate;
+    }
+
+    private Integer minDate() {
+        Integer minDate = Integer.MAX_VALUE;
+        for (Collaborateur collaborateur : collaborateurRepository.findAll()) {
+            LocalDate localDate = collaborateur.getDate_Embauche().toLocalDate();
+            Integer year = localDate.getYear();
+            if (year < minDate) {
+                minDate = year;
+            }
         }
-    private Integer minDate(){
-            Integer minDate=Integer.MAX_VALUE;
-            for (Collaborateur collaborateur:collaborateurRepository.findAll()){
+        return minDate;
+    }
+
+    public Map<Integer, Integer> getRecruitmentEvolution() {
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+        Map<Integer, Integer> hash = new HashMap<>();
+        Integer min = minDate();
+        Integer max = maxDate();
+        for (Integer i = min - 1; i <= max + 1; i++) {
+            Integer numberOfCollabs = 0;
+            for (Collaborateur collaborateur : collaborateurs) {
                 LocalDate localDate = collaborateur.getDate_Embauche().toLocalDate();
-                Integer year = localDate.getYear();
-                if(year<minDate){
-                    minDate=year;
+                int year = localDate.getYear();
+                System.out.println(year);
+                if (year == i) {
+                    numberOfCollabs++;
                 }
             }
-            return minDate;
+            hash.put(i, numberOfCollabs);
         }
+        return hash;
+    }
 
-    public Map<Integer,Integer> getRecruitmentEvolution(){
-            List<Collaborateur> collaborateurs=collaborateurRepository.findAll();
-            Map<Integer,Integer> hash=new HashMap<>();
-            Integer min=minDate();
-            Integer max=maxDate();
-            for(Integer i=min-1;i<=max+1;i++){
-                Integer numberOfCollabs=0;
-                for(Collaborateur collaborateur:collaborateurs){
-                    LocalDate localDate = collaborateur.getDate_Embauche().toLocalDate();
-                    int year = localDate.getYear();
-                    System.out.println(year);
-                    if(year==i){
-                        numberOfCollabs++;
-                    }
-                }
-                hash.put(i,numberOfCollabs);
+    public Map<String, Double> getDiplomaRatios() {
+        Map<String, Integer> diplomaCounts = new HashMap<>();
+        int totalCollaborators = 0;
+
+        List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
+
+        for (Collaborateur collaborateur : collaborateurs) {
+            List<Diplome> diplomes = collaborateur.getDiplomes();
+
+            for (Diplome diplome : diplomes) {
+                String diplomaType = diplome.getType();
+                diplomaCounts.put(diplomaType, diplomaCounts.getOrDefault(diplomaType, 0) + 1);
+                totalCollaborators++;
             }
-            return hash;
         }
 
+        Map<String, Double> diplomaRatios = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : diplomaCounts.entrySet()) {
+            double ratio = ((double) entry.getValue() / totalCollaborators) * 100;
+            diplomaRatios.put(entry.getKey(), ratio);
+        }
 
-
+        return diplomaRatios;
+    }
 
 }
-
-
-
