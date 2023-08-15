@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -24,9 +23,9 @@ public class Ecole {
     private Integer  id;
     @Column(nullable = false)
     private String nom;
-    @OneToMany(mappedBy ="ecole" )
-    @JsonIgnore
-    private List<Diplome> diplomes;
 
+    @JsonIgnore
+    @OneToMany(mappedBy ="ecole" )
+    private List<Diplome> diplomes;
 
 }

@@ -3,6 +3,7 @@ package com.tlrh.gestion_tlrh_backend.controllers;
 import com.tlrh.gestion_tlrh_backend.entity.Ecole;
 import com.tlrh.gestion_tlrh_backend.service.CollaborateurService;
 import com.tlrh.gestion_tlrh_backend.service.EcoleService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/ecole")
 @AllArgsConstructor
+@Tag(name = "Ecole", description = "Gestion des ecoles")
 @CrossOrigin(origins = "*")
 public class EcoleController {
 

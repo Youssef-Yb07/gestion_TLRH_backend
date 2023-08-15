@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -640,8 +641,89 @@ public class CollaborateurService {
             return hash;
         }
 
+        public Map<Integer,Integer> DepartParAnnee(){
+
+        Map<Integer,Integer>DepartByYear=new HashMap<>();
+
+        for (Collaborateur collaborateur :collaborateurRepository.findAll()){
+
+            if(collaborateur.isAncien_Collaborateur() && collaborateur.getDate_Depart()!=null){
+
+                int departureYear = collaborateur.getDate_Depart().toLocalDate().getYear();
+
+                DepartByYear.put(departureYear, DepartByYear.getOrDefault(departureYear, 0) + 1);
+            }
+        }
+        return DepartByYear;
+    }
 
 
+    public Map<Integer,Integer> ArriveeParAnnee(){
+
+        Map<Integer,Integer>ArriveeByYear=new HashMap<>();
+
+        for (Collaborateur collaborateur :collaborateurRepository.findAll()){
+            if(collaborateur.getDate_Embauche()!=null){
+
+                int AnneeArrivee=collaborateur.getDate_Embauche().toLocalDate().getYear();
+
+                ArriveeByYear.put(AnneeArrivee,ArriveeByYear.getOrDefault(AnneeArrivee,0)+1);
+
+            }
+        }
+        return ArriveeByYear;
+    }
+
+    public Map<Integer, Integer> calculateEffectifs1stJanvier() {
+        Map<Integer, Integer> effectifMap = new HashMap<>();
+        List<Collaborateur> collaborateurs=collaborateurRepository.findAll();
+        // Supposons que collaborateurs contient la liste de collaborateurs
+
+        Integer startYear = minDate();
+        Integer endYear = maxDate();
+
+        for (int year = startYear; year <= endYear; year++) {
+            int count = 0;
+            LocalDate january1st = LocalDate.of(year, 1, 1);
+
+            for (Collaborateur collaborateur : collaborateurs) {
+                if (collaborateur.getDate_Embauche() != null) {
+                    LocalDate dateEmbauche = collaborateur.getDate_Embauche().toLocalDate();
+                    if (!dateEmbauche.isAfter(january1st)) {
+                        count++;
+                    }
+                }
+            }
+
+            effectifMap.put(year, count);
+        }
+
+        return effectifMap;
+    }
+
+    public Map<Integer, Double> calculateTurnoverRates() {
+        Map<Integer, Integer> departsByYear = DepartParAnnee();
+        Map<Integer, Integer> arriveesByYear = ArriveeParAnnee();
+        Map<Integer, Integer> effectifsByYear = calculateEffectifs1stJanvier();
+
+        Map<Integer, Double> turnoverRates = new HashMap<>();
+
+        Set<Integer> years = new HashSet<>();
+        years.addAll(departsByYear.keySet());
+        years.addAll(arriveesByYear.keySet());
+        years.addAll(effectifsByYear.keySet());
+
+        for (int year : years) {
+            int departs = departsByYear.getOrDefault(year, 0);
+            int arrivees = arriveesByYear.getOrDefault(year, 0);
+            int effectif = effectifsByYear.getOrDefault(year, 0);
+
+            double turnoverRate = ((departs + arrivees) / 2.0) / effectif;
+            turnoverRates.put(year, turnoverRate*100);
+        }
+
+        return turnoverRates;
+    }
 
 }
 

@@ -3,13 +3,17 @@ package com.tlrh.gestion_tlrh_backend.controllers;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.entity.Technologie;
 import com.tlrh.gestion_tlrh_backend.service.TechnologieService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/technologie")
+@Tag(name = "Technologie", description = "Gestion des Technologies")
 @CrossOrigin(origins = "*")
 public class TechnologieController {
 
@@ -30,6 +34,17 @@ public class TechnologieController {
             return new ResponseEntity<>(technologieService.affectTechnologiesToCollaborateur(idTechnologie,idCollaborateur), HttpStatus.OK);
         }catch (Exception e){
             System.out.println("Error while Affecting Technologie to Collaborateur");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/calculate/Taux/Technologies")
+    public ResponseEntity<Map<String,Double>> CalculateTauxTechnologies(){
+        try{
+            return new ResponseEntity<>(technologieService.CalculateTauxTechnologies(), HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println("Error while Calculating Taux Technologies");
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

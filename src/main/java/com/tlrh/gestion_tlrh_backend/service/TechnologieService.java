@@ -7,7 +7,9 @@ import com.tlrh.gestion_tlrh_backend.repositories.TechnologieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -47,6 +49,28 @@ public class TechnologieService {
         }
 
         throw new IllegalStateException("Technologie or Collaborateur not found");
+    }
+
+
+    public Map<String,Double> CalculateTauxTechnologies(){
+
+        List<Collaborateur> collaborateurs=collaborateurRepository.findAll();
+
+        int TotalCollaborateurs=collaborateurs.size();
+
+        Map<String, Double> tauxTechnologies = new HashMap<>();
+
+        for (Collaborateur collaborateur :collaborateurs){
+            for (Technologie technologie :collaborateur.getTechnologies()){
+
+                tauxTechnologies.put(technologie.getNom(),tauxTechnologies.getOrDefault(technologie.getNom(),0.0)+1);
+            }
+        }
+        for (Map.Entry<String, Double> tech : tauxTechnologies.entrySet()) {
+            double taux = (tech.getValue() / TotalCollaborateurs) * 100;
+            tech.setValue(taux);
+        }
+        return tauxTechnologies;
     }
 
 }

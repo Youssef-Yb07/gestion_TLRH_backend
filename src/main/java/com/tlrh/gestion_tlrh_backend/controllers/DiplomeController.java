@@ -4,6 +4,7 @@ import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import com.tlrh.gestion_tlrh_backend.entity.Diplome;
 import com.tlrh.gestion_tlrh_backend.service.CollaborateurService;
 import com.tlrh.gestion_tlrh_backend.service.DiplomeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/diplome")
 @AllArgsConstructor
+@Tag(name = "Diplome", description = "Gestion des diplomes")
 @CrossOrigin(origins = "*")
 public class DiplomeController {
 
@@ -48,15 +50,16 @@ public class DiplomeController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/pourcentage/type")
-    public ResponseEntity<List<Map.Entry<String, Double>>> getPourcentageTypeDeDiplomeByCollaborateur() {
+    @GetMapping("/get/DiplomaRatios")
+    public ResponseEntity<Map<String, Double>> getDiplomaRatios() {
         try {
-            return new ResponseEntity<>(diplomeService.calculerPourcentageParTypeDeDiplome(), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, Double> ratios = diplomeService.getDiplomaRatios();
+            System.out.println(ratios);
+            return new ResponseEntity<>(ratios, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
 }

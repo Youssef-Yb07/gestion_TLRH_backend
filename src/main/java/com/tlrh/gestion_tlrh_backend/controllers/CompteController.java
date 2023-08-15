@@ -2,6 +2,7 @@ package com.tlrh.gestion_tlrh_backend.controllers;
 
 import com.tlrh.gestion_tlrh_backend.entity.Compte;
 import com.tlrh.gestion_tlrh_backend.service.CompteService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/compte")
 @AllArgsConstructor
+@Tag(name = "Compte", description = "Gestion des comptes")
 @CrossOrigin(origins = "*")
 public class CompteController {
 
