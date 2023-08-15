@@ -725,7 +725,31 @@ public class CollaborateurService {
         return turnoverRates;
     }
 
-}
+        public Map<Integer, List<String>> EvolutionPostAPP(Integer collaborateurId) {
+
+            Collaborateur collaborateur = collaborateurRepository.findById(collaborateurId)
+                    .orElseThrow(() -> new IllegalArgumentException("Collaborator does not exist!!!!!!!!"));
+
+            List<Archivage> archivages = collaborateur.getArchivages();
+            Map<Integer,List<String>> posteByYear = new HashMap<>();
+
+            for (Archivage archivage : archivages) {
+                int year = archivage.getDateArchivage().toLocalDate().getYear();
+
+                posteByYear.computeIfAbsent(year, k -> new ArrayList<>())
+                        .add(archivage.getPosteApp());
+            }
+
+            int currentYear = java.time.LocalDate.now().getYear();
+            String posteActuel = collaborateur.getPosteActuel();
+            posteByYear.computeIfAbsent(currentYear, k -> new ArrayList<>())
+                    .add(posteActuel);
+
+            return posteByYear;
+        }
+    }
+
+
 
 
 

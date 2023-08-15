@@ -320,6 +320,17 @@ public class CollaborateurController {
         }
     }
 
+    @GetMapping("get/EvolutionPostAPP")
+    public ResponseEntity<Map<Integer,List<String>>> EvolutionPostAPP(@RequestParam Integer collaborateurID){
+        try {
+            return new ResponseEntity<>(collaborateurService.EvolutionPostAPP(collaborateurID),HttpStatus.OK);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 }
