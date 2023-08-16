@@ -84,7 +84,7 @@ public class ExcelService {
                        }
                        case 14 -> collaborateur.setPosteAPP(cell.getStringCellValue());
                        case 15 -> collaborateur.setPosteActuel(cell.getStringCellValue());
-                       case 16 -> collaborateur.setSalaireActuel((int) cell.getNumericCellValue());
+                       case 16 -> collaborateur.setSalaireActuel((Double) cell.getNumericCellValue());
                        default -> {
                        }
                    }

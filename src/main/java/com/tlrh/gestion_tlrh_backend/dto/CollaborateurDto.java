@@ -13,7 +13,7 @@ public class CollaborateurDto {
     private String Bu;
     private String email;
 
-    private int SalaireActuel;
+    private Double SalaireActuel;
 
     private Integer managerRH;
 

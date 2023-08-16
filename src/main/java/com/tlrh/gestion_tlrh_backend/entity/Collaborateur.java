@@ -55,7 +55,7 @@ public class Collaborateur {
 
     private String PosteActuel;
 
-    private int SalaireActuel;
+    private Double SalaireActuel;
 
 
     @ManyToMany
@@ -74,10 +74,7 @@ public class Collaborateur {
     )
     private List<Role> roles;
 
-    @OneToMany
-    @JoinTable(name = "collaborateur_archivage",
-            joinColumns = @JoinColumn(name = "id_collaborateur"),
-            inverseJoinColumns = @JoinColumn(name = "id_archivage"))
+    @OneToMany(mappedBy = "collaborateur")
     private List<Archivage> archivages;
 
     @OneToMany(mappedBy = "collaborateur")
@@ -97,7 +94,7 @@ public class Collaborateur {
             inverseJoinColumns = @JoinColumn(name = "id_certificat")
     )
     private List<Certificat> certificats;
-    public Collaborateur(Integer matricule,String email, String nom, String prenom, String abreviationCollaborateur, String ancienManagerRH, Collaborateur managerRH, String sexe, String site, String BU, Date date_Embauche, String mois_BAP, Date date_Depart, boolean ancien_Collaborateur, boolean seminaireIntegration, Date dateParticipation, String posteAPP, String posteActuel, int salaireActuel, StatutManagerRH statut) {
+    public Collaborateur(Integer matricule,String email, String nom, String prenom, String abreviationCollaborateur, String ancienManagerRH, Collaborateur managerRH, String sexe, String site, String BU, Date date_Embauche, String mois_BAP, Date date_Depart, boolean ancien_Collaborateur, boolean seminaireIntegration, Date dateParticipation, String posteAPP, String posteActuel, Double salaireActuel, StatutManagerRH statut) {
         this.matricule=matricule;
         this.email = email;
         this.Nom = nom;

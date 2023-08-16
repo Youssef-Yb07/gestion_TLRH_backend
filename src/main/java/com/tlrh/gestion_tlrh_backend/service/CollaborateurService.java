@@ -41,6 +41,8 @@ public class CollaborateurService {
 
     @Autowired
     private ArchivageRepository archivageRepository;
+    @Autowired
+    private ArchivageService archivageService;
 
     @Transactional
     public Collaborateur updateCollaborateurBy3Actors(Integer matricule, UpdateBy3ActorsDto collaborateurDto)
@@ -339,32 +341,6 @@ public class CollaborateurService {
      }
     }
 
-    @Transactional
-    public void addRandomCollaborateurs(int number) {
-        for (int i = 0; i < number; i++) {
-            Collaborateur collaborateur = new Collaborateur();
-            collaborateur.setMatricule(i);
-            collaborateur.setSalaireActuel((int) (Math.random() * 1000));
-            collaborateur.setPosteAPP("Poste APP " + i);
-            collaborateur.setPosteActuel("Poste actuel " + i);
-            collaborateur.setSexe("M");
-            collaborateur.setNom("Nom " + i);
-            collaborateur.setPrenom("Prenom " + i);
-            collaborateur.setAbreviationCollaborateur("Abreviation " + i);
-            collaborateur.setAncienManagerRH("Ancien Manager RH " + i);
-            collaborateur.setAncien_Collaborateur(false);
-            collaborateur.setSeminaireIntegration(false);
-            collaborateur.setDate_Embauche(Date.valueOf(LocalDateTime.now().toLocalDate()));
-            collaborateur.setDateParticipation(Date.valueOf(LocalDateTime.now().toLocalDate()));
-            collaborateur.setDate_Depart(Date.valueOf(LocalDateTime.now().toLocalDate()));
-            collaborateur.setMois_BAP("Mois BAP " + i);
-            collaborateur.setSite("Site " + i);
-            collaborateur.setBU("BU " + i);
-            collaborateur.setStatut(StatutManagerRH.Active);
-            collaborateurRepository.save(collaborateur);
-        }
-    }
-
     // create a managerRH
     @Transactional
     public Collaborateur createManagerRh(CollaborateurDto managerDto) throws IllegalStateException, MessagingException {
@@ -657,6 +633,22 @@ public class CollaborateurService {
         return DepartByYear;
     }
 
+    public Map<Integer,Double> getSalaryEvolution(Integer id){
+            Map<Integer,Double> archiveMap=archivageService.getSalary(id);
+            Collaborateur collaborateur=collaborateurRepository.findById(id).get();
+            //the maximum of the archiveMap.
+            Integer LastSalaryEvaluation=archiveMap.keySet().stream().max(Integer::compareTo).get();
+            Integer CurrentYear=LocalDate.now().getYear();
+            for (Integer i=LastSalaryEvaluation;i<=CurrentYear;i++){
+                if(!archiveMap.containsKey(i)){
+                    archiveMap.put(i, collaborateur.getSalaireActuel());
+                }
+                else{
+                    archiveMap.put(i,(archiveMap.get(i)+collaborateur.getSalaireActuel())/2);
+                }
+            }
+            return archiveMap;
+     }
 
     public Map<Integer,Integer> ArriveeParAnnee(){
 
@@ -748,6 +740,7 @@ public class CollaborateurService {
             return posteByYear;
         }
     }
+
 
 
 

@@ -29,6 +29,6 @@ public class Archivage {
 
     private String posteApp;
 
-    private int salaire;
+    private Double salaire;
 
 }
