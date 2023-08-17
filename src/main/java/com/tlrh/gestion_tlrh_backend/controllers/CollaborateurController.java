@@ -311,6 +311,15 @@ public class CollaborateurController {
         return collaborateurService.getSalaryEvolution(id);
     }
 
+    @GetMapping("get/competences")
+    public ResponseEntity<Map<String,List<Integer>>> TechnologiesParNiveau(@RequestParam Integer collaborateurID) {
+        try {
+            return new ResponseEntity<>(collaborateurService.TechnologiesParNiveau(collaborateurID), HttpStatus.OK);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

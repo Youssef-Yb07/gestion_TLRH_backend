@@ -2,11 +2,8 @@ package com.tlrh.gestion_tlrh_backend.service;
 
 import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
-import com.tlrh.gestion_tlrh_backend.entity.Archivage;
-import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
-import com.tlrh.gestion_tlrh_backend.entity.Diplome;
+import com.tlrh.gestion_tlrh_backend.entity.*;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
-import com.tlrh.gestion_tlrh_backend.entity.Role;
 import com.tlrh.gestion_tlrh_backend.repositories.ArchivageRepository;
 import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
 import com.tlrh.gestion_tlrh_backend.repositories.RoleRepositories;
@@ -739,7 +736,26 @@ public class CollaborateurService {
 
             return posteByYear;
         }
+
+    public Map<String, List<Integer>> TechnologiesParNiveau(Integer collaborateurId) {
+
+        Optional<Collaborateur> collaborateur = collaborateurRepository.findById(collaborateurId);
+
+
+        List<Technologie> technologies = collaborateur.get().getTechnologies();
+        Map<String, List<Integer>> technologiesParNiveau = new HashMap<>();
+
+        for (Technologie technologie : technologies) {
+            String nomTechnologie = technologie.getNom();
+            int niveauTechnologie = technologie.getNiveau();
+
+            technologiesParNiveau.computeIfAbsent(nomTechnologie, k -> new ArrayList<>())
+                    .add(niveauTechnologie);
+        }
+
+        return technologiesParNiveau;
     }
+}
 
 
 
