@@ -323,7 +323,7 @@ public class CollaborateurController {
         }
     }
 
-    @GetMapping("get/{id}/salaireMoyenne")
+    @GetMapping("get/salaireMoyenne/{id}")
     public ResponseEntity<Map<Date,Double>> getYearlyAverageSalary(@PathVariable Integer id){
         try {
             return new ResponseEntity<>(collaborateurService.getYearlyAverageSalary(id),HttpStatus.OK);
