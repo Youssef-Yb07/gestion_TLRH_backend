@@ -2,6 +2,8 @@ package com.tlrh.gestion_tlrh_backend.controllers;
 import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
+
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityNotFoundException;
@@ -311,6 +313,13 @@ public class CollaborateurController {
         return collaborateurService.getSalaryEvolution(id);
     }
 
-
-
+    @GetMapping("get/{id}/salaireMoyenne")
+    public ResponseEntity<Map<Date,Double>> getYearlyAverageSalary(@PathVariable Integer id){
+        try {
+            return new ResponseEntity<>(collaborateurService.getYearlyAverageSalary(id),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
