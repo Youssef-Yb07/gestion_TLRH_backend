@@ -807,4 +807,30 @@ public class CollaborateurService {
 
         return yearlyAverageSalary;
     }
+
+    public Map<Date, Double> getSalaryData(int collabId,Date startDate,Date endDate) {
+        Map<Date, Double> salaryData = new HashMap<>();
+
+        Collaborateur collaborateur = collaborateurRepository.findById(collabId)
+                .orElseThrow(() -> new IllegalArgumentException("Collaborator does not exist!!!!!!!!"));
+        if (collaborateur == null) {
+            return salaryData; // Return empty map if collaborateur not found
+        }
+
+        List<Archivage> archivages = collaborateur.getArchivages();
+        if (archivages == null || archivages.isEmpty()) {
+            return salaryData; // Return empty map if no archivages
+        }
+
+        for (Archivage archivage : archivages) {
+            if (archivage.getDateArchivage() != null && archivage.getSalaire() != null) {
+                Date dateArchivage = archivage.getDateArchivage();
+                if (dateArchivage.after(startDate) && dateArchivage.before(endDate)) {
+                    salaryData.put(dateArchivage, archivage.getSalaire());
+                }
+            }
+        }
+
+        return salaryData;
+    }
 }

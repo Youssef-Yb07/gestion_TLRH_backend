@@ -339,4 +339,14 @@ public class CollaborateurController {
         }
     }
 
+    @GetMapping("get/salary/{id}/{start}/{end}")
+    public ResponseEntity<Map<Date,Double>> getSalaryBetween(@PathVariable Integer id,@PathVariable Date start,@PathVariable Date end){
+        try {
+            return new ResponseEntity<>(collaborateurService.getSalaryData(id,start,end),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
