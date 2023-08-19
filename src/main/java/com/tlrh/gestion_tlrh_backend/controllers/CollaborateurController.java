@@ -308,9 +308,15 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/evolution/{id}")
-    public Map<Integer,Double> getSalaryEvolution(@PathVariable Integer id){
-        return collaborateurService.getSalaryEvolution(id);
+    @GetMapping("/SalaryEvolution/{id}")
+    public ResponseEntity<Map<Integer,Double>> getSalaryEvolution(@PathVariable Integer id){
+        try {
+            return new ResponseEntity<>(collaborateurService.getSalaryEvolution(id),HttpStatus.OK);
+            }
+        catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("get/competences")

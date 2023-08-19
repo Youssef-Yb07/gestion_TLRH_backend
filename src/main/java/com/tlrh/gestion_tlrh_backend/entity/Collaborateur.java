@@ -18,9 +18,7 @@ public class Collaborateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer matricule;
-
     private String email;
-
     private String Nom;
 
     private String Prenom;

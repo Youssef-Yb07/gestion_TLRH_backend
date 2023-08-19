@@ -642,15 +642,22 @@ public class CollaborateurService {
     public Map<Integer, Double> getSalaryEvolution(Integer id) {
         Map<Integer, Double> archiveMap = archivageService.getSalary(id);
         Collaborateur collaborateur = collaborateurRepository.findById(id).get();
-        // the maximum of the archiveMap.
-        Integer LastSalaryEvaluation = archiveMap.keySet().stream().max(Integer::compareTo).get();
         Integer CurrentYear = LocalDate.now().getYear();
-        for (Integer i = LastSalaryEvaluation; i <= CurrentYear; i++) {
-            if (!archiveMap.containsKey(i)) {
-                archiveMap.put(i, collaborateur.getSalaireActuel());
-            } else {
-                archiveMap.put(i, (archiveMap.get(i) + collaborateur.getSalaireActuel()) / 2);
+        if(!archiveMap.isEmpty()) {
+            Integer LastSalaryEvaluation = archiveMap.keySet().stream().max(Integer::compareTo).get();
+            for (Integer i = LastSalaryEvaluation; i <= CurrentYear; i++) {
+                if (!archiveMap.containsKey(i)) {
+                    archiveMap.put(i, collaborateur.getSalaireActuel());
+                }
+                else {
+                    archiveMap.put(i, (archiveMap.get(i) + collaborateur.getSalaireActuel()) / 2);
+                }
             }
+        }
+        else {
+                archiveMap.put(CurrentYear-1,0.0);
+                archiveMap.put(CurrentYear, collaborateur.getSalaireActuel());
+                archiveMap.put(CurrentYear+1,0.0);
         }
         return archiveMap;
     }
