@@ -1,4 +1,5 @@
 package com.tlrh.gestion_tlrh_backend.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class Collaborateur {
     private String AncienManagerRH;
 
     @OneToOne
+    @JsonBackReference
     private Collaborateur managerRH;
 
     //F or M : Femme ou Homme

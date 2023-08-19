@@ -339,6 +339,15 @@ public class CollaborateurController {
         }
     }
 
+    @GetMapping("get/collaborators/associated/managerRH")
+    public ResponseEntity<List<Collaborateur>> getCollaboratorsAssociatedToManagerRH(@RequestParam Integer managerRHMatricule){
+        try {
+            return new ResponseEntity<>(collaborateurService.findCollabsAssociatedToManagerRH(managerRHMatricule),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @GetMapping("get/salary/{id}/{start}/{end}")
     public ResponseEntity<Map<Date,Double>> getSalaryBetween(@PathVariable Integer id,@PathVariable Date start,@PathVariable Date end){
         try {

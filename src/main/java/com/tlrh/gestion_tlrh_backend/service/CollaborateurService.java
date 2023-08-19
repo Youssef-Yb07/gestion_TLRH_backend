@@ -808,6 +808,31 @@ public class CollaborateurService {
         return yearlyAverageSalary;
     }
 
+    public List<Collaborateur> findCollabsAssociatedToManagerRH(Integer idManagerRH){
+        Optional<Collaborateur> optionalManagerRH=collaborateurRepository.findById(idManagerRH);
+
+        List<Collaborateur> collabsAssociatedToManagerRH=new ArrayList<>();
+
+        if(optionalManagerRH.isPresent()){
+            if(optionalManagerRH.get().getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
+               for (Collaborateur collaborateur :collaborateurRepository.findAll()){
+                   if(collaborateur.getManagerRH() !=null && collaborateur.getManagerRH().equals(optionalManagerRH.get())){
+                       collabsAssociatedToManagerRH.add(collaborateur);
+                   }
+               }
+            }
+            else{
+                throw new IllegalStateException("Collaborator does not have the Manager RH role.");
+            }
+        }
+        else {
+            throw new IllegalStateException("Collaborator does not exist.");
+        }
+        return collabsAssociatedToManagerRH;
+    }
+
+
+
     public Map<Date, Double> getSalaryData(int collabId,Date startDate,Date endDate) {
         Map<Date, Double> salaryData = new HashMap<>();
 
