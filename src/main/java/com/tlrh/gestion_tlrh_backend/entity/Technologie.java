@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@ToString
 public class Technologie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +29,12 @@ public class Technologie {
             inverseJoinColumns = @JoinColumn(name = "id_collaborateur")
     )
     private List<Collaborateur> collaborateurs;
+    @Override
+    public String toString() {
+        return "Technologie{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", niveau=" + niveau +
+                '}';
+    }
 }

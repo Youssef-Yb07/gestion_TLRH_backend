@@ -319,10 +319,10 @@ public class CollaborateurController {
         }
     }
 
-    @GetMapping("get/competences")
-    public ResponseEntity<Map<String,List<Integer>>> TechnologiesParNiveau(@RequestParam Integer collaborateurID) {
+    @GetMapping("get/competences/{id}")
+    public ResponseEntity<Map<String,Integer>> TechnologiesParNiveau(@PathVariable Integer id) {
         try {
-            return new ResponseEntity<>(collaborateurService.TechnologiesParNiveau(collaborateurID), HttpStatus.OK);
+            return new ResponseEntity<>(collaborateurService.TechnologiesParNiveau(id), HttpStatus.OK);
             } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

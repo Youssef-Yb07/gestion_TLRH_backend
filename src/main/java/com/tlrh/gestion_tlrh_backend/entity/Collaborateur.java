@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+
 public class Collaborateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -115,6 +115,36 @@ public class Collaborateur {
         SalaireActuel = salaireActuel;
         this.statut = statut;
     }
-
+    @Override
+    public String toString() {
+        return "Collaborateur{" +
+                "matricule=" + matricule +
+                ", email='" + email + '\'' +
+                ", Nom='" + Nom + '\'' +
+                ", Prenom='" + Prenom + '\'' +
+                ", AbreviationCollaborateur='" + AbreviationCollaborateur + '\'' +
+                ", AncienManagerRH='" + AncienManagerRH + '\'' +
+                ", managerRH=" + managerRH +
+                ", sexe='" + sexe + '\'' +
+                ", site='" + site + '\'' +
+                ", BU='" + BU + '\'' +
+                ", Date_Embauche=" + Date_Embauche +
+                ", Mois_BAP='" + Mois_BAP + '\'' +
+                ", Date_Depart=" + Date_Depart +
+                ", Ancien_Collaborateur=" + Ancien_Collaborateur +
+                ", SeminaireIntegration=" + SeminaireIntegration +
+                ", DateParticipation=" + DateParticipation +
+                ", PosteAPP='" + PosteAPP + '\'' +
+                ", PosteActuel='" + PosteActuel + '\'' +
+                ", SalaireActuel=" + SalaireActuel +
+                ", technologies=" + technologies +
+                ", roles=" + roles +
+                ", archivages=" + archivages +
+                ", diplomes=" + diplomes +
+                ", statut=" + statut +
+                ", compte=" + compte +
+                ", certificats=" + certificats +
+                '}';
+    }
 
 }

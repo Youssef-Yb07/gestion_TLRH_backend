@@ -752,22 +752,21 @@ public class CollaborateurService {
             return posteByYear;
         }
 
-        public Map<String, List<Integer>> TechnologiesParNiveau(Integer collaborateurId) {
+        public Map<String, Integer> TechnologiesParNiveau(Integer collaborateurId) {
 
             Optional<Collaborateur> collaborateur = collaborateurRepository.findById(collaborateurId);
-    
-    
+            if (!collaborateur.isPresent()) {
+                return new HashMap<>();
+            }
             List<Technologie> technologies = collaborateur.get().getTechnologies();
-            Map<String, List<Integer>> technologiesParNiveau = new HashMap<>();
-    
+            Map<String, Integer> technologiesParNiveau = new HashMap<>();
             for (Technologie technologie : technologies) {
                 String nomTechnologie = technologie.getNom();
                 int niveauTechnologie = technologie.getNiveau();
-    
-                technologiesParNiveau.computeIfAbsent(nomTechnologie, k -> new ArrayList<>())
-                        .add(niveauTechnologie);
+                technologiesParNiveau.put(nomTechnologie, niveauTechnologie);
             }
-    
+
+
             return technologiesParNiveau;
         }
     
