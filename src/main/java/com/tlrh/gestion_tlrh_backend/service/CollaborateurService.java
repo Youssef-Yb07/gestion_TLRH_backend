@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -442,6 +441,11 @@ public class CollaborateurService {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
         return collaborateurs;
     }
+    public Collaborateur GetCollaborateurById(Integer id){
+        Collaborateur collaborateur = collaborateurRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Employee not exist with id :" + id));
+        return collaborateur;
+    }
 
     public List<Collaborateur> getNonAffectedCollabs() {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
@@ -729,7 +733,7 @@ public class CollaborateurService {
         return turnoverRates;
     }
 
-    public Map<Integer, List<String>> EvolutionPostAPP(Integer collaborateurId) {
+    public Map<Integer,List<String>> EvolutionPostAPP(Integer collaborateurId) {
 
         Collaborateur collaborateur = collaborateurRepository.findById(collaborateurId)
                 .orElseThrow(() -> new IllegalArgumentException("Collaborator does not exist!!!!!!!!"));
@@ -751,6 +755,8 @@ public class CollaborateurService {
 
             return posteByYear;
         }
+
+
 
         public Map<String, Integer> TechnologiesParNiveau(Integer collaborateurId) {
 
@@ -857,4 +863,6 @@ public class CollaborateurService {
 
         return salaryData;
     }
+
+
 }

@@ -6,6 +6,7 @@ import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import com.tlrh.gestion_tlrh_backend.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/collaborateur")
 @Tag(name = "Collaborateur", description = "Gestion des collaborateurs")
 @CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
 public class CollaborateurController {
     @Autowired
@@ -112,6 +114,17 @@ public class CollaborateurController {
         }catch (Exception e){
          e.printStackTrace();
          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("get/Collaborateur/byId/{id}")
+
+    public ResponseEntity<Collaborateur> GetCollaborateursById(@RequestParam Integer collaborateurId){
+        try {
+            return new ResponseEntity<>(collaborateurService.GetCollaborateurById(collaborateurId),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -298,8 +311,8 @@ public class CollaborateurController {
         }
     }
 
-    @GetMapping("get/EvolutionPostAPP")
-    public ResponseEntity<Map<Integer,List<String>>> EvolutionPostAPP(@RequestParam Integer collaborateurID){
+    @GetMapping("/get/EvolutionPostAPP/{id}")
+    public ResponseEntity<Map<Integer,List<String>>> EvolutionPostAPP(@PathVariable Integer collaborateurID){
         try {
             return new ResponseEntity<>(collaborateurService.EvolutionPostAPP(collaborateurID),HttpStatus.OK);
 
