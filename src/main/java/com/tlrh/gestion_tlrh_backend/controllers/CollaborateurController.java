@@ -6,6 +6,7 @@ import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import com.tlrh.gestion_tlrh_backend.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/collaborateur")
 @Tag(name = "Collaborateur", description = "Gestion des collaborateurs")
 @CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
 public class CollaborateurController {
     @Autowired
@@ -112,6 +114,17 @@ public class CollaborateurController {
         }catch (Exception e){
          e.printStackTrace();
          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("get/Collaborateur/byId/{id}")
+
+    public ResponseEntity<Collaborateur> GetCollaborateursById(@RequestParam Integer collaborateurId){
+        try {
+            return new ResponseEntity<>(collaborateurService.GetCollaborateurById(collaborateurId),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -298,8 +311,8 @@ public class CollaborateurController {
         }
     }
 
-    @GetMapping("get/EvolutionPostAPP")
-    public ResponseEntity<Map<Integer,List<String>>> EvolutionPostAPP(@RequestParam Integer collaborateurID){
+    @GetMapping("/get/EvolutionPostAPP/{id}")
+    public ResponseEntity<Map<Integer,List<String>>> EvolutionPostAPP(@PathVariable Integer collaborateurID){
         try {
             return new ResponseEntity<>(collaborateurService.EvolutionPostAPP(collaborateurID),HttpStatus.OK);
 
@@ -319,10 +332,10 @@ public class CollaborateurController {
         }
     }
 
-    @GetMapping("get/competences")
-    public ResponseEntity<Map<String,List<Integer>>> TechnologiesParNiveau(@RequestParam Integer collaborateurID) {
+    @GetMapping("get/competences/{id}")
+    public ResponseEntity<Map<String,Integer>> TechnologiesParNiveau(@PathVariable Integer id) {
         try {
-            return new ResponseEntity<>(collaborateurService.TechnologiesParNiveau(collaborateurID), HttpStatus.OK);
+            return new ResponseEntity<>(collaborateurService.TechnologiesParNiveau(id), HttpStatus.OK);
             } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -339,8 +352,8 @@ public class CollaborateurController {
         }
     }
 
-    @GetMapping("get/collaborators/associated/managerRH")
-    public ResponseEntity<List<Collaborateur>> getCollaboratorsAssociatedToManagerRH(@RequestParam Integer managerRHMatricule){
+    @GetMapping("get/collaborators/associated/managerRH/{managerRHMatricule}")
+    public ResponseEntity<List<Collaborateur>> getCollaboratorsAssociatedToManagerRH(@PathVariable Integer managerRHMatricule){
         try {
             return new ResponseEntity<>(collaborateurService.findCollabsAssociatedToManagerRH(managerRHMatricule),HttpStatus.OK);
         }catch (Exception e){
@@ -348,6 +361,16 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("get/salary/{id}/{start}/{end}")
+    public ResponseEntity<Map<Date,Double>> getSalaryBetween(@PathVariable Integer id,@PathVariable Date start,@PathVariable Date end){
+        try {
+            return new ResponseEntity<>(collaborateurService.getSalaryData(id,start,end),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @GetMapping("get/by/matricule")
     public ResponseEntity<Collaborateur> getCollaborateurByMatricule(@RequestParam Integer matricule){

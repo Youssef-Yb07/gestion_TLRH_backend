@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ public class CollaborateurService {
     @Autowired
     private CollaborateurRepository collaborateurRepository;
     @Autowired
-    private RoleRepositories roleRepositories;
+    private RoleService roleService;
 
     // @Autowired
     // private ModelMapper modelMapper;
@@ -395,9 +394,15 @@ public class CollaborateurService {
             collaborateur.setPosteActuel(collab.getPosteActuel());
             collaborateur.setPosteAPP(collab.getPosteAPP());
             collaborateur.setAncienManagerRH(collab.getAncienManagerRH());
+            collaborateur.setManagerRH(collab.getManagerRH());
             collaborateur.setDateParticipation(collab.getDateParticipation());
-            // Enregistre le collaborateur dans la base de données
-            collaborateurRepository.save(collaborateur);
+            collaborateur.setRoles(collab.getRoles());
+            collaborateur.setTechnologies(collab.getTechnologies());
+            if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
+                collaborateur.setStatut(StatutManagerRH.Active);
+            }
+            // Enregistre le collaborateur dans la base de donnée
+                collaborateurRepository.save(collaborateur);
             WelcomeEmail(collaborateur);
             AffectationEmails(collaborateur);
             return collaborateur;
@@ -441,6 +446,11 @@ public class CollaborateurService {
     public List<Collaborateur> getAllCollaborateurs() {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
         return collaborateurs;
+    }
+    public Collaborateur GetCollaborateurById(Integer id){
+        Collaborateur collaborateur = collaborateurRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Employee not exist with id :" + id));
+        return collaborateur;
     }
 
     public List<Collaborateur> getNonAffectedCollabs() {
@@ -526,7 +536,7 @@ public class CollaborateurService {
     }
 
     public List<Collaborateur> getNonManagerRH() {
-        Role role = roleRepositories.findByRole("Manager RH");
+        Role role = roleService.findByRole("Manager RH");
         return collaborateurRepository.findCollaborateursByRolesNotContaining(role);
     }
 
@@ -587,7 +597,7 @@ public class CollaborateurService {
                 maxDate = year;
             }
         }
-        System.out.println("max" + maxDate);
+
         return maxDate;
     }
 
@@ -613,7 +623,6 @@ public class CollaborateurService {
             for (Collaborateur collaborateur : collaborateurs) {
                 LocalDate localDate = collaborateur.getDate_Embauche().toLocalDate();
                 int year = localDate.getYear();
-                System.out.println(year);
                 if (year == i) {
                     numberOfCollabs++;
                 }
@@ -729,7 +738,7 @@ public class CollaborateurService {
         return turnoverRates;
     }
 
-    public Map<Integer, List<String>> EvolutionPostAPP(Integer collaborateurId) {
+    public Map<Integer,List<String>> EvolutionPostAPP(Integer collaborateurId) {
 
         Collaborateur collaborateur = collaborateurRepository.findById(collaborateurId)
                 .orElseThrow(() -> new IllegalArgumentException("Collaborator does not exist!!!!!!!!"));
@@ -752,22 +761,23 @@ public class CollaborateurService {
             return posteByYear;
         }
 
-        public Map<String, List<Integer>> TechnologiesParNiveau(Integer collaborateurId) {
+
+
+        public Map<String, Integer> TechnologiesParNiveau(Integer collaborateurId) {
 
             Optional<Collaborateur> collaborateur = collaborateurRepository.findById(collaborateurId);
-    
-    
+            if (!collaborateur.isPresent()) {
+                return new HashMap<>();
+            }
             List<Technologie> technologies = collaborateur.get().getTechnologies();
-            Map<String, List<Integer>> technologiesParNiveau = new HashMap<>();
-    
+            Map<String, Integer> technologiesParNiveau = new HashMap<>();
             for (Technologie technologie : technologies) {
                 String nomTechnologie = technologie.getNom();
                 int niveauTechnologie = technologie.getNiveau();
-    
-                technologiesParNiveau.computeIfAbsent(nomTechnologie, k -> new ArrayList<>())
-                        .add(niveauTechnologie);
+                technologiesParNiveau.put(nomTechnologie, niveauTechnologie);
             }
-    
+
+
             return technologiesParNiveau;
         }
     
@@ -840,5 +850,33 @@ public class CollaborateurService {
             throw new IllegalStateException("Collaborator does not exist.");
         }
     }
+
+
+    public Map<Date, Double> getSalaryData(int collabId,Date startDate,Date endDate) {
+        Map<Date, Double> salaryData = new HashMap<>();
+
+        Collaborateur collaborateur = collaborateurRepository.findById(collabId)
+                .orElseThrow(() -> new IllegalArgumentException("Collaborator does not exist!!!!!!!!"));
+        if (collaborateur == null) {
+            return salaryData; // Return empty map if collaborateur not found
+        }
+
+        List<Archivage> archivages = collaborateur.getArchivages();
+        if (archivages == null || archivages.isEmpty()) {
+            return salaryData; // Return empty map if no archivages
+        }
+
+        for (Archivage archivage : archivages) {
+            if (archivage.getDateArchivage() != null && archivage.getSalaire() != null) {
+                Date dateArchivage = archivage.getDateArchivage();
+                if (dateArchivage.after(startDate) && dateArchivage.before(endDate)) {
+                    salaryData.put(dateArchivage, archivage.getSalaire());
+                }
+            }
+        }
+
+        return salaryData;
+    }
+
 
 }
