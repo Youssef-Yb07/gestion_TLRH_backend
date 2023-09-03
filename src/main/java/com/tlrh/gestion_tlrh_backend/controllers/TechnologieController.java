@@ -50,6 +50,27 @@ public class TechnologieController {
         }
     }
 
+    @GetMapping("/get/all")
+    public ResponseEntity<Iterable<Technologie>> getAllTechnologies(){
+        try{
+            return new ResponseEntity<>(technologieService.getAllTechnologies(), HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println("Error while getting all Technologies");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/get/By/Id")
+    public ResponseEntity<Technologie> getTechnologieById(@RequestParam int id){
+        try{
+            return new ResponseEntity<>(technologieService.getTechnologieById(id), HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println("Error while getting Technologie by id");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 }

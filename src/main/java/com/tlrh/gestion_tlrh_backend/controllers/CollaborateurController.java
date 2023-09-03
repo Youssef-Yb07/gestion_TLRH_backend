@@ -348,4 +348,14 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("get/by/matricule")
+    public ResponseEntity<Collaborateur> getCollaborateurByMatricule(@RequestParam Integer matricule){
+        try {
+            return new ResponseEntity<>(collaborateurService.GetCollaborateurByID(matricule),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

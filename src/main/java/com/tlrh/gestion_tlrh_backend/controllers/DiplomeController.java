@@ -62,4 +62,25 @@ public class DiplomeController {
         }
     }
 
+    @GetMapping("/get/id")
+    public ResponseEntity<Diplome> getDiplomeById(@RequestParam int id){
+        try{
+            return new ResponseEntity<>(diplomeService.getDiplomeById(id),HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println("Erreur lors de la recuperation du diplome");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/get/all")
+    public ResponseEntity<List<Diplome>> getAllDiplomes(){
+        try{
+            return new ResponseEntity<>(diplomeService.getAllDiplomes(),HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println("Erreur lors de la recuperation des diplomes");
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

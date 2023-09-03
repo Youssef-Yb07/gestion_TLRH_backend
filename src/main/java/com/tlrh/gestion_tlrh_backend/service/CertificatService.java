@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 @Service
 
@@ -57,6 +58,24 @@ public class CertificatService {
             }
         }
         throw new IllegalStateException("Certificat or Collaborateur not found");
+    }
+
+    public Certificat getCertificatById(Integer id) {
+        Optional<Certificat> optionalCertificat = certificatRepository.findById(id);
+
+        if (optionalCertificat.isPresent()) {
+            return optionalCertificat.get();
+        } else {
+            throw new IllegalStateException("Certificat not found");
+        }
+    }
+
+    public List<Certificat> getAllCertificats() {
+        if (certificatRepository.findAll().isEmpty()){
+            throw new IllegalStateException("Certificats not found");
+        } else {
+            return certificatRepository.findAll();
+        }
     }
 
 }

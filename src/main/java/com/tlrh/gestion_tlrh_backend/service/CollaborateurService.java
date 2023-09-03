@@ -831,5 +831,14 @@ public class CollaborateurService {
         return collabsAssociatedToManagerRH;
     }
 
+    public Collaborateur GetCollaborateurByID(Integer matricule){
+        Optional<Collaborateur> optionalCollaborateur=collaborateurRepository.findById(matricule);
+        if(optionalCollaborateur.isPresent()){
+            return optionalCollaborateur.get();
+        }
+        else{
+            throw new IllegalStateException("Collaborator does not exist.");
+        }
+    }
 
 }

@@ -73,4 +73,21 @@ public class TechnologieService {
         return tauxTechnologies;
     }
 
+    public List<Technologie> getAllTechnologies() {
+        if (technologieRepository.findAll().isEmpty()) {
+            throw new IllegalStateException("Technologies not found");
+        } else {
+            return technologieRepository.findAll();
+        }
+    }
+
+    public Technologie getTechnologieById(int id) {
+        Optional<Technologie> optionalTechnologie = technologieRepository.findById(id);
+        if (optionalTechnologie.isPresent()) {
+            return optionalTechnologie.get();
+        } else {
+            throw new IllegalStateException("Technologie not found");
+        }
+    }
+
 }

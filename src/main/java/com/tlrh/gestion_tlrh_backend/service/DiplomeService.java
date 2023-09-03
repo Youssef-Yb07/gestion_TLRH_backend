@@ -80,6 +80,20 @@ public class DiplomeService {
     }
 
 
+    public Diplome getDiplomeById(int id) {
+        Optional<Diplome> existingDiplome = diplomeRepository.findById(id);
+        if (!existingDiplome.isPresent()) {
+            throw new RuntimeException("Diplome entity doesn't exist !");
+        }
+        return existingDiplome.get();
+    }
+
+    public List<Diplome> getAllDiplomes() {
+        if (diplomeRepository.findAll().isEmpty()){
+            throw new RuntimeException("Diplome entity doesn't exist !");
+        }
+        return diplomeRepository.findAll();
+    }
 
 
 }
