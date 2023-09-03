@@ -398,8 +398,11 @@ public class CollaborateurService {
             collaborateur.setDateParticipation(collab.getDateParticipation());
             collaborateur.setRoles(collab.getRoles());
             collaborateur.setTechnologies(collab.getTechnologies());
-            // Enregistre le collaborateur dans la base de données
-            collaborateurRepository.save(collaborateur);
+            if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
+                collaborateur.setStatut(StatutManagerRH.Active);
+            }
+            // Enregistre le collaborateur dans la base de donnée
+                collaborateurRepository.save(collaborateur);
             WelcomeEmail(collaborateur);
             AffectationEmails(collaborateur);
             return collaborateur;
@@ -594,7 +597,7 @@ public class CollaborateurService {
                 maxDate = year;
             }
         }
-        System.out.println("max" + maxDate);
+
         return maxDate;
     }
 
@@ -620,7 +623,6 @@ public class CollaborateurService {
             for (Collaborateur collaborateur : collaborateurs) {
                 LocalDate localDate = collaborateur.getDate_Embauche().toLocalDate();
                 int year = localDate.getYear();
-                System.out.println(year);
                 if (year == i) {
                     numberOfCollabs++;
                 }
