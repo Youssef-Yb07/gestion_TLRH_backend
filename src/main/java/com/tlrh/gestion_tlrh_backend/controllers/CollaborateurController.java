@@ -352,7 +352,7 @@ public class CollaborateurController {
         }
     }
 
-    @GetMapping("get/collaborators/associated/managerRH")
+    @GetMapping("get/collaborators/associated/managerRH/{managerRHMatricule}")
     public ResponseEntity<List<Collaborateur>> getCollaboratorsAssociatedToManagerRH(@RequestParam Integer managerRHMatricule){
         try {
             return new ResponseEntity<>(collaborateurService.findCollabsAssociatedToManagerRH(managerRHMatricule),HttpStatus.OK);
