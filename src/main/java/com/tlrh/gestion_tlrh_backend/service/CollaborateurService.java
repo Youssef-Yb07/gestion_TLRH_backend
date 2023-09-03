@@ -28,7 +28,7 @@ public class CollaborateurService {
     @Autowired
     private CollaborateurRepository collaborateurRepository;
     @Autowired
-    private RoleRepositories roleRepositories;
+    private RoleService roleService;
 
     // @Autowired
     // private ModelMapper modelMapper;
@@ -394,7 +394,10 @@ public class CollaborateurService {
             collaborateur.setPosteActuel(collab.getPosteActuel());
             collaborateur.setPosteAPP(collab.getPosteAPP());
             collaborateur.setAncienManagerRH(collab.getAncienManagerRH());
+            collaborateur.setManagerRH(collab.getManagerRH());
             collaborateur.setDateParticipation(collab.getDateParticipation());
+            collaborateur.setRoles(collab.getRoles());
+            collaborateur.setTechnologies(collab.getTechnologies());
             // Enregistre le collaborateur dans la base de données
             collaborateurRepository.save(collaborateur);
             WelcomeEmail(collaborateur);
@@ -530,7 +533,7 @@ public class CollaborateurService {
     }
 
     public List<Collaborateur> getNonManagerRH() {
-        Role role = roleRepositories.findByRole("Manager RH");
+        Role role = roleService.findByRole("Manager RH");
         return collaborateurRepository.findCollaborateursByRolesNotContaining(role);
     }
 
