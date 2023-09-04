@@ -399,16 +399,7 @@ public class CollaborateurService {
             collaborateur.setManagerRH(collab.getManagerRH());
             collaborateur.setDateParticipation(collab.getDateParticipation());
             collaborateur.setRoles(collab.getRoles());
-            //save the diplomes first and then set them to the collaborateur
-            for (Diplome diplome : collab.getDiplomes()) {
-                diplomeRepository.save(diplome);
-            }
             collaborateur.setDiplomes(collab.getDiplomes());
-
-            //save the technologies first and then set them to the collaborateur
-            for (Technologie technologie:collaborateur.getTechnologies()){
-                technologieRepository.save(technologie);
-            }
             collaborateur.setTechnologies(collab.getTechnologies());
 
             if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
