@@ -4,9 +4,7 @@ import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
 import com.tlrh.gestion_tlrh_backend.entity.*;
 import com.tlrh.gestion_tlrh_backend.entity.Enum.StatutManagerRH;
-import com.tlrh.gestion_tlrh_backend.repositories.ArchivageRepository;
-import com.tlrh.gestion_tlrh_backend.repositories.CollaborateurRepository;
-import com.tlrh.gestion_tlrh_backend.repositories.RoleRepositories;
+import com.tlrh.gestion_tlrh_backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,6 +27,10 @@ public class CollaborateurService {
     private CollaborateurRepository collaborateurRepository;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private DiplomeRepository diplomeRepository;
+    @Autowired
+    private TechnologieRepository technologieRepository;
 
     // @Autowired
     // private ModelMapper modelMapper;
@@ -397,7 +399,18 @@ public class CollaborateurService {
             collaborateur.setManagerRH(collab.getManagerRH());
             collaborateur.setDateParticipation(collab.getDateParticipation());
             collaborateur.setRoles(collab.getRoles());
+            //save the diplomes first and then set them to the collaborateur
+            for (Diplome diplome : collab.getDiplomes()) {
+                diplomeRepository.save(diplome);
+            }
+            collaborateur.setDiplomes(collab.getDiplomes());
+
+            //save the technologies first and then set them to the collaborateur
+            for (Technologie technologie:collaborateur.getTechnologies()){
+                technologieRepository.save(technologie);
+            }
             collaborateur.setTechnologies(collab.getTechnologies());
+
             if(collaborateur.getRoles().stream().anyMatch(role -> role.getRole().equals("Manager RH"))){
                 collaborateur.setStatut(StatutManagerRH.Active);
             }
