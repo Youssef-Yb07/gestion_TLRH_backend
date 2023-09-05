@@ -381,4 +381,14 @@ public class CollaborateurController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("get/CollabWithoutCompte")
+    public ResponseEntity<List<Collaborateur>> getCollaborateurWithoutCompte(){
+        try {
+            return new ResponseEntity<>(collaborateurService.getCollabWithoutAccount(),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

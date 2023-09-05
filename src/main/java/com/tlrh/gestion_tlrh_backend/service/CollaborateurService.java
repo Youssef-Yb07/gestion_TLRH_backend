@@ -524,7 +524,11 @@ public class CollaborateurService {
         }
         return managers;
     }
+    public List<Collaborateur> getCollabWithoutAccount() {
+        List<Collaborateur> collaborateurs = collaborateurRepository.findCollaborateursByCompteIsNull();
 
+        return collaborateurs;
+    }
     public List<Collaborateur> getAllManagerRH() {
         List<Collaborateur> collaborateurs = collaborateurRepository.findAll();
         List<Collaborateur> managers = new ArrayList<>();

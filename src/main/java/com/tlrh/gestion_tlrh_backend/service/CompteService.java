@@ -35,12 +35,13 @@ public class CompteService {
         Compte compte = optionalCompte.get();
         Collaborateur collaborateur = optionalCollab.get();
         compte.setCollaborateur(collaborateur);
+        compteRepository.save(compte);
         emailsService.SendEmail(collaborateur.getEmail()
                 ,"Hi Dear "+collaborateur.getPrenom() +" " +collaborateur.getNom()
                         +" , To acces to your personnal space in our Application SQLI Here's the authentication information . The Email :"
                         +compte.getEmail()+" And the password : "+compte.getPassword()
                 ,"New Account");
-        return compteRepository.save(compte);
+        return compte;
     }
 
     private String generatePassword() {

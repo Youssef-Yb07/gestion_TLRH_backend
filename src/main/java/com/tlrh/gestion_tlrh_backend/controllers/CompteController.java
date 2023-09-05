@@ -30,7 +30,7 @@ public class CompteController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/NoCollab")
+    @GetMapping("/compteWithoutCollab")
     public ResponseEntity<List<Compte>> GetComptesWithoutCollaborateur(){
         try {
             return new ResponseEntity<>(compteService.accountWithoutCollab(), HttpStatus.OK);
@@ -48,7 +48,7 @@ public class CompteController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PutMapping("/CompteToCollab")
+    @PutMapping("/AffectCompteToCollab")
     public ResponseEntity<Compte> Affectation(
             @RequestParam Integer compteId,
             @RequestParam Integer collaborateurId)throws MessagingException{
