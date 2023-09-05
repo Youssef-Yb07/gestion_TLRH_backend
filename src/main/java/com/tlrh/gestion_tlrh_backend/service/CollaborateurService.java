@@ -346,10 +346,9 @@ public class CollaborateurService {
     }
 
     // create a managerRH
-    @Transactional
-    public Collaborateur createManagerRh(CollaborateurDto managerDto) throws IllegalStateException, MessagingException {
+    public Collaborateur createManagerRh(Integer matricule) throws IllegalStateException, MessagingException {
         // Check if the coll already exists in bd
-        Optional<Collaborateur> existingCollaborateur = collaborateurRepository.findById(managerDto.getMatricule());
+        Optional<Collaborateur> existingCollaborateur = collaborateurRepository.findById(matricule);
         if (existingCollaborateur.isPresent()) {
             Collaborateur collaborateur = existingCollaborateur.get();
             // Check if the collaborator already has the "Manager RH" role
@@ -359,11 +358,9 @@ public class CollaborateurService {
                 throw new IllegalStateException("Collaborator already has the Manager RH role.");
             }
             // Assign the "Manager RH" role to the coll
-            Role managerRole = new Role();
-            managerRole.setRole("Manager RH");
+            collaborateur.setStatut(StatutManagerRH.Active);
+            Role managerRole = roleService.findByRole("Manager RH");
             collaborateur.getRoles().add(managerRole);
-            StatutManagerRH status = StatutManagerRH.Active;
-            collaborateur.setStatut(status);
             collaborateurRepository.save(collaborateur);
             WelcomeEmail(collaborateur);
 
