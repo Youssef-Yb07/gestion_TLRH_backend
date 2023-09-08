@@ -1,12 +1,10 @@
 package com.tlrh.gestion_tlrh_backend.controllers;
-import com.tlrh.gestion_tlrh_backend.dto.CollaborateurDto;
 import com.tlrh.gestion_tlrh_backend.dto.UpdateBy3ActorsDto;
 import com.tlrh.gestion_tlrh_backend.entity.Collaborateur;
 
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import com.tlrh.gestion_tlrh_backend.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,11 +54,11 @@ public class CollaborateurController {
     }
 
     @PutMapping("/assignCollaborateursToManager")
-    public ResponseEntity<List<CollaborateurDto>> assignCollaborateursToManager(
+    public ResponseEntity<List<Collaborateur>> assignCollaborateursToManager(
             @RequestParam List<Integer> collaborateurMatricules,
             @RequestParam Integer managerMatricule) {
         try {
-            List<CollaborateurDto> updatedCollaborateurs = collaborateurService.assignCollaborateursToManager(collaborateurMatricules, managerMatricule);
+            List<Collaborateur> updatedCollaborateurs = collaborateurService.assignCollaborateursToManager(collaborateurMatricules, managerMatricule);
             return new ResponseEntity<>(updatedCollaborateurs, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

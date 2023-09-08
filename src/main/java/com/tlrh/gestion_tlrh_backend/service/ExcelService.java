@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -138,15 +139,16 @@ public class ExcelService {
                 dataRow.createCell(5).setCellValue(collaborateur.getSexe());
                 dataRow.createCell(6).setCellValue(collaborateur.getSite());
                 dataRow.createCell(7).setCellValue(collaborateur.getBU());
-                dataRow.createCell(8).setCellValue(new java.util.Date(collaborateur.getDate_Embauche().getTime()));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                dataRow.createCell(8).setCellValue(dateFormat.format(collaborateur.getDate_Embauche()));
                 dataRow.createCell(9).setCellValue(collaborateur.getMois_BAP());
-                dataRow.createCell(10).setCellValue(new java.util.Date(collaborateur.getDate_Depart().getTime()));
+                dataRow.createCell(10).setCellValue(dateFormat.format(collaborateur.getDate_Depart()));
 
                 // Convert boolean attributes to "true" or "false"
                 dataRow.createCell(11).setCellValue(collaborateur.isAncien_Collaborateur() ? "true" : "false");
                 dataRow.createCell(12).setCellValue(collaborateur.isSeminaireIntegration() ? "true" : "false");
 
-                dataRow.createCell(13).setCellValue(new java.util.Date(collaborateur.getDateParticipation().getTime()));
+                dataRow.createCell(13).setCellValue(dateFormat.format(collaborateur.getDateParticipation()));
                 dataRow.createCell(14).setCellValue(collaborateur.getPosteAPP());
                 dataRow.createCell(15).setCellValue(collaborateur.getPosteActuel());
                 dataRow.createCell(16).setCellValue(collaborateur.getSalaireActuel());

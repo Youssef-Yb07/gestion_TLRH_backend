@@ -260,7 +260,7 @@ public class CollaborateurService {
     }
 
     @Transactional
-    public List<CollaborateurDto> assignCollaborateursToManager(List<Integer> collaborateurMatricules,
+    public List<Collaborateur> assignCollaborateursToManager(List<Integer> collaborateurMatricules,
             Integer managerMatricule) throws EntityNotFoundException {
         // Get Manager RH by matricule
         Optional<Collaborateur> optionalManagerRH = collaborateurRepository.findById(managerMatricule);
@@ -284,19 +284,8 @@ public class CollaborateurService {
 
                     List<Collaborateur> updatedCollaborateurs = collaborateurRepository.saveAll(collaborateurs);
 
-                    // Convert updated collaborators to CollaborateurDto list
-                    List<CollaborateurDto> updatedDtos = updatedCollaborateurs.stream()
-                            .map(collaborateur -> {
-                                CollaborateurDto dto = new CollaborateurDto();
-                                dto.setMatricule(collaborateur.getMatricule());
-                                dto.setSalaireActuel(collaborateur.getSalaireActuel());
-                                dto.setManagerRH(collaborateur.getManagerRH().getMatricule());
-                                dto.setPosteAPP(collaborateur.getPosteAPP());
-                                return dto;
-                            })
-                            .collect(Collectors.toList());
+                    return updatedCollaborateurs;
 
-                    return updatedDtos;
                 } else {
                     throw new IllegalStateException("Le Manager sélectionné n'a pas le rôle de Manager RH.");
                 }
