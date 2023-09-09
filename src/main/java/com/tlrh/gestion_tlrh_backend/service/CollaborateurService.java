@@ -648,7 +648,9 @@ public class CollaborateurService {
         Integer CurrentYear = LocalDate.now().getYear();
         if(!archiveMap.isEmpty()) {
             Integer LastSalaryEvaluation = archiveMap.keySet().stream().max(Integer::compareTo).get();
-            for (Integer i = LastSalaryEvaluation; i <= CurrentYear; i++) {
+            Integer DateAmbauche = collaborateur.getDate_Embauche().toLocalDate().getYear();
+            Integer min= Math.min(LastSalaryEvaluation, DateAmbauche);
+            for (Integer i = min; i <= CurrentYear; i++) {
                 if (!archiveMap.containsKey(i)) {
                     archiveMap.put(i, collaborateur.getSalaireActuel());
                 }
@@ -723,9 +725,9 @@ public class CollaborateurService {
         for (int year : years) {
             int departs = departsByYear.getOrDefault(year, 0);
             int arrivees = arriveesByYear.getOrDefault(year, 0);
-            int effectif = effectifsByYear.getOrDefault(year, 0);
+           int effectif = effectifsByYear.getOrDefault(year, 0);
 
-            double turnoverRate = ((departs + arrivees) / 2.0) / effectif;
+            double turnoverRate = departs/(departs+arrivees);
             turnoverRates.put(year, turnoverRate * 100);
         }
 
