@@ -140,18 +140,30 @@ public class ExcelService {
                 dataRow.createCell(6).setCellValue(collaborateur.getSite());
                 dataRow.createCell(7).setCellValue(collaborateur.getBU());
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                if (collaborateur.getDate_Embauche() != null) {
-                    dataRow.createCell(8).setCellValue(dateFormat.format(collaborateur.getDate_Embauche().getTime()));
+
+                if(collaborateur.getDate_Embauche()==null){
+                 dataRow.createCell(8).setCellValue("");
                 }
-                dataRow.createCell(9).setCellValue(collaborateur.getMois_BAP());
-                if (collaborateur.getDate_Depart() != null) {
-                    dataRow.createCell(10).setCellValue(dateFormat.format(collaborateur.getDate_Depart()));
+                else {
+                    dataRow.createCell(8).setCellValue(dateFormat.format(collaborateur.getDate_Embauche()));
                 }
 
+                dataRow.createCell(9).setCellValue(collaborateur.getMois_BAP());
+
+                if(collaborateur.getDate_Depart()==null){
+                    dataRow.createCell(10).setCellValue("");
+                }
+                else{
+                    dataRow.createCell(10).setCellValue(dateFormat.format(collaborateur.getDate_Depart()));
+                }
                 // Convert boolean attributes to "true" or "false"
                 dataRow.createCell(11).setCellValue(collaborateur.isAncien_Collaborateur() ? "true" : "false");
                 dataRow.createCell(12).setCellValue(collaborateur.isSeminaireIntegration() ? "true" : "false");
-                if (collaborateur.getDateParticipation() != null) {
+
+                if(collaborateur.getDateParticipation()==null){
+                    dataRow.createCell(13).setCellValue("");
+                }
+                else {
                     dataRow.createCell(13).setCellValue(dateFormat.format(collaborateur.getDateParticipation()));
                 }
                 dataRow.createCell(14).setCellValue(collaborateur.getPosteAPP());
