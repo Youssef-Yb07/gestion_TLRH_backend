@@ -660,9 +660,9 @@ public class CollaborateurService {
             }
         }
         else {
-                archiveMap.put(CurrentYear-1,0.0);
+//                archiveMap.put(CurrentYear-1,0.0);
                 archiveMap.put(CurrentYear, collaborateur.getSalaireActuel());
-                archiveMap.put(CurrentYear+1,0.0);
+//                archiveMap.put(CurrentYear+1,0.0);
         }
         return archiveMap;
     }
@@ -725,9 +725,9 @@ public class CollaborateurService {
         for (int year : years) {
             int departs = departsByYear.getOrDefault(year, 0);
             int arrivees = arriveesByYear.getOrDefault(year, 0);
-           int effectif = effectifsByYear.getOrDefault(year, 0);
+            int effectif = effectifsByYear.getOrDefault(year, 0);
 
-            double turnoverRate = departs/(departs+arrivees);
+            double turnoverRate = ((departs + arrivees) / 2.0) / effectif;
             turnoverRates.put(year, turnoverRate * 100);
         }
 

@@ -21,7 +21,7 @@ public class Diplome {
     @Column(nullable = false)
     private String type;
     @Column(nullable = false)
-    private Integer niveau ;
+    private String niveau ;
     @Column(nullable = false)
     private Integer promotion ;
     @ManyToOne

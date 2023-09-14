@@ -23,6 +23,8 @@ public class Ecole {
     private Integer  id;
     @Column(nullable = false)
     private String nom;
+    @Column(nullable = false)
+    private String type;
 
     @JsonIgnore
     @OneToMany(mappedBy ="ecole" )
