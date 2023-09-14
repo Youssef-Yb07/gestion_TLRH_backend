@@ -648,9 +648,7 @@ public class CollaborateurService {
         Integer CurrentYear = LocalDate.now().getYear();
         if(!archiveMap.isEmpty()) {
             Integer LastSalaryEvaluation = archiveMap.keySet().stream().max(Integer::compareTo).get();
-            Integer DateAmbauche = collaborateur.getDate_Embauche().toLocalDate().getYear();
-            Integer min= Math.min(LastSalaryEvaluation, DateAmbauche);
-            for (Integer i = min; i <= CurrentYear; i++) {
+            for (Integer i = LastSalaryEvaluation; i <= CurrentYear; i++) {
                 if (!archiveMap.containsKey(i)) {
                     archiveMap.put(i, collaborateur.getSalaireActuel());
                 }
